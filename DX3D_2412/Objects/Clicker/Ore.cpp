@@ -21,17 +21,17 @@ Ore::Ore(int oreID ,const string& modelPath) : oreID(oreID)
     }
     //hpBar = new ProgressBar(L"Resources/Textures/UI/enemy_hp_bar.png", L"Resources/Textures/UI/enemy_hp_bar_BG.png"); 택스처 적용법
 
-    collider = new SphereCollider(3.0f);
     collider->SetParent(this);
     collider->SetLocalPosition(Vector3(0, 0, 0));
-    collider->SetLocalScale(Vector3(0.25, 0.25, 0.25));
-    //particle = new ParticleSystem("Resources/FX/Explosion.fx");
-
+    collider->SetLocalScale(Vector3(1,1,1));
+    particle = new ParticleSystem("Resources/FX/Explosion.fx");
+    particle->SetLoop(false);
+    particle->Stop();
 }
 
 Ore::~Ore()
 {
-   // delete particle;
+    delete particle;
     delete collider;
     delete model;
 }
@@ -39,8 +39,9 @@ Ore::~Ore()
 void Ore::Render()
 {
     model->Render();
-    //particle->Render();
-    //collider->Render();
+    if (particle)
+        particle->Render();
+    collider->Render();
 }
 
 void Ore::Update()
@@ -48,8 +49,8 @@ void Ore::Update()
     UpdateWorld();
     collider->UpdateWorld();
     model->UpdateWorld();
-    //if (!particle->IsActive())
-    //    particle->Update();
+    if (particle)
+        particle->Update();
 }
 
 void Ore::Edit()
@@ -100,16 +101,15 @@ void Ore::TakeDamage(int damage)
 {
     health -= damage;
 
+    if (particle && !particle->IsActive())
+        particle->Play(GetGlobalPosition());
+
     if (health <= 0)
     {
         DropItems();
-        ResetOre();
+        health = data.health;
+
     }
-}
-
-void Ore::ResetOre()
-{
-
 }
 
 bool Ore::IsRayCollision(const Ray& ray, RaycastHit* hit)
@@ -120,4 +120,10 @@ bool Ore::IsRayCollision(const Ray& ray, RaycastHit* hit)
 void Ore::SetColliderColor(const Float4& color)
 {
     collider->GetMaterial()->GetData()->diffuse = color;
+}
+
+void Ore::SetData(const oreData& data)
+{
+    this->data = data;
+    this->health = data.health;
 }

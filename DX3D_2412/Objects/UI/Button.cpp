@@ -21,7 +21,7 @@ Button::~Button()
 
 void Button::Update()
 {
-    if (!isActive) return;
+    if (!isActive || !isEnabled) return;
 
     if (IsPointCollision(mousePos))
     {

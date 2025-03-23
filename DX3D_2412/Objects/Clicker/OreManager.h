@@ -20,6 +20,7 @@ struct DropData
     int minCount;
     int maxCount;
     int price;
+    wstring rarePath;
 };
 
 class OreManager : public Singleton<OreManager>
@@ -44,7 +45,6 @@ public:
 
 
 private:
-    SphereCollider* collider;
     //Ore* ore;
     unordered_map<int, oreData> oreTable;
     unordered_map<int, vector<DropData>> dropTable;

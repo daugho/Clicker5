@@ -1,7 +1,7 @@
-id,name,texturePath,dropRate,minCount,maxCount,price
-1,Normal,Resources/Textures/Block/Block3.png,0.6,1,5,10
-2,common,Resources/Textures/Ore/12.png,0.2,1,4,15
-3,uncommon,Resources/Textures/Ore/13.png,0.1,1,3,35
-4,Rare,Resources/Textures/Ore/14.png,0.05,1,2,50
-5,Unique,Resources/Textures/Ore/15.png,0.03,1,1,70
-6,Legend,Resources/Textures/Ore/16.png,0.02,1,1,100
+id,name,texturePath,dropRate,minCount,maxCount,price,alarm
+1,Normal,Resources/Textures/Ore/11.png,0.6,1,5,10,Resources/Textures/UI/00.png
+2,common,Resources/Textures/Ore/12.png,0.2,1,4,15,Resources/Textures/UI/11.png
+3,uncommon,Resources/Textures/Ore/13.png,0.1,1,3,35,Resources/Textures/UI/22.png
+4,Rare,Resources/Textures/Ore/14.png,0.05,1,2,50,Resources/Textures/UI/33.png
+5,Unique,Resources/Textures/Ore/15.png,0.03,1,1,70,Resources/Textures/UI/44.png
+6,Legend,Resources/Textures/Ore/16.png,0.02,1,1,100,Resources/Textures/UI/55.png

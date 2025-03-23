@@ -1,8 +1,25 @@
 #pragma once
 class Shop;
+
+class Shop;
+class OreInventory;
+class Quad;
+class BlendState;
+class GoldDisplay;
+class ItemPopup;
+enum class UIState
+{
+    None,
+    Inventory,
+    Shop,
+    Dialogue,
+    Upgrade,
+};
+
 class ClickerUIManager : public Singleton<ClickerUIManager>
 {
     friend class Singleton;
+
 public:
     ClickerUIManager();
     ~ClickerUIManager();
@@ -10,30 +27,30 @@ public:
     void Update();
     void Render();
     void Edit();
-    void ToggleInventory();
-    void ToogleFreeView();
-    //void ShowMiningEffect();
+
+    void OpenInventory();
+    void OpenShopUI(int shopID);
+    void CloseCurrentUI();
 
     void SetCursorColor(const Float4& color);
     void ResetCursorColor();
 
-    void OpenShopUI(int shopID);
-    void CloseShopUI();
-
-    void SetCurrentShop(Shop* shop);
     OreInventory* GetInventory() { return inventory; }
-    bool IsInventoryOpen() const { return isInventoryOpen;}
-    bool IsShopOpen() const { return isShopOpen;}
+    ItemPopup* GetItemPopup() { return itemPopup; }
+    bool IsInventoryOpen() const { return currentUIState == UIState::Inventory; }
+    bool IsShopOpen() const { return currentUIState == UIState::Shop; }
     int GetCurrentShopID() const { return currentShopID; }
+
 private:
     void CreateUI();
-    void HandleUIToggle();
+    void HandleUIInput();
+    void UpdateCurrentUI();
+    void ToogleFreeView();
 
 private:
-    bool isInventoryOpen = false;
-    bool isShopOpen = false;
+    UIState currentUIState = UIState::None;
 
-    int currentShopID = -1 ;
+    int currentShopID = -1;
 
     Quad* cursor;
     Quad* miningEffect;
@@ -41,9 +58,11 @@ private:
 
     OreInventory* inventory;
     Shop* shopOpen;
+
     BlendState* blendState[2];
 
     Float4 originalCursorColor = Float4(1, 1, 1, 1);
-
     bool isFreeView = false;
+    GoldDisplay* goldDisplay;
+    ItemPopup* itemPopup;
 };

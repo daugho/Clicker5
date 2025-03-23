@@ -24,6 +24,8 @@ public:
     void SetParamEvent(ParamEvent event) { paramEvent = event; }
     void SetObject(void* object) { this->object = object; }
 
+    void SetEnabled(bool value) { isEnabled = value; }
+    bool IsEnabled() const { return isEnabled; }
 protected:
     Quad* image;
 
@@ -35,4 +37,6 @@ protected:
     ParamEvent paramEvent = nullptr;
 
     void* object;
+
+    bool isEnabled = true;
 };

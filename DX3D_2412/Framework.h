@@ -192,6 +192,8 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Clicker/HermitData.h"
 #include "Objects/Clicker/ShopNpc.h"
 #include "Objects/Clicker/Player.h"
+#include "Objects/Clicker/GoldDisplay.h"
+#include "Objects/Clicker/ItemPopup.h"
 
 
 //Manager Head

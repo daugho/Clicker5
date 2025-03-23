@@ -16,7 +16,7 @@ void OreSlot::Update()
 	Button::Update();
 }
 
-void OreSlot::SetItem(const DropData& item, int count)
+void OreSlot::SetItem(const DropData& item, int count)//슬롯에 몇개가있는지 표시
 {
     this->item = item;
     this->count = count;
@@ -43,6 +43,15 @@ void OreSlot::Render()
 void OreSlot::ShowTooltip()
 {
 
+}
+
+void OreSlot::Clear()
+{
+	item = DropData();
+	count = 0;
+	occupied = false;
+
+	image->SetActive(false);
 }
 
 void OreSlot::SetData(DropData data, int index)

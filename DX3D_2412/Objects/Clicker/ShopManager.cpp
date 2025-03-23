@@ -25,7 +25,8 @@ void ShopManager::Update()
 
 void ShopManager::Edit()
 {
-
+    //for (ShopNPC* shop : shopNPCs)
+    //    shop->Edit();
 }
 
 
@@ -60,7 +61,7 @@ vector<ShopData>& ShopManager::GetShopData(int hermitID)
 
 void ShopManager::AddShop(Vector3 pos, int shopID)
 {
-    ShopNPC* npc = new ShopNPC(shopID, pos);
+    npc = new ShopNPC(shopID, pos);
     shopNPCs.push_back(npc);
 }
 
@@ -92,13 +93,14 @@ void ShopManager::LoadHermitData(string path)
         data.name = datas[1];
 
         hermitTable[data.id] = data;
+        LoadShopTable(data.id);
     }
     fclose(file);
 }
 
 void ShopManager::LoadShopTable(int hermitID)
 {
-    string path = "Resources/Tables/Ore" + to_string(hermitID) + "DropTable.csv";
+    string path = "Resources/Tables/HermitShop" + to_string(hermitID) + ".csv";
 
     FILE* file;
     fopen_s(&file, path.c_str(), "r");

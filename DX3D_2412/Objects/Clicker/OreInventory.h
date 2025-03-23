@@ -12,11 +12,14 @@ public:
     void CreatSlot();
 
     bool AddItem(const DropData& item, int count);
-    bool IsFull() const;
- 
+    void RemoveItemCount(int count);
+    
+    void AddGold(int value) { gold += value; }
+    int GetGold() const { return gold; }
 
     bool IsActive() const { return isActive; }
     int GetTotalItemCount() const;
+    vector<OreSlot*>& GetSlots() { return slots; }
 private:
 
     int currentCapacity = 0;
@@ -31,6 +34,7 @@ private:
 
     bool isActive = false;
     LightBuffer::Light* light;
+    int gold =0 ;
 private:
     struct InventorySlot 
     {

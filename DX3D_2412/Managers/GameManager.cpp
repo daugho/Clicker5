@@ -1,3 +1,13 @@
+	//SCENE->Create("Export", new ModelExportScene());
+	//SCENE->Create("Start", new CollisionScene());
+
+	//SCENE->Create("Start", new ModelAnimationScene());
+	//SCENE->Create("Start", new ModelEquipScene());
+	//SCENE->Create("Start", new AStarScene());
+	//SCENE->Create("Start", new RenderTargetScene());
+	//SCENE->Create("Start", new BillboardScene());	
+	//SCENE->Create("Start", new WeatherScene());	
+	//SCENE->Create("Start", new ParticleEditorScene());	
 #include "Framework.h"
 
 #include "Scenes/GridScene.h"
@@ -14,33 +24,12 @@
 
 GameManager::GameManager()
 {
-	SCENE->Create("Grid", new GridScene());
-	//SCENE->Create("Export", new ModelExportScene());
-	//SCENE->Create("Start", new SphereScene());
-	//SCENE->Create("Start", new SpawnScene());
-	//SCENE->Create("Start", new CollisionScene());
-	//SCENE->Create("Start", new ShootingScene());
-	//SCENE->Create("Start", new MineCraftScene());
-	//SCENE->Create("Start", new LightScene());
-	//SCENE->Create("Start", new TerrainScene());
-	//SCENE->Create("Start", new CubeMapEditorScene());
-	//SCENE->Create("Start", new PacmanScene());	
-	//SCENE->Create("Start", new ModelRenderScene());
-	//SCENE->Create("Start", new InstancingScene());
-	//SCENE->Create("Start", new ModelInstancingScene());
-	//SCENE->Create("Start", new ModelAnimationScene());
-	//SCENE->Create("Start", new ModelEquipScene());
-	//SCENE->Create("Start", new MapEditorScene());
-	//SCENE->Create("Start", new AStarScene());
-	//SCENE->Create("Start", new RenderTargetScene());
-	//SCENE->Create("Start", new OutlineScene());	
-	//SCENE->Create("Start", new WaterScene());	
-	//SCENE->Create("Start", new BillboardScene());	
-	//SCENE->Create("Start", new WeatherScene());	
+	//SCENE->Create("Grid", new GridScene());
 	SCENE->Create("Start", new ClickerPlayScene());
-	//SCENE->Create("Start", new ParticleEditorScene());	
+	//SCENE->Create("Start", new ModelRenderScene());
 
-	SCENE->Add("Grid");
+
+	//SCENE->Add("Grid");
 	SCENE->Add("Start");
 	//SCENE->Add("Export");
 

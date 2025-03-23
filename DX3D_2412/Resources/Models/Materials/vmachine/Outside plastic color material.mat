@@ -1,0 +1,14 @@
+<Material Name="Outside plastic color material">
+    <Shader Vertex="Light/Light.hlsl" Pixel="Light/Light.hlsl"/>
+    <Texture>
+        <DiffuseMap Diffuse="Resources/Textures/Colors/White.png"/>
+        <SpecularMap Specular="Resources/Textures/Colors/White.png"/>
+        <NormalMap Normal="Resources/Textures/Colors/White.png"/>
+    </Texture>
+    <Property Shininess="0.45256191" HasNormalMap="0">
+        <Diffuse R="0.24620138" G="0.27049783" B="0.25415215" A="1"/>
+        <Specular R="0.24620138" G="0.27049783" B="0.25415215" A="1"/>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Property>
+</Material>

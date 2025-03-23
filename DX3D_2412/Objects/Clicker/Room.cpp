@@ -9,8 +9,6 @@ Room::~Room()
 {
     for (Cube* cube : roomCubes)
         delete cube;
-    for (Shop* shop : shops) // ? °³º° Shop °´Ã¼ »èÁ¦
-        delete shop;
     delete oreManager;
 }
 
@@ -34,23 +32,24 @@ void Room::AddHermit(Vector3 pos, int shopID)
     ShopManager::Get()->AddShop(pos, shopID);
 }
 
+void Room::Edit()
+{
+    ShopManager::Get()->Edit();
+}
+
 void Room::Render()
 {
     for (Cube* cube : roomCubes)
         cube->Render();
     oreManager->Render();
-    for (Shop* shop : shops)
-        shop->Render();
     ShopManager::Get()->Render();
 }
 
 void Room::Update()
 {
-    for (Cube* cube : roomCubes)
+    for (Cube* cube : roomCubes)//6¸é render
         cube->Update();
-    for (Shop* shop : shops)
-        shop->Update();
-    oreManager->Update();
-    ShopManager::Get()->Update();
+    oreManager->Update();//±¤¹° render
+    ShopManager::Get()->Update();//machine render
 
 }

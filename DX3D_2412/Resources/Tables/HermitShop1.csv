@@ -1,8 +1,5 @@
 id,name,discrip,price,icon
-1,aa,aaa,10,Resources/Textures/Block/Block0.png
-2,bb,bbb,20,Resources/Textures/Block/Block1.png
-3,cc,ccc,30,Resources/Textures/Block/Block2.png
-4,dd,ddd,40,Resources/Textures/Block/Block3.png
-5,ee,eee,50,Resources/Textures/Block/Block4.png
-6,ff,fff,60,Resources/Textures/Block/Block0.png
-7,gg,ggg,70,Resources/Textures/Block/Block0.png
+1,aa,Resources/Textures/UI/ShopUI/shop0.png,10,Resources/Textures/UI/ShopUI/potion0.png
+2,bb,Resources/Textures/UI/ShopUI/shop1.png,20,Resources/Textures/UI/ShopUI/potion1.png
+3,cc,Resources/Textures/UI/ShopUI/shop2.png,30,Resources/Textures/UI/ShopUI/fire.png
+4,dd,Resources/Textures/UI/ShopUI/shop3.png,40,Resources/Textures/UI/ShopUI/potion2.png

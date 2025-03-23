@@ -23,8 +23,6 @@ private:
     //OreInventory* inventory;
     vector<Cube*> roomCubes;
     Cube* floor;
-    vector<BoxCollider*> wallColliders;
-    vector<BoxCollider*> floorColliders;
     Room* room1;
 
 };

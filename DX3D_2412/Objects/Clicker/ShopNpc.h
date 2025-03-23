@@ -7,9 +7,8 @@ public:
 
     void Update();
     void Render();
-
+    void Edit();
     int GetID() const { return shopID; }
-    Model* GetModel() { return model; }
 
 private:
     Model* model;

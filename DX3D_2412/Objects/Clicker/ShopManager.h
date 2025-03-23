@@ -17,13 +17,13 @@ public:
 	void LoadShopTable(int hermitID);
 
 	ShopNPC* GetClosestShopID(const Ray& ray, RaycastHit* hit);
-
+	vector<ShopData>& GetShopTable(int hermitID) { return shopTables[hermitID]; }
 	vector<ShopNPC*>& GetShops() { return shopNPCs; }
 	vector<ShopData>& GetShopData(int hermitID);
 private:
 	unordered_map<int, vector<ShopData>> shopTables;
 	unordered_map<int, string> hermitNames;
 	unordered_map<int, HermitTable> hermitTable;
-
+	ShopNPC* npc;
 	vector<ShopNPC*> shopNPCs;
 };

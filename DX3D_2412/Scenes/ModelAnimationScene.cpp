@@ -3,7 +3,7 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	model = new ModelAnimator("Ghost");	
+	model = new ModelAnimator("Bodyfinal");	
 	model->SetShader(L"Model/Model.hlsl");
 	FOR(6)
 		model->ReadClip("Ghost_animation", i);

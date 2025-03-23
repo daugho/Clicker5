@@ -66,7 +66,6 @@ void OreInventory::CreatSlot()
         slots.push_back(slot);
     }
 
-
     for (int j = 1; j < 3; j++)
     {
         for (int i = 0; i < 5; i++)
@@ -87,27 +86,31 @@ void OreInventory::CreatSlot()
 
 bool OreInventory::AddItem(const DropData& item, int count)
 {
-    if (currentCapacity + count > MAX_CAPACITY){return false;}
+    int availableSpace = MAX_CAPACITY - currentCapacity;
+    if (availableSpace <= 0)
+        return false; // 아예 여유 없음
 
+    int addCount = min(availableSpace, count); // 실제로 추가 가능한 개수
+
+    // 이미 존재하는 아이템에 추가
     for (auto& slot : slots) {
         if (slot->IsOccupied() && slot->GetItem().id == item.id) {
-            int availableSpace = MAX_CAPACITY - slot->GetCount();
+            int newCount = slot->GetCount() + addCount;
+            slot->SetItem(item, newCount);
+            currentCapacity += addCount;
 
-            if (availableSpace >= count) {
-                slot->SetItem(item, slot->GetCount() + count);
-                return true;
-            }
-            else {
-                slot->SetItem(item, MAX_CAPACITY);
-                return false;
-            }
+            ClickerUIManager::Get()->GetItemPopup()->Play(item.rarePath);
+            return true;
         }
     }
 
-
+    // 새로운 슬롯에 추가
     for (auto& slot : slots) {
         if (!slot->IsOccupied()) {
-            slot->SetItem(item, count);
+            slot->SetItem(item, addCount);
+            currentCapacity += addCount;
+
+            ClickerUIManager::Get()->GetItemPopup()->Play(item.rarePath);
             return true;
         }
     }
@@ -115,16 +118,19 @@ bool OreInventory::AddItem(const DropData& item, int count)
     return false;
 }
 
-bool OreInventory::IsFull() const
-{
-    return currentCapacity >= MAX_CAPACITY;
-}
-
 int OreInventory::GetTotalItemCount() const
 {
     int totalCount = 0;
     for (const auto& slot : slots) {
-        totalCount += slot->GetCount();
+        if (slot->IsOccupied())
+            totalCount += slot->GetCount();
     }
     return totalCount;
 }
+
+void OreInventory::RemoveItemCount(int count)
+{
+    currentCapacity -= count;
+    currentCapacity = max(0, currentCapacity);
+}
+

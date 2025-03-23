@@ -23,6 +23,7 @@ public:
 		localRotation += Vector3(x, y, z);
 	}
 
+	Transform* GetParentTransform() const { return parent; }
 	Vector3 GetRight() const { return right.GetNormalized(); }
 	Vector3 GetLeft() const { return -right.GetNormalized(); }
 	Vector3 GetUp() const { return up.GetNormalized(); }

@@ -1,10 +1,11 @@
 #pragma once
 
 class ShopSlot;
+class GoldDisplay;
 
 class Shop : public Quad {
 public:
-    Shop(int hermitID);
+    Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay);
     ~Shop();
 
     void Update();
@@ -13,11 +14,23 @@ public:
     void CreateSlots();
     void CreateSlots2();
     void CreateSlots3();
+    void UpgradePlayer(int index);
+
+    void RegisterBuyEvent(int index);
+
     bool IsActive() const { return isActive; }
+    vector<ShopSlot*>& GetIconSlots() { return iconSlots; }
+    vector<ShopSlot*>& GetDescSlots() { return descSlots; }
 
 private:
-    vector<ShopSlot*> slots;
+    vector<ShopSlot*> iconSlots;
+    vector<ShopSlot*> descSlots;
+    vector<ShopSlot*> buySlots;
+    vector<ShopSlot*> sellSlots;
     bool isActive = false;
     wstring texturePath;
+    int hermitID;
+    OreInventory* inventory=nullptr;
+    GoldDisplay* goldDisplay = nullptr;
 };
 

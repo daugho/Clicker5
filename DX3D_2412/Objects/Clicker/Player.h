@@ -25,6 +25,14 @@ public:
 	void ToggleLight();
 	void OpenShop();
 
+	//데미지 계산 함수
+	void RecalculateDamage();
+	void RecalculateMiningCooldown();
+
+	//체굴 속도 계산함수
+	void ApplyShopDamageBoost();
+	void ApplyShopSpeedBoost();
+
 private:
 	void Control();
 
@@ -35,10 +43,24 @@ private:
 
 
 private:
+	//move
 	float moveSpeed = 5.0f;
 	float rotSpeed = 1.0f;
-	int playerDamage = 5;
 
+	//damage
+	int baseDamage = 5;          // 기본 채굴 데미지
+	int upgradeBonus = 0;        // 업그레이드로 인한 추가 데미지
+	int shopBonus = 0;           // 상점 아이템 효과
+	int equipmentBonus = 0;
+	int playerDamage = 1;
+
+	//mining speed
+	float baseCooldown = 1.0f;
+	float upgradeCooldownBonus = 0.0f;
+	float shopCooldownBonus = 0.0f;
+	float miningCooldown = 2.0f;  //채굴 쿨다운 (1.5초당 1회)
+
+	//etc
 	Vector3 velocity;
 
 	POINT clientCenterPos;
@@ -47,7 +69,7 @@ private:
 
 	OreInventory* oreInventory;
 	Shop* shopOpne;
-	float miningCooldown = 1.0f;  //채굴 쿨다운 (초당 1회)
+
 	float miningTimer = 0.0f;
 
 	SphereCollider* collider;

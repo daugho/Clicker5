@@ -6,79 +6,131 @@ ClickerUIManager::ClickerUIManager()
 
     inventory = new OreInventory();
     inventory->SetActive(false);
-    shopOpen = new Shop(1);
+
+    goldDisplay = new GoldDisplay();
+    goldDisplay->SetPosition(Vector3(50, 50, 0)); // 화면 우측 상단 등 적절한 위치
+    goldDisplay->SetGold(0);
+
+    shopOpen = new Shop(1, inventory,goldDisplay);
     shopOpen->SetActive(false);
+
+    itemPopup = new ItemPopup();
 }
 
 ClickerUIManager::~ClickerUIManager()
 {
     delete cursor;
     delete inventory;
+    delete shopOpen;
 }
 
 void ClickerUIManager::Update()
 {
-    HandleUIToggle();
+    goldDisplay->Update();
+    itemPopup->Update();
+    HandleUIInput();
     ToogleFreeView();
-    if (isInventoryOpen)
-        inventory->Update();
-
-    if (isShopOpen)
-        shopOpen->Update();
+    UpdateCurrentUI();
 }
 
 void ClickerUIManager::Render()
 {
-    //Environment::Get()->SetAlphaBlend(true);
-
     cursor->Render();
     inventory->Render();
     shopOpen->Render();
+    goldDisplay->Render();
+    itemPopup->Render();
 }
 
 void ClickerUIManager::Edit()
 {
     inventory->Edit();
     shopOpen->Edit();
+    goldDisplay->Edit();
+    //itemPopup->Edit();
 }
 
-void ClickerUIManager::ToggleInventory()
+void ClickerUIManager::HandleUIInput()
 {
-   // isInventoryOpen = !isInventoryOpen;
-   // inventory->SetActive(isInventoryOpen);
-   //
-   // if (isInventoryOpen)
-   // {
-   //     ShowCursor(true); // ? 마우스 커서 활성화
-   //     //CAM->IsActive(true); // ? 카메라 움직임 잠금
-   // }
-   // else
-   // {
-   //     ShowCursor(false); // ? 마우스 커서 비활성화
-   //    // CAM->IsActive(false); // ? 카메라 움직임 해제
-   // }
+    if (KEY->Down('I') && currentUIState == UIState::None)
+        OpenInventory();
+
+    if (KEY->Down('B') && currentUIState == UIState::None)
+        OpenShopUI(1); // 현재 예시로 1번 상점 고정
+
+    if (KEY->Down(VK_ESCAPE) && currentUIState != UIState::None)
+        CloseCurrentUI();
+}
+
+void ClickerUIManager::OpenInventory()
+{
+    currentUIState = UIState::Inventory;
+    inventory->SetActive(true);
+    ShowCursor(true);
+}
+
+void ClickerUIManager::OpenShopUI(int shopID)
+{
+    currentShopID = shopID;
+    currentUIState = UIState::Shop;
+    shopOpen = new Shop(shopID, inventory, goldDisplay);
+    shopOpen->SetActive(true);
+    ShowCursor(true);
+}
+
+void ClickerUIManager::CloseCurrentUI()
+{
+    switch (currentUIState)
+    {
+    case UIState::Inventory:
+        inventory->SetActive(false);
+        break;
+    case UIState::Shop:
+        shopOpen->SetActive(false);
+        break;
+    default:
+        break;
+    }
+
+    currentUIState = UIState::None;
+    ShowCursor(false);
+    currentShopID = -1;
+}
+
+void ClickerUIManager::UpdateCurrentUI()
+{
+    switch (currentUIState)
+    {
+    case UIState::Inventory:
+        inventory->Update();
+        break;
+    case UIState::Shop:
+        shopOpen->Update();
+        break;
+    default:
+        break;
+    }
 }
 
 void ClickerUIManager::ToogleFreeView()
 {
-   //if (KEY->Down(VK_F2))
-   //{
-   //    isFreeView = true;
-   //    CAM->SetTarget(nullptr);
-   //    ShowCursor(true);
-   //}
-   //
-   //if (KEY->Down(VK_F3))
-   //{
-   //    isFreeView = false;
-   //    CAM->SetTarget(ClickerMapManager::Get()->GetPlayer());
-   //    CAM->TargetOptionLoad("FPSMode");
-   //    ShowCursor(false);
-   //}
-   //if (isFreeView)
-   //{
-   //    return;
-   //}
+    if (KEY->Down(VK_F2))
+    {
+        isFreeView = true;
+        CAM->SetTarget(nullptr);
+        ShowCursor(true);
+    }
+
+    if (KEY->Down(VK_F3))
+    {
+        isFreeView = false;
+        CAM->SetTarget(ClickerMapManager::Get()->GetPlayer());
+        CAM->TargetOptionLoad("FPSMode");
+        ShowCursor(false);
+    }
+
+    if (isFreeView)
+        return;
 }
 
 void ClickerUIManager::SetCursorColor(const Float4& color)
@@ -91,50 +143,9 @@ void ClickerUIManager::ResetCursorColor()
     cursor->GetMaterial()->GetData()->diffuse = originalCursorColor;
 }
 
-void ClickerUIManager::OpenShopUI(int shopID)
-{
-    shopOpen = new Shop(shopID);
-    shopOpen->SetActive(true);
-
-    currentShopID = shopID;
-    isShopOpen = true;
-
-    ShowCursor(true);
-}
-
-void ClickerUIManager::CloseShopUI()
-{
-    currentShopID = -1;
-    isShopOpen = false;
-
-    ShowCursor(false);
-}
-
-void ClickerUIManager::SetCurrentShop(Shop* shop)
-{
-
-}
-
 void ClickerUIManager::CreateUI()
 {
     cursor = new Quad(L"Resources/Textures/UI/cursor.png");
     cursor->SetLocalPosition(CENTER);
-    cursor->UpdateWorld();    
-}
-
-void ClickerUIManager::HandleUIToggle()
-{
-    if (KEY->Down('I'))
-    {
-        isInventoryOpen = !isInventoryOpen;
-        ShowCursor(isInventoryOpen);
-        inventory->SetActive(isInventoryOpen);
-    }
-
-    if (KEY->Down('B'))
-    {
-        isShopOpen = !isShopOpen;
-        ShowCursor(isShopOpen);
-        shopOpen->SetActive(isShopOpen);
-    }
+    cursor->UpdateWorld();
 }

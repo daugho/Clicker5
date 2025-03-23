@@ -54,7 +54,7 @@ public:
     void Stop();
 
     bool IsActive() { return quad->IsActive(); }
-
+    void SetLoop(bool loop) { data.isLoop = loop; }
 private:
     void UpdatePhysical();
     void UpdateColor();

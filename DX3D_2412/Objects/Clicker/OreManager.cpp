@@ -105,7 +105,7 @@ void OreManager::LoadDropTable(int oreID)
 
         vector<string> datas = Utility::SplitString(row, ",");
 
-        if (datas.size() < 7) // 필드 개수 확인
+        if (datas.size() < 8) // 필드 개수 확인
         {
             printf("Invalid DropTable row: %s\n", row.c_str());
             continue;
@@ -119,8 +119,8 @@ void OreManager::LoadDropTable(int oreID)
         data.minCount = stoi(datas[4]);
         data.maxCount = stoi(datas[5]);
         data.price = stoi(datas[6]);
-
-        dropTable[oreID].push_back(data); // ? oreID별 DropTable 저장
+        data.rarePath = Utility::ToWString(datas[7]);
+        dropTable[oreID].push_back(data); //oreID별 DropTable 저장
     }
     fclose(file);
 }

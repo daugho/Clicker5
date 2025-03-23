@@ -11,12 +11,12 @@ public:
     void SetItem(const DropData& item, int count);
     void Render();
     void ShowTooltip();
+    void Clear();
 
     void SetData(DropData data,int index);
     bool IsOccupied() const { return occupied; }
     const DropData& GetItem() const { return item; }
     int GetCount() const { return count; }
-
     void UpdateData();
 
 private:

@@ -30,7 +30,7 @@ void ClickerMapManager::Update()
 {
 	player->Update();
 	room1->Update();
-	ShopManager::Get()->Update();
+	//ShopManager::Get()->Update();
 	CheckCollision();
 }
 
@@ -42,7 +42,8 @@ void ClickerMapManager::Render()
 
 void ClickerMapManager::Edit()
 {
-	player->Edit();
+	//player->Edit();
+	room1->Edit();
 }
 
 void ClickerMapManager::CreateRoom1()
@@ -56,9 +57,10 @@ void ClickerMapManager::CreateRoom1()
 	room1->AddCube(Vector3(11, 1, 31), Vector3(0, 6, 0), baseTexture, Vector2(1, 1));  // 천장
 
 	// ?? Room1에 광물 추가
-	room1->AddOre({2,0.5,4}, 0);
-	//room1->AddOre({ 2, 2 }, { 10, 10 }, 1);
+	room1->AddOre(Vector3{2,0,4}, 0);
+	room1->AddOre(Vector3{ 2,0, -15 }, 1);
 	room1->AddHermit(Vector3(-2.5, 0 , 10), 1);
+	room1->AddHermit(Vector3(-2.5, 1 , -10), 2);
 }
 
 void ClickerMapManager::CreateRoom2()

@@ -25,7 +25,7 @@ Player::Player()
 	oreInventory = new OreInventory();
 	collider = new SphereCollider(1.0f); // 반지름 1.0 설정
 	collider->SetParent(this);
-
+	RecalculateDamage();
 }
 
 Player::~Player()
@@ -203,6 +203,34 @@ void Player::OpenShop()
 		int shopID = npc->GetID();
 		ClickerUIManager::Get()->OpenShopUI(shopID);
 	}
+}
+
+void Player::RecalculateDamage()
+{
+	playerDamage = baseDamage + upgradeBonus + shopBonus + equipmentBonus;
+
+	string msg = "현재 채굴 데미지: " + to_string(playerDamage) + "\n";
+	OutputDebugStringA(msg.c_str());
+}
+
+void Player::RecalculateMiningCooldown()
+{
+	miningCooldown = baseCooldown - upgradeCooldownBonus - shopCooldownBonus;
+	miningCooldown = max(miningCooldown, 0.1f);
+	string msg = "현재 채굴 쿨다운: " + to_string(miningCooldown) + "\n";
+	OutputDebugStringA(msg.c_str());
+}
+
+void Player::ApplyShopDamageBoost()
+{
+	shopBonus += 3;
+	RecalculateDamage();
+}
+
+void Player::ApplyShopSpeedBoost()
+{
+	shopCooldownBonus = 0.3f;
+	RecalculateMiningCooldown();
 }
 
 void Player::Control()

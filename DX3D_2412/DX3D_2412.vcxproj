@@ -200,6 +200,8 @@
     <ClInclude Include="Objects\Basic\Sphere.h" />
     <ClInclude Include="Objects\Clicker\ClickerMapManager.h" />
     <ClInclude Include="Objects\Clicker\ClickerUIManager.h" />
+    <ClInclude Include="Objects\Clicker\GoldDisplay.h" />
+    <ClInclude Include="Objects\Clicker\ItemPopup.h" />
     <ClInclude Include="Objects\Clicker\ShopManager.h" />
     <ClInclude Include="Objects\Clicker\HermitData.h" />
     <ClInclude Include="Objects\Clicker\Ore.h" />
@@ -299,6 +301,8 @@
     <ClCompile Include="Objects\Basic\Sphere.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerMapManager.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerUIManager.cpp" />
+    <ClCompile Include="Objects\Clicker\GoldDisplay.cpp" />
+    <ClCompile Include="Objects\Clicker\ItemPopup.cpp" />
     <ClCompile Include="Objects\Clicker\ShopManager.cpp" />
     <ClCompile Include="Objects\Clicker\Ore.cpp" />
     <ClCompile Include="Objects\Clicker\OreInventory.cpp" />

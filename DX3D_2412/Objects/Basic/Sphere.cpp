@@ -8,6 +8,25 @@ Sphere::Sphere(float radius, UINT sliceCount, UINT stackCount)
 	MakeMesh();
     MakeTangent();
 	mesh->CreateMesh();
+
+    collider = new SphereCollider(radius);
+    collider->SetParent(this);
+}
+
+void Sphere::Update()
+{
+    if (!IsActive()) return;
+
+    UpdateWorld();
+    collider->UpdateWorld();
+}
+
+void Sphere::Render()
+{
+    if (!IsActive()) return;
+
+    GameObject::Render();
+    collider->Render();
 }
 
 void Sphere::MakeMesh()
