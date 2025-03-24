@@ -27,6 +27,7 @@ private:
     vector<ShopSlot*> descSlots;
     vector<ShopSlot*> buySlots;
     vector<ShopSlot*> sellSlots;
+    vector<ShopSlot*> iconSlots2;
     bool isActive = false;
     wstring texturePath;
     int hermitID;
