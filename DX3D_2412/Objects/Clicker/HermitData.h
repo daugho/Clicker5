@@ -32,3 +32,13 @@ struct HermitTable
 	int id;
 	string name;
 };
+struct ShopItemLevelData
+{
+	int id;
+	int level;
+	float value;
+	float rate;
+	wstring iconPath;
+	int down;
+};
+

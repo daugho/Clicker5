@@ -18,6 +18,8 @@ public:
 
     void RegisterBuyEvent(int index);
 
+    void TryUpgradeItem(int itemID);
+
     bool IsActive() const { return isActive; }
     vector<ShopSlot*>& GetIconSlots() { return iconSlots; }
     vector<ShopSlot*>& GetDescSlots() { return descSlots; }
@@ -27,11 +29,11 @@ private:
     vector<ShopSlot*> descSlots;
     vector<ShopSlot*> buySlots;
     vector<ShopSlot*> sellSlots;
-    vector<ShopSlot*> iconSlots2;
     bool isActive = false;
     wstring texturePath;
     int hermitID;
     OreInventory* inventory=nullptr;
     GoldDisplay* goldDisplay = nullptr;
+    unordered_map<int, int> itemLevels;
 };
 

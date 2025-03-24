@@ -100,7 +100,24 @@ void ShopManager::LoadHermitData(string path)
 
 void ShopManager::LoadShopTable(int hermitID)
 {
-    string path = "Resources/Tables/HermitShop" + to_string(hermitID) + ".csv";
+    string path;
+
+    switch (hermitID)
+    {
+    case 1:
+        path = "Resources/Tables/HermitShop1.csv";
+        break;
+    case 2:
+        path = "Resources/Tables/HermitShop2.csv";
+        LoadShop2Table(hermitID);
+        break;
+    case 3:
+        path = "Resources/Tables/HermitShop3.csv";
+        break;
+    default:
+        path = "Resources/Tables/HermitShop_Default.csv";
+        break;
+    }
 
     FILE* file;
     fopen_s(&file, path.c_str(), "r");
@@ -134,6 +151,52 @@ void ShopManager::LoadShopTable(int hermitID)
         shopTables[hermitID].push_back(data);  // Hermit ID별로 저장
     }
     fclose(file);
+}
+
+void ShopManager::LoadShop2Table(int hermitID)
+{
+    string path = "Resources/Tables/shop2item.csv";
+
+    FILE* file;
+    fopen_s(&file, path.c_str(), "r");
+
+    if (!file)
+    {
+        OutputDebugStringA(("Shop2Item CSV 열기 실패: " + path + "\n").c_str());
+        return;
+    }
+
+    bool isFirstLine = true;
+    while (!feof(file))
+    {
+        char temp[1024];
+        fgets(temp, 1024, file);
+
+        if (isFirstLine) {
+            isFirstLine = false;
+            continue;
+        }
+
+        string row = temp;
+        Utility::Replace(row, "\n", "");
+        vector<string> datas = Utility::SplitString(row, ",");
+
+        if (datas.size() < 6) continue; // 안전 체크
+
+        ShopItemLevelData data;
+        data.id = stoi(datas[0]);
+        data.level = stoi(datas[1]);
+        data.value = stof(datas[2]);
+        data.rate = stof(datas[3]);
+        data.iconPath = Utility::ToWString(datas[4]);
+        data.down = stoi(datas[5]);
+
+        shop2ItemLevels[data.id].push_back(data);
+    }
+
+    fclose(file);
+
+    OutputDebugStringA("Shop2 아이템 CSV 로드 완료\n");
 }
 
 

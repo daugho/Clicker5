@@ -36,7 +36,7 @@ void OreSlot::Render()
 	if (!ClickerUIManager::Get()->IsInventoryOpen())
 		return;
 	Font::Get()->SetStyle("Icon");
-	Font::Get()->SetColor("Red");
+	Font::Get()->SetColor("Blue");
 	Font::Get()->RenderText(to_string(count), GetGlobalPosition());
 }
 

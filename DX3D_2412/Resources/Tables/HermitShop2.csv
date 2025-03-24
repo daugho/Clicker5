@@ -1,8 +1,6 @@
 id,name,discrip,price,icon
-1,11,111,10,Resources/Textures/Block/Block0.png
-2,22,222,20,Resources/Textures/Block/Block0.png
-3,33,333,30,Resources/Textures/Block/Block0.png
-4,44,444,40,Resources/Textures/Block/Block0.png
-5,55,555,50,Resources/Textures/Block/Block0.png
-6,66,666,60,Resources/Textures/Block/Block0.png
-7,77,777,70,Resources/Textures/Block/Block0.png
+1,speed,Resources/Textures/UI/ShopUI/speeddiscrip.png,500,Resources/Textures/UI/ShopUI/speed1.png
+2,box,Resources/Textures/UI/ShopUI/boxdiscrip.png,600,Resources/Textures/UI/ShopUI/box1.png
+3,bag,Resources/Textures/UI/ShopUI/bagdiscrip.png,900,Resources/Textures/UI/ShopUI/bag1.png
+4,power,Resources/Textures/UI/ShopUI/powerdiscrip.png,1500,Resources/Textures/UI/ShopUI/power1.png
+5,pick,Resources/Textures/UI/ShopUI/pickdiscrip.png,2000,Resources/Textures/UI/ShopUI/pick1.png

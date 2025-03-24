@@ -44,9 +44,6 @@ Shop::~Shop()
     for (ShopSlot* slot : sellSlots) {
         delete slot;
     }
-    for (ShopSlot* slot : iconSlots2) {
-        delete slot;
-    }
 }
 
 void Shop::Update()
@@ -63,9 +60,6 @@ void Shop::Update()
         slot->Update();
     }
     for (ShopSlot* slot : sellSlots) {
-        slot->Update();
-    }
-    for (ShopSlot* slot : iconSlots2) {
         slot->Update();
     }
 }
@@ -88,16 +82,12 @@ void Shop::Render()
     for (ShopSlot* slot : sellSlots) {
         slot->Render();
     }
-    for (ShopSlot* slot : iconSlots2) {
-        slot->Render();
-    }
 }
 
 void Shop::Edit()
 {
-    OutputDebugStringA(("Edit 호출 - hermitID: " + to_string(hermitID) + "\n").c_str());
-    for (ShopSlot* slot : iconSlots) {
-        OutputDebugStringA(("Slot Tag: " + slot->GetTag() + "\n").c_str()); // <-- 디버깅 포인트
+    
+    for (ShopSlot* slot : sellSlots) {
         slot->Edit();
     }
 }
@@ -203,31 +193,31 @@ void Shop::CreateSlots2()
 
     float xinterval = 15.0f;
     float yinterval = 17.0f;
-    
+    int numSlots = 3;
 
     ShopSlot* slot = new ShopSlot();
-    slot->SetTag("Ore_ShopSlot2");
+    slot->SetTag("Ore_Shop2Slot");
     slot->SetParent(this);
     slot->SetItem(items[0], 0);
     slot->Load();
-    iconSlots2.push_back(slot);
-
+    iconSlots.push_back(slot);
 
     for (int i = 1; i < 6; i++) {
         ShopSlot* slot = new ShopSlot();
         float yOffset = (slot->Size().x + yinterval) * i;
 
-        Vector3 pos = iconSlots2[0]->GetLocalPosition() + Vector3(0, yOffset, 0);
+        Vector3 pos = iconSlots[0]->GetLocalPosition() + Vector3(0, yOffset, 0);
         slot->SetLocalPosition(pos);
-        slot->SetTag("Ore_ShopSlot2" + to_string(i));
+        slot->SetTag("Ore_Shop2Slot" + to_string(i));
         slot->SetParent(this);
         slot->SetItem(items[i], i);
         slot->Load();
 
         slot->UpdateWorld();
 
-        iconSlots2.push_back(slot);
+        iconSlots.push_back(slot);
     }
+
     ShopSlot* sellButton = new ShopSlot();
     sellButton->SetTag("SellAllButton2");
     sellButton->SetParent(this);
@@ -256,6 +246,22 @@ void Shop::CreateSlots2()
             OutputDebugStringA(("판매된 금액: " + to_string(totalGold) + "\n").c_str());
         });
     sellSlots.push_back(sellButton);
+
+    for (int i = 0; i < numSlots + 1; i++) {
+        ShopSlot* slot = new ShopSlot();
+        float yOffset = (slot->Size().x + yinterval) * i;
+
+        Vector3 pos = iconSlots[0]->GetLocalPosition() + Vector3(465, yOffset, 0);
+        slot->SetLocalPosition(pos);
+        slot->SetTag("Ore_Shop2Slot_Bye" + to_string(i));
+        slot->SetParent(this);
+        slot->SetSlotIndex(i);
+        slot->SetBuyEvent(items[i], i);
+        slot->Load();
+        slot->UpdateWorld();
+
+        buySlots.push_back(slot);
+    }
 }
 
 void Shop::CreateSlots3()
@@ -323,3 +329,64 @@ void Shop::RegisterBuyEvent(int index)
         UpgradePlayer(index);
     });
 }
+
+void Shop::TryUpgradeItem(int itemID)
+{
+    int& currentLevel = itemLevels[itemID];
+    if (currentLevel == 0)
+        currentLevel = 1;
+
+    unordered_map<int, vector<ShopItemLevelData>>& levels = ShopManager::Get()->GetShop2ItemLevels(); // CSV에서 로드된 데이터
+    if (levels.count(itemID) == 0)
+    {
+        OutputDebugStringA("존재하지 않는 itemID입니다.\n");
+        return;
+    }
+
+    auto& levelList = levels[itemID];
+
+    // 범위 초과 방지
+    if (currentLevel > levelList.size())
+    {
+        OutputDebugStringA("이미 최대 레벨입니다!\n");
+        return;
+    }
+
+    // 현재 레벨의 강화 정보
+    ShopItemLevelData& data = levelList[currentLevel - 1];
+
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
+
+    // 난수 생성
+    float randValue = distribution(generator);
+    bool success = randValue < data.rate;
+
+    if (success)
+    {
+        currentLevel++;
+        OutputDebugStringA(("강화 성공! 현재 레벨: " + to_string(currentLevel) + "\n").c_str());
+    }
+    else
+    {
+        int oldLevel = currentLevel;
+        currentLevel = max(1, currentLevel - data.down);
+        OutputDebugStringA(("강화 실패! 레벨 감소: " + to_string(oldLevel) + " → " + to_string(currentLevel) + "\n").c_str());
+    }
+
+    // UI 아이콘 변경
+    int slotIndex = itemID - 1; // buySlots와 itemID가 1부터 일치한다고 가정
+    if (slotIndex >= 0 && slotIndex < buySlots.size())
+    {
+        int iconLevelIndex = min(currentLevel - 1, (int)levelList.size() - 1);
+        wstring newIcon = levelList[iconLevelIndex].iconPath;
+        buySlots[slotIndex]->GetImage()->GetMaterial()->SetDiffuseMap(newIcon);
+    }
+
+    // 실제 효과 적용은 여기서 필요에 따라 Player에게 전달
+    // 예시:
+    // ClickerMapManager::Get()->GetPlayer()->ApplyUpgrade(itemID, data.value);
+}
+
+

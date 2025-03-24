@@ -30,8 +30,8 @@ void ShopSlot::Render()
         for (int i = 0; i < text.length(); ++i)
         {
             Font::Get()->SetStyle("Icon");
+            Font::Get()->RenderText(text,GetGlobalPosition() + Vector3(-30, -30, 0));            
             Font::Get()->SetColor("Black");
-            Font::Get()->RenderText(string(1, text[i]),GetGlobalPosition() + Vector3((i * 10), 0, 0),25.0f);            
         }
     }
 }
@@ -98,8 +98,8 @@ void ShopSlot::OnClick()
     }
 }
 
-void ShopSlot::Edit()
-{
-    image->Edit();
-}
+//void ShopSlot::Edit()
+//{
+//    image->Edit();
+//}
 
