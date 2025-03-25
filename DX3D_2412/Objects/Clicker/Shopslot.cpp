@@ -98,8 +98,8 @@ void ShopSlot::OnClick()
     }
 }
 
-//void ShopSlot::Edit()
-//{
-//    image->Edit();
-//}
+void ShopSlot::Edit()
+{
+    image->Edit();
+}
 

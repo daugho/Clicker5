@@ -13,7 +13,7 @@ public:
     void SetDescrip(const ShopData& item, int index);
     void SetBuyEvent(const ShopData& item, int index);
     void OnClick();
-    //void Edit();
+    void Edit();
 
     void SetSlotIndex(int index) { slotIndex = index; }
     int GetSlotIndex() const { return slotIndex; }

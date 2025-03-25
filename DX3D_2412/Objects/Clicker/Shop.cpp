@@ -87,7 +87,7 @@ void Shop::Render()
 void Shop::Edit()
 {
     
-    for (ShopSlot* slot : sellSlots) {
+    for (ShopSlot* slot : iconSlots) {
         slot->Edit();
     }
 }
@@ -190,6 +190,7 @@ void Shop::CreateSlots() {
 void Shop::CreateSlots2()
 {
     vector<ShopData>& items = ShopManager::Get()->GetShopTable(hermitID);
+    vector<int> itemIDs = { 1, 2, 3, 4, 5, 6 };
 
     float xinterval = 15.0f;
     float yinterval = 17.0f;
@@ -247,7 +248,8 @@ void Shop::CreateSlots2()
         });
     sellSlots.push_back(sellButton);
 
-    for (int i = 0; i < numSlots + 1; i++) {
+    for (int i = 0; i < 6; i++)
+    {
         ShopSlot* slot = new ShopSlot();
         float yOffset = (slot->Size().x + yinterval) * i;
 
@@ -255,6 +257,11 @@ void Shop::CreateSlots2()
         slot->SetLocalPosition(pos);
         slot->SetTag("Ore_Shop2Slot_Bye" + to_string(i));
         slot->SetParent(this);
+        int itemID = itemIDs[i];
+        slot->SetEvent([=]()
+        {
+            TryUpgradeItem(itemID);
+        });
         slot->SetSlotIndex(i);
         slot->SetBuyEvent(items[i], i);
         slot->Load();
@@ -361,7 +368,7 @@ void Shop::TryUpgradeItem(int itemID)
 
     // 난수 생성
     float randValue = distribution(generator);
-    bool success = randValue < data.rate;
+    bool success = randValue <= data.rate;
 
     if (success)
     {
@@ -377,11 +384,11 @@ void Shop::TryUpgradeItem(int itemID)
 
     // UI 아이콘 변경
     int slotIndex = itemID - 1; // buySlots와 itemID가 1부터 일치한다고 가정
-    if (slotIndex >= 0 && slotIndex < buySlots.size())
+    if (slotIndex >= 0 && slotIndex < iconSlots.size())
     {
         int iconLevelIndex = min(currentLevel - 1, (int)levelList.size() - 1);
         wstring newIcon = levelList[iconLevelIndex].iconPath;
-        buySlots[slotIndex]->GetImage()->GetMaterial()->SetDiffuseMap(newIcon);
+        iconSlots[slotIndex]->GetImage()->GetMaterial()->SetDiffuseMap(newIcon);
     }
 
     // 실제 효과 적용은 여기서 필요에 따라 Player에게 전달

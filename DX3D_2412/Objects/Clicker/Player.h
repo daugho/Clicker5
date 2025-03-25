@@ -27,10 +27,10 @@ public:
 
 	//데미지 계산 함수
 	void RecalculateDamage();
-	void RecalculateMiningCooldown();
+	void ApplyShopDamageBoost();
 
 	//체굴 속도 계산함수
-	void ApplyShopDamageBoost();
+	void RecalculateMiningCooldown();
 	void ApplyShopSpeedBoost();
 
 private:
