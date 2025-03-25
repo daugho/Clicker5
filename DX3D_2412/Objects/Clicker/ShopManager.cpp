@@ -200,3 +200,4 @@ void ShopManager::LoadShop2Table(int hermitID)
 }
 
 
+

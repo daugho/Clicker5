@@ -53,5 +53,5 @@ void ItemPopup::Render()
 
 void ItemPopup::Edit()
 {
-    //Quad::Edit();
+    Quad::Edit();
 }

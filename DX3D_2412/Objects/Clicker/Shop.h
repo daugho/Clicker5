@@ -3,7 +3,8 @@
 class ShopSlot;
 class GoldDisplay;
 
-class Shop : public Quad {
+class Shop : public Quad
+{
 public:
     Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay);
     ~Shop();
@@ -11,19 +12,21 @@ public:
     void Update();
     void Render();
     void Edit();
+    //shop1
     void CreateSlots();
-    void CreateSlots2();
-    void CreateSlots3();
     void UpgradePlayer(int index);
-
     void RegisterBuyEvent(int index);
 
+    //shop2
+    void CreateSlots2();
     void TryUpgradeItem(int itemID);
+    void ShowUpgradeResultImage(bool success);
 
     bool IsActive() const { return isActive; }
     vector<ShopSlot*>& GetIconSlots() { return iconSlots; }
     vector<ShopSlot*>& GetDescSlots() { return descSlots; }
-
+    int GetItemLevel(int itemID) const;
+    
 private:
     vector<ShopSlot*> iconSlots;
     vector<ShopSlot*> descSlots;
@@ -35,5 +38,9 @@ private:
     OreInventory* inventory=nullptr;
     GoldDisplay* goldDisplay = nullptr;
     unordered_map<int, int> itemLevels;
+    Quad* resultImage;
+    float resultTimer;
+    float resultDuration;
+    ItemPopup* popup;
 };
 

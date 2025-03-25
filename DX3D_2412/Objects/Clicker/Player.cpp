@@ -227,6 +227,10 @@ void Player::ApplyShopDamageBoost()
 	RecalculateDamage();
 }
 
+void Player::Shop2buypick()
+{
+}
+
 void Player::ApplyShopSpeedBoost()
 {
 	shopCooldownBonus = 0.3f;

@@ -26,13 +26,15 @@ public:
 	void OpenShop();
 
 	//데미지 계산 함수
-	void RecalculateDamage();
 	void ApplyShopDamageBoost();
+	void Shop2buypick();
 
 	//체굴 속도 계산함수
-	void RecalculateMiningCooldown();
 	void ApplyShopSpeedBoost();
 
+	//최종 계산함수
+	void RecalculateMiningCooldown();
+	void RecalculateDamage();
 private:
 	void Control();
 

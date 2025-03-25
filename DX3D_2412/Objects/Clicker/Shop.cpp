@@ -16,7 +16,6 @@ Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
         break;
     case 3:
         texturePath = L"Resources/Textures/UI/Shop3.png";
-        CreateSlots3();
         break;
     default:
         texturePath = L"Resources/Textures/UI/DefaultShop.png";
@@ -28,6 +27,11 @@ Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
     localPosition = CENTER;
     UpdateWorld();
     isActive = false;
+
+    popup = new ItemPopup();
+    popup->SetParent(this);
+    popup->SetLocalPosition(Vector3(200, 0, 0));
+
 }
 
 Shop::~Shop()
@@ -62,6 +66,7 @@ void Shop::Update()
     for (ShopSlot* slot : sellSlots) {
         slot->Update();
     }
+    popup->Update();
 }
 
 void Shop::Render()
@@ -82,14 +87,15 @@ void Shop::Render()
     for (ShopSlot* slot : sellSlots) {
         slot->Render();
     }
+    popup->Render();
 }
 
 void Shop::Edit()
-{
-    
+{    
     for (ShopSlot* slot : iconSlots) {
         slot->Edit();
     }
+
 }
 
 void Shop::CreateSlots() {
@@ -190,7 +196,7 @@ void Shop::CreateSlots() {
 void Shop::CreateSlots2()
 {
     vector<ShopData>& items = ShopManager::Get()->GetShopTable(hermitID);
-    vector<int> itemIDs = { 1, 2, 3, 4, 5, 6 };
+    vector<int> itemIDs = { 1, 2, 3, 4, 5, 6 };//업그레이드 가능한칸은 5칸이지만 총슬롯은 6개이므로 6이 맞다.
 
     float xinterval = 15.0f;
     float yinterval = 17.0f;
@@ -218,7 +224,24 @@ void Shop::CreateSlots2()
 
         iconSlots.push_back(slot);
     }
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    for (int i = 0; i < numSlots + 1; i++) {
+        ShopSlot* slot = new ShopSlot();
+        float yOffset = (slot->Size().x + yinterval) * i;
 
+        Vector3 pos = iconSlots[0]->GetLocalPosition() + Vector3(100, yOffset, 0);
+        slot->SetLocalPosition(pos);
+        slot->SetTag("Ore_ShopSlot2_descrip" + to_string(i));
+        slot->SetParent(this);
+        slot->SetDescrip(items[i], i);
+
+        slot->Load();
+
+        slot->UpdateWorld();
+
+        descSlots.push_back(slot);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////
     ShopSlot* sellButton = new ShopSlot();
     sellButton->SetTag("SellAllButton2");
     sellButton->SetParent(this);
@@ -247,7 +270,7 @@ void Shop::CreateSlots2()
             OutputDebugStringA(("판매된 금액: " + to_string(totalGold) + "\n").c_str());
         });
     sellSlots.push_back(sellButton);
-
+    /////////////////////////////////////////////////////////////////////////////////////////////
     for (int i = 0; i < 6; i++)
     {
         ShopSlot* slot = new ShopSlot();
@@ -263,16 +286,11 @@ void Shop::CreateSlots2()
             TryUpgradeItem(itemID);
         });
         slot->SetSlotIndex(i);
-        slot->SetBuyEvent(items[i], i);
         slot->Load();
         slot->UpdateWorld();
 
         buySlots.push_back(slot);
     }
-}
-
-void Shop::CreateSlots3()
-{
 }
 
 void Shop::UpgradePlayer(int index)
@@ -337,6 +355,7 @@ void Shop::RegisterBuyEvent(int index)
     });
 }
 
+
 void Shop::TryUpgradeItem(int itemID)
 {
     int& currentLevel = itemLevels[itemID];
@@ -381,7 +400,7 @@ void Shop::TryUpgradeItem(int itemID)
         currentLevel = max(1, currentLevel - data.down);
         OutputDebugStringA(("강화 실패! 레벨 감소: " + to_string(oldLevel) + " → " + to_string(currentLevel) + "\n").c_str());
     }
-
+    ShowUpgradeResultImage(success);
     // UI 아이콘 변경
     int slotIndex = itemID - 1; // buySlots와 itemID가 1부터 일치한다고 가정
     if (slotIndex >= 0 && slotIndex < iconSlots.size())
@@ -391,9 +410,46 @@ void Shop::TryUpgradeItem(int itemID)
         iconSlots[slotIndex]->GetImage()->GetMaterial()->SetDiffuseMap(newIcon);
     }
 
+    switch (itemID) {
+    case 1:
+
+        break;
+    case 2:
+
+        break;
+    case 3:
+
+        break;
+    case 4 :
+
+        break;
+    case 5:
+
+        break;
+    }
     // 실제 효과 적용은 여기서 필요에 따라 Player에게 전달
     // 예시:
     // ClickerMapManager::Get()->GetPlayer()->ApplyUpgrade(itemID, data.value);
 }
+
+void Shop::ShowUpgradeResultImage(bool success)
+{
+    if (!popup) return;
+    if (success)
+        popup->Play(L"Resources/Textures/UI/ShopUI/ok.png");
+    else
+        popup->Play(L"Resources/Textures/UI/ShopUI/back.png");
+}
+
+int Shop::GetItemLevel(int itemID) const
+{
+    auto it = itemLevels.find(itemID);
+    if (it != itemLevels.end())
+        return it->second;
+
+    return 1; // 기본 레벨은 1
+}
+
+
 
 
