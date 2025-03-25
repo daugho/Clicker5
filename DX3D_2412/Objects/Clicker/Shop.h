@@ -26,7 +26,7 @@ public:
     vector<ShopSlot*>& GetIconSlots() { return iconSlots; }
     vector<ShopSlot*>& GetDescSlots() { return descSlots; }
     int GetItemLevel(int itemID) const;
-    
+    unordered_map<int, int>& GetItemLevels() { return itemLevels; }
 private:
     vector<ShopSlot*> iconSlots;
     vector<ShopSlot*> descSlots;
