@@ -194,6 +194,10 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Clicker/Player.h"
 #include "Objects/Clicker/GoldDisplay.h"
 #include "Objects/Clicker/ItemPopup.h"
+#include "Objects/Clicker/BoxManager.h"
+#include "Objects/Clicker/BoxInventory.h"
+#include "Objects/Clicker/BoxSlot.h"
+#include "Objects/Clicker/BoxUI.h"
 
 
 //Manager Head

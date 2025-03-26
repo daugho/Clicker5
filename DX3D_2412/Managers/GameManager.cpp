@@ -1,4 +1,4 @@
-	//SCENE->Create("Export", new ModelExportScene());
+	
 	//SCENE->Create("Start", new CollisionScene());
 
 	//SCENE->Create("Start", new ModelAnimationScene());
@@ -27,7 +27,7 @@ GameManager::GameManager()
 	//SCENE->Create("Grid", new GridScene());
 	SCENE->Create("Start", new ClickerPlayScene());
 	//SCENE->Create("Start", new ModelRenderScene());
-
+	//SCENE->Create("Export", new ModelExportScene());
 
 	//SCENE->Add("Grid");
 	SCENE->Add("Start");

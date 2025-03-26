@@ -32,9 +32,15 @@ void Room::AddHermit(Vector3 pos, int shopID)
     ShopManager::Get()->AddShop(pos, shopID);
 }
 
+void Room::AddBox(Vector3 pos)
+{
+    BoxInventoryManager::Get()->AddBox(pos);
+}
+
 void Room::Edit()
 {
-    ShopManager::Get()->Edit();
+    //ShopManager::Get()->Edit();
+    BoxInventoryManager::Get()->Edit();
 }
 
 void Room::Render()
@@ -43,6 +49,7 @@ void Room::Render()
         cube->Render();
     oreManager->Render();
     ShopManager::Get()->Render();
+    BoxInventoryManager::Get()->Render();
 }
 
 void Room::Update()
@@ -51,5 +58,5 @@ void Room::Update()
         cube->Update();
     oreManager->Update();//±¤¹° render
     ShopManager::Get()->Update();//machine render
-
+    BoxInventoryManager::Get()->Update();
 }

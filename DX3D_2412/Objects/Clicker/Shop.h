@@ -31,13 +31,13 @@ private:
     vector<ShopSlot*> descSlots;
     vector<ShopSlot*> buySlots;
     vector<ShopSlot*> sellSlots;
+    vector<ShopSlot*> levelSlots;
     bool isActive = false;
     wstring texturePath;
     int hermitID;
     OreInventory* inventory=nullptr;
     GoldDisplay* goldDisplay = nullptr;
     unordered_map<int, int> itemLevels;
-    Quad* resultImage;
     float resultTimer;
     float resultDuration;
     ItemPopup* popup;

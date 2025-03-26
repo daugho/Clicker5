@@ -198,6 +198,10 @@
     <ClInclude Include="Objects\Basic\Plane.h" />
     <ClInclude Include="Objects\Basic\Quad.h" />
     <ClInclude Include="Objects\Basic\Sphere.h" />
+    <ClInclude Include="Objects\Clicker\BoxInventory.h" />
+    <ClInclude Include="Objects\Clicker\BoxManager.h" />
+    <ClInclude Include="Objects\Clicker\BoxSlot.h" />
+    <ClInclude Include="Objects\Clicker\BoxUI.h" />
     <ClInclude Include="Objects\Clicker\ClickerMapManager.h" />
     <ClInclude Include="Objects\Clicker\ClickerUIManager.h" />
     <ClInclude Include="Objects\Clicker\GoldDisplay.h" />
@@ -299,6 +303,9 @@
     <ClCompile Include="Objects\Basic\Plane.cpp" />
     <ClCompile Include="Objects\Basic\Quad.cpp" />
     <ClCompile Include="Objects\Basic\Sphere.cpp" />
+    <ClCompile Include="Objects\Clicker\BoxInventory.cpp" />
+    <ClCompile Include="Objects\Clicker\BoxManager.cpp" />
+    <ClCompile Include="Objects\Clicker\BoxUI.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerMapManager.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerUIManager.cpp" />
     <ClCompile Include="Objects\Clicker\GoldDisplay.cpp" />

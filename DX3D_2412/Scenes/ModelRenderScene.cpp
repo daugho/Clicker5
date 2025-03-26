@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("Bodyfinal");
+	model = new Model("woodbox");
 	//model->SetShader(L"Model/Model.hlsl");
 }
 

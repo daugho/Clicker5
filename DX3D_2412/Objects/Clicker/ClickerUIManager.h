@@ -7,6 +7,8 @@ class Quad;
 class BlendState;
 class GoldDisplay;
 class ItemPopup;
+class BoxInventory;
+class BoxUI;
 enum class UIState
 {
     None,
@@ -14,6 +16,7 @@ enum class UIState
     Shop,
     Dialogue,
     Upgrade,
+    Box
 };
 
 class ClickerUIManager : public Singleton<ClickerUIManager>
@@ -31,6 +34,8 @@ public:
     void OpenInventory();
     void OpenShopUI(int shopID);
     void CloseCurrentUI();
+    void OpenBoxUI();
+
 
     void SetCursorColor(const Float4& color);
     void ResetCursorColor();
@@ -39,6 +44,7 @@ public:
     ItemPopup* GetItemPopup() { return itemPopup; }
     bool IsInventoryOpen() const { return currentUIState == UIState::Inventory; }
     bool IsShopOpen() const { return currentUIState == UIState::Shop; }
+    bool IsBoxOPen() const{return currentUIState== UIState::Box;}
     int GetCurrentShopID() const { return currentShopID; }
 
 private:
@@ -57,7 +63,10 @@ private:
     Quad* resourcePanel;
 
     OreInventory* inventory;
-    Shop* shopOpen;
+    Shop* shopOpen;//shop UI
+
+    BoxInventory* boxinventory;
+    BoxUI* boxUI;
 
     BlendState* blendState[2];
 

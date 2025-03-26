@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-    string name = "Bodyfinal";
+    string name = "woodbox";
     string extension = "fbx";
     string file = "Resources/Models/FBX/" + name + "." + extension;
 
@@ -12,12 +12,12 @@ ModelExportScene::ModelExportScene()
     exporter->ExportMesh();
     delete exporter;
 
-    string clipName = "MinerIdle";
-    file = "Resources/Models/Animations/Miner/MinerIdle.anim";    
-    
-    exporter = new ModelExporter(name, file);
-    exporter->ExportClip(clipName);
-    delete exporter;
+    //string clipName = "MinerIdle";
+    //file = "Resources/Models/Animations/Miner/MinerIdle.anim";    
+    //
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
     
     //clipName = "Run";
     //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";

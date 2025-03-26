@@ -8,6 +8,11 @@ ShopSlot::ShopSlot() : Button(Vector2(110, 60))
     image->SetLocalScale(Vector3(0.8f, 0.8f, 1));   // 슬롯보다 약간 작게
     image->UpdateWorld();
     image->SetActive(false);
+
+    levelImage = new Quad(Vector2(30, 30)); // 크기 적당히 조절
+    levelImage->SetParent(this);
+    levelImage->SetLocalPosition(Vector3(0, 0, 0.01f));  // 위치 조절
+    levelImage->SetActive(false);
 }
 
 ShopSlot::~ShopSlot() {}
@@ -15,6 +20,7 @@ ShopSlot::~ShopSlot() {}
 void ShopSlot::Update()
 {
     Button::Update();
+    levelImage->Update();
 }
 
 void ShopSlot::Render()
@@ -23,27 +29,13 @@ void ShopSlot::Render()
         return;
     Button::Render();
     image->Render();
+    levelImage->Render();
     if (slotType == ShopSlotType::ItemSlot)
     {
         string text = to_string(item.price) + "G";
         Font::Get()->SetStyle("Icon");
         Font::Get()->SetColor("Black");
         Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(-30, -30, 0));
-    }
-    if (slotType == ShopSlotType::DescriptionSlot2)
-    {
-        string currentlevel = to_string(reinforce.level);
-        string nextlevel = to_string(reinforce.level + 1);
-        string successRate = to_string((int)(reinforce.rate * 100)) + "%";
-        string down = to_string(reinforce.down);
-
-        string info = "Lv." + currentlevel + " → Lv." + nextlevel;
-        info += " | 성공률: " + successRate;
-        info += " | 실패 시 -" + down + "레벨";
-        Vector3 textPos = GetGlobalPosition() + Vector3(10, 0, 0);
-        Font::Get()->SetStyle("Icon");
-        Font::Get()->SetColor("Black");
-        Font::Get()->RenderText(info, textPos);
     }
 }
 
@@ -57,7 +49,6 @@ void ShopSlot::SetItem(const ShopData& item, int index)
     image->SetTag("Ore_ShopSlot_Icon_" + to_string(index));
     image->GetMaterial()->SetDiffuseMap(item.icon);
     image->Load();
-
 }
 
 void ShopSlot::SetDescrip(const ShopData& item, int index)
@@ -86,19 +77,18 @@ void ShopSlot::SetBuyEvent(const ShopData& item, int index)
     image->Load();
 }
 
-void ShopSlot::SetShop2Descrip(const ShopData& item, int index)
+void ShopSlot::SetLevel(const ShopItemLevelData& level, int index)
 {
     this->item = item;
     this->slotIndex = index;
     occupied = true;
-    slotType = ShopSlotType::DescriptionSlot2;
-    //image->SetActive(true);
-    //image->Load();
+    slotType = ShopSlotType::ItemLevel;//정해진 text를 출력하기위해 타입 정하기.
+    levelImage->SetActive(true);
+    levelImage->SetTag("Level" + to_string(index));
+    levelImage->GetMaterial()->SetDiffuseMap(level.ratePath);
+    levelImage->Load();
 }
 
-void ShopSlot::RenderUpgradeInfo()
-{
-}
 
 void ShopSlot::OnClick()
 {
@@ -125,6 +115,7 @@ void ShopSlot::OnClick()
 
 void ShopSlot::Edit()
 {
-    image->Edit();
+    //image->Edit();
+    levelImage->Edit();
 }
 

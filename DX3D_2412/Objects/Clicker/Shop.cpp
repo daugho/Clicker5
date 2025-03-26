@@ -48,6 +48,9 @@ Shop::~Shop()
     for (ShopSlot* slot : sellSlots) {
         delete slot;
     }
+    for (ShopSlot* slot : levelSlots) {
+        delete slot;
+    }
 }
 
 void Shop::Update()
@@ -66,6 +69,9 @@ void Shop::Update()
     for (ShopSlot* slot : sellSlots) {
         slot->Update();
     }
+    for (ShopSlot* slot : levelSlots) {
+        slot->Update();
+    }
     popup->Update();
 }
 
@@ -74,8 +80,6 @@ void Shop::Render()
     //if (!isActive) return;
     Quad::Render();
     popup->Render();
-
-
     for (ShopSlot* slot : iconSlots) {
         slot->Render();
     }
@@ -88,14 +92,17 @@ void Shop::Render()
     for (ShopSlot* slot : sellSlots) {
         slot->Render();
     }
+    for (ShopSlot* slot : levelSlots) {
+        slot->Render();
+    }
 }
 
 void Shop::Edit()
 {    
-    for (ShopSlot* slot : iconSlots) {
+    for (ShopSlot* slot : levelSlots) {
         slot->Edit();
     }
-    popup->Edit();
+    //popup->Edit();
 }
 
 void Shop::CreateSlots() {
@@ -234,7 +241,6 @@ void Shop::CreateSlots2()
         slot->SetTag("Ore_ShopSlot2_descrip" + to_string(i));
         slot->SetParent(this);
         slot->SetDescrip(items[i], i);
-
         slot->Load();
 
         slot->UpdateWorld();
@@ -282,14 +288,39 @@ void Shop::CreateSlots2()
         slot->SetParent(this);
         int itemID = itemIDs[i];
         slot->SetEvent([=]()
-        {
-            TryUpgradeItem(itemID);
-        });
+            {
+                TryUpgradeItem(itemID);
+            });
         slot->SetSlotIndex(i);
+        int level = GetItemLevel(itemID);
         slot->Load();
         slot->UpdateWorld();
-        slot->SetShop2Descrip(items[i], i);
         buySlots.push_back(slot);
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    for (int i = 0; i < 6; i++)
+    {
+        int itemID = itemIDs[i];
+
+        // 레벨 데이터 가져오기
+        const auto& levels = ShopManager::Get()->GetShop2ItemLevels();
+        if (levels.count(itemID) == 0 || levels.at(itemID).empty())
+            continue;
+
+        const ShopItemLevelData& levelData = levels.at(itemID)[0];  // 레벨 1 데이터
+
+        ShopSlot* slot = new ShopSlot();
+        float yOffset = (slot->Size().x + yinterval) * i;
+
+        Vector3 pos = iconSlots[0]->GetLocalPosition() + Vector3(0, yOffset, 0); // 위치 조정
+        slot->SetLocalPosition(pos);
+        slot->SetTag("ForceLevel" + to_string(i));
+        slot->SetParent(this);
+        slot->SetLevel(levelData, i);
+        slot->Load();
+        slot->UpdateWorld();
+
+        levelSlots.push_back(slot);
     }
 }
 
@@ -408,7 +439,11 @@ void Shop::TryUpgradeItem(int itemID)
         wstring newIcon = levelList[iconLevelIndex].iconPath;
         iconSlots[slotIndex]->GetImage()->GetMaterial()->SetDiffuseMap(newIcon);
     }
-
+    if (slotIndex >= 0 && slotIndex < levelSlots.size())
+    {
+        int levelIndex = min(currentLevel - 1, (int)levelList.size() - 1);
+        levelSlots[slotIndex]->SetLevel(levelList[levelIndex], slotIndex);
+    }
     switch (itemID) {
     case 1:
 

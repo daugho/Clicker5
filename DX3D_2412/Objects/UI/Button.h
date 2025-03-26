@@ -28,7 +28,7 @@ public:
     bool IsEnabled() const { return isEnabled; }
 protected:
     Quad* image;
-
+    Quad* level;
     State state = NONE;
     
     bool isDownCheck = false;

@@ -15,6 +15,9 @@ ClickerUIManager::ClickerUIManager()
     shopOpen->SetActive(false);
 
     itemPopup = new ItemPopup();
+
+    boxUI = new BoxUI();
+    boxUI->SetActive(false);
 }
 
 ClickerUIManager::~ClickerUIManager()
@@ -28,6 +31,7 @@ void ClickerUIManager::Update()
 {
     goldDisplay->Update();
     itemPopup->Update();
+    boxUI->Update();
     HandleUIInput();
     ToogleFreeView();
     UpdateCurrentUI();
@@ -40,6 +44,7 @@ void ClickerUIManager::Render()
     shopOpen->Render();
     goldDisplay->Render();
     itemPopup->Render();
+    boxUI->Render();
 }
 
 void ClickerUIManager::Edit()
@@ -57,7 +62,8 @@ void ClickerUIManager::HandleUIInput()
 
     if (KEY->Down('B') && currentUIState == UIState::None)
         OpenShopUI(1); // 현재 예시로 1번 상점 고정
-
+    if (KEY->Down('c') && currentUIState == UIState::None)
+        OpenShopUI(2); // 현재 예시로 1번 상점 고정
     if (KEY->Down(VK_ESCAPE) && currentUIState != UIState::None)
         CloseCurrentUI();
 }
@@ -88,6 +94,8 @@ void ClickerUIManager::CloseCurrentUI()
     case UIState::Shop:
         shopOpen->SetActive(false);
         break;
+    case UIState::Box:
+        boxUI->SetActive(false);
     default:
         break;
     }
@@ -95,6 +103,14 @@ void ClickerUIManager::CloseCurrentUI()
     currentUIState = UIState::None;
     ShowCursor(false);
     currentShopID = -1;
+}
+
+void ClickerUIManager::OpenBoxUI()
+{
+    currentUIState = UIState::Box;
+    boxUI = new BoxUI();
+    boxUI->SetActive(true);
+    ShowCursor(true);
 }
 
 void ClickerUIManager::UpdateCurrentUI()

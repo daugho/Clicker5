@@ -12,8 +12,7 @@ public:
     void SetItem(const ShopData& item, int index);
     void SetDescrip(const ShopData& item, int index);
     void SetBuyEvent(const ShopData& item, int index);
-    void SetShop2Descrip(const ShopData& item, int index);
-    void RenderUpgradeInfo();
+    void SetLevel(const ShopItemLevelData& level, int index);
     void OnClick();
     void Edit();
 
@@ -29,7 +28,7 @@ private:
     bool occupied = false;
     vector<ShopSlot*> shopslots;
     ShopSlotType slotType;
-    Quad* iconImage = nullptr;
+    Quad* levelImage = nullptr;
     int slotIndex = -1;
     Transform* parent;
 };

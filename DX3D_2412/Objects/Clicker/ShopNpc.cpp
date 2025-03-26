@@ -18,6 +18,7 @@ ShopNPC::ShopNPC(int shopID, Vector3 position) : shopID(shopID)
     //SetLocalPosition(position);
     model->SetParent(this);
     model->SetLocalPosition(position);
+    model->Load();
 
     collider = new BoxCollider(Vector3(1,2,1));
     collider->SetLocalPosition(position.x,position.y+1,position.z);

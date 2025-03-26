@@ -61,6 +61,7 @@ void ClickerMapManager::CreateRoom1()
 	room1->AddOre(Vector3{ 2,0, -15 }, 1);
 	room1->AddHermit(Vector3(-2.5, 0 , 10), 1);
 	room1->AddHermit(Vector3(-2.5, 1 , -10), 2);
+	room1->AddBox(Vector3(3, 0, -7));
 }
 
 void ClickerMapManager::CreateRoom2()
@@ -73,7 +74,8 @@ void ClickerMapManager::CheckCollision()
 	RaycastHit hit;
 
 
-	for (ShopNPC* npc : ShopManager::Get()->GetShops()) {
+	for (ShopNPC* npc : ShopManager::Get()->GetShops()) 
+	{
 		if (npc->GetCollider()->PushSphere(player, &hit)) { // ? NPC와 충돌 감지
 			player->SetLocalPosition(player->GetGlobalPosition() + (hit.point * hit.distance));
 		}
@@ -90,6 +92,13 @@ void ClickerMapManager::CheckCollision()
 	for (Ore* ore : OreManager::Get()->GetOres())
 	{
 		if (ore->GetCollider()->PushSphere(player, &hit))
+		{
+			player->SetLocalPosition(player->GetGlobalPosition() + (hit.point * hit.distance));
+		}
+	}
+	for (BoxInventory* box : BoxInventoryManager::Get()->GetBoxes())
+	{
+		if (box->GetCollider()->PushSphere(player, &hit))
 		{
 			player->SetLocalPosition(player->GetGlobalPosition() + (hit.point * hit.distance));
 		}

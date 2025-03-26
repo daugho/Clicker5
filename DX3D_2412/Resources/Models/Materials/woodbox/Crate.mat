@@ -1,0 +1,14 @@
+<Material Name="Crate">
+    <Shader Vertex="Light/Light.hlsl" Pixel="Light/Light.hlsl"/>
+    <Texture>
+        <DiffuseMap Diffuse="Resources\Textures\Model\woodbox\WoodenCrate_Crate_BaseColor.png"/>
+        <SpecularMap Specular="Resources/Textures/Colors/White.png"/>
+        <NormalMap Normal="Resources\Textures\Model\woodbox\WoodenCrate_Crate_Normal.png"/>
+    </Texture>
+    <Property Shininess="36" HasNormalMap="1">
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Property>
+</Material>

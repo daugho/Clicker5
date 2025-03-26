@@ -69,10 +69,10 @@ void Player::Update()
 	UpdateWorld();
 	Mining();
 	if (KEY->Down('E'))
+	{
 		OpenShop();
-	//ToggleUI();
-	//ForceOpenShopUI();
-	//ToggleInventory();
+		OpenBox();
+	}
 }
 
 void Player::Render()
@@ -202,6 +202,17 @@ void Player::OpenShop()
 	{
 		int shopID = npc->GetID();
 		ClickerUIManager::Get()->OpenShopUI(shopID);
+	}
+}
+
+void Player::OpenBox()
+{
+	Ray ray = CAM->ScreenPointToRay(CENTER);
+	RaycastHit hit;
+	BoxInventory* box = BoxInventoryManager::Get()->GetClosestBox(ray, &hit);
+	if (box && !ClickerUIManager::Get()->IsBoxOPen())
+	{
+		ClickerUIManager::Get()->OpenBoxUI();
 	}
 }
 

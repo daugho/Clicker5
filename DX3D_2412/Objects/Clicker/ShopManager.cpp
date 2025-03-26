@@ -67,6 +67,10 @@ void ShopManager::AddShop(Vector3 pos, int shopID)
 
 void ShopManager::LoadHermitData(string path)
 {
+    if (!shop2ItemLevels.empty()) {
+        OutputDebugStringA("이미 LoadHermitData 존재  중복 로딩 방지\n");
+        return;
+    }
     FILE* file;
     fopen_s(&file, path.c_str(), "r");
 
@@ -100,6 +104,10 @@ void ShopManager::LoadHermitData(string path)
 
 void ShopManager::LoadShopTable(int hermitID)
 {
+    if (!shop2ItemLevels.empty()) {
+        OutputDebugStringA("이미 LoadShopTable 존재  중복 로딩 방지\n");
+        return;
+    }
     string path;
 
     switch (hermitID)
@@ -155,6 +163,10 @@ void ShopManager::LoadShopTable(int hermitID)
 
 void ShopManager::LoadShop2Table(int hermitID)
 {
+    if (!shop2ItemLevels.empty()) {
+        OutputDebugStringA("이미 shop2ItemLevels 존재 ? 중복 로딩 방지\n");
+        return;
+    }
     string path = "Resources/Tables/shop2item.csv";
 
     FILE* file;
@@ -190,13 +202,14 @@ void ShopManager::LoadShop2Table(int hermitID)
         data.rate = stof(datas[3]);
         data.iconPath = Utility::ToWString(datas[4]);
         data.down = stoi(datas[5]);
+        data.ratePath = Utility::ToWString(datas[6]);
+
 
         shop2ItemLevels[data.id].push_back(data);
+
     }
 
     fclose(file);
-
-    OutputDebugStringA("Shop2 아이템 CSV 로드 완료\n");
 }
 
 

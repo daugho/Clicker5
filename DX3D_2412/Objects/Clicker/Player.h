@@ -24,6 +24,7 @@ public:
 	SphereCollider* GetCollider() { return collider; }
 	void ToggleLight();
 	void OpenShop();
+	void OpenBox();
 
 	//데미지 계산 함수
 	void ApplyShopDamageBoost();
