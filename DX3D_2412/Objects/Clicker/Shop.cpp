@@ -31,7 +31,7 @@ Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
     popup = new ItemPopup();
     popup->SetParent(this);
     popup->SetLocalPosition(Vector3(200, 0, 0));
-
+    popup->Load();
 }
 
 Shop::~Shop()
@@ -72,8 +72,9 @@ void Shop::Update()
 void Shop::Render()
 {
     //if (!isActive) return;
-
     Quad::Render();
+    popup->Render();
+
 
     for (ShopSlot* slot : iconSlots) {
         slot->Render();
@@ -87,7 +88,6 @@ void Shop::Render()
     for (ShopSlot* slot : sellSlots) {
         slot->Render();
     }
-    popup->Render();
 }
 
 void Shop::Edit()
@@ -95,7 +95,7 @@ void Shop::Edit()
     for (ShopSlot* slot : iconSlots) {
         slot->Edit();
     }
-
+    popup->Edit();
 }
 
 void Shop::CreateSlots() {
@@ -288,7 +288,7 @@ void Shop::CreateSlots2()
         slot->SetSlotIndex(i);
         slot->Load();
         slot->UpdateWorld();
-
+        slot->SetShop2Descrip(items[i], i);
         buySlots.push_back(slot);
     }
 }
@@ -354,7 +354,6 @@ void Shop::RegisterBuyEvent(int index)
         UpgradePlayer(index);
     });
 }
-
 
 void Shop::TryUpgradeItem(int itemID)
 {

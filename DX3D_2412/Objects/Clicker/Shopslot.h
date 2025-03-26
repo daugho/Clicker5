@@ -12,9 +12,10 @@ public:
     void SetItem(const ShopData& item, int index);
     void SetDescrip(const ShopData& item, int index);
     void SetBuyEvent(const ShopData& item, int index);
-
+    void SetShop2Descrip(const ShopData& item, int index);
+    void RenderUpgradeInfo();
     void OnClick();
-    //void Edit();
+    void Edit();
 
 
     void SetSlotIndex(int index) { slotIndex = index; }
@@ -24,6 +25,7 @@ public:
     Transform* GetParentTransform() const { return parent; }
 private:
     ShopData item;
+    ShopItemLevelData reinforce;
     bool occupied = false;
     vector<ShopSlot*> shopslots;
     ShopSlotType slotType;

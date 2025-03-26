@@ -26,13 +26,24 @@ void ShopSlot::Render()
     if (slotType == ShopSlotType::ItemSlot)
     {
         string text = to_string(item.price) + "G";
+        Font::Get()->SetStyle("Icon");
+        Font::Get()->SetColor("Black");
+        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(-30, -30, 0));
+    }
+    if (slotType == ShopSlotType::DescriptionSlot2)
+    {
+        string currentlevel = to_string(reinforce.level);
+        string nextlevel = to_string(reinforce.level + 1);
+        string successRate = to_string((int)(reinforce.rate * 100)) + "%";
+        string down = to_string(reinforce.down);
 
-        for (int i = 0; i < text.length(); ++i)
-        {
-            Font::Get()->SetStyle("Icon");
-            Font::Get()->RenderText(text,GetGlobalPosition() + Vector3(-30, -30, 0));            
-            Font::Get()->SetColor("Black");
-        }
+        string info = "Lv." + currentlevel + " → Lv." + nextlevel;
+        info += " | 성공률: " + successRate;
+        info += " | 실패 시 -" + down + "레벨";
+        Vector3 textPos = GetGlobalPosition() + Vector3(10, 0, 0);
+        Font::Get()->SetStyle("Icon");
+        Font::Get()->SetColor("Black");
+        Font::Get()->RenderText(info, textPos);
     }
 }
 
@@ -75,6 +86,20 @@ void ShopSlot::SetBuyEvent(const ShopData& item, int index)
     image->Load();
 }
 
+void ShopSlot::SetShop2Descrip(const ShopData& item, int index)
+{
+    this->item = item;
+    this->slotIndex = index;
+    occupied = true;
+    slotType = ShopSlotType::DescriptionSlot2;
+    //image->SetActive(true);
+    //image->Load();
+}
+
+void ShopSlot::RenderUpgradeInfo()
+{
+}
+
 void ShopSlot::OnClick()
 {
     if (!occupied) return;
@@ -98,8 +123,8 @@ void ShopSlot::OnClick()
     }
 }
 
-//void ShopSlot::Edit()
-//{
-//    image->Edit();
-//}
+void ShopSlot::Edit()
+{
+    image->Edit();
+}
 

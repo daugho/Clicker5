@@ -16,7 +16,6 @@ public:
     void CreateSlots();
     void UpgradePlayer(int index);
     void RegisterBuyEvent(int index);
-
     //shop2
     void CreateSlots2();
     void TryUpgradeItem(int itemID);
