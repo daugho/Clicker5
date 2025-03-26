@@ -393,11 +393,8 @@ void Shop::TryUpgradeItem(int itemID)
         currentLevel = 1;
 
     unordered_map<int, vector<ShopItemLevelData>>& levels = ShopManager::Get()->GetShop2ItemLevels(); // CSV에서 로드된 데이터
-    if (levels.count(itemID) == 0)
-    {
-        OutputDebugStringA("존재하지 않는 itemID입니다.\n");
-        return;
-    }
+    if (levels.count(itemID) == 0) { return; }
+
 
     auto& levelList = levels[itemID];
 
