@@ -79,7 +79,7 @@ void ClickerUIManager::OpenShopUI(int shopID)
 {
     currentShopID = shopID;
     currentUIState = UIState::Shop;
-    shopOpen = new Shop(shopID, inventory, goldDisplay);
+    shopOpen->ChangeShop(shopID);
     shopOpen->SetActive(true);
     ShowCursor(true);
 }

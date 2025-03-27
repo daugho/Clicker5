@@ -35,8 +35,6 @@ public:
     void OpenShopUI(int shopID);
     void CloseCurrentUI();
     void OpenBoxUI();
-
-
     void SetCursorColor(const Float4& color);
     void ResetCursorColor();
 

@@ -14,7 +14,7 @@ public:
     void SetBuyEvent(const ShopData& item, int index);
     void SetLevel(const ShopItemLevelData& level, int index);
     void OnClick();
-    void Edit();
+    //void Edit();
 
 
     void SetSlotIndex(int index) { slotIndex = index; }

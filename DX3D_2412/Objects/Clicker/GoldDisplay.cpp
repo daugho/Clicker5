@@ -41,7 +41,6 @@ void GoldDisplay::SetGold(int value)
         float offsetX = spacing * i;
         digit->SetLocalPosition(position + Vector3(offsetX, 0, 0));
         digit->SetTag("GoldDigit_" + to_string(i));
-
         digit->Load();
         digits.push_back(digit);
     }

@@ -21,6 +21,8 @@ public:
     void TryUpgradeItem(int itemID);
     void ShowUpgradeResultImage(bool success);
 
+    void ChangeShop(int newHermitID);
+    void ClearSlots();
     bool IsActive() const { return isActive; }
     vector<ShopSlot*>& GetIconSlots() { return iconSlots; }
     vector<ShopSlot*>& GetDescSlots() { return descSlots; }
@@ -41,5 +43,6 @@ private:
     float resultTimer;
     float resultDuration;
     ItemPopup* popup;
+    unordered_map<int, bool> isSoldMap;
 };
 

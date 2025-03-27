@@ -113,9 +113,9 @@ void ShopSlot::OnClick()
     }
 }
 
-void ShopSlot::Edit()
-{
-    //image->Edit();
-    levelImage->Edit();
-}
+//void ShopSlot::Edit()
+//{
+//    //image->Edit();
+//    levelImage->Edit();
+//}
 

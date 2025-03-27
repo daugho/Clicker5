@@ -3,25 +3,25 @@
 Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
     : Quad(L"Resources/Textures/UI/Shop1.png"), hermitID(hermitID) , inventory(inventory) , goldDisplay(goldDisplay)
 {
-    wstring texturePath;
-
-    switch (hermitID) {
-    case 1:
-        texturePath = L"Resources/Textures/UI/Shop1.png";
-        CreateSlots();
-        break;
-    case 2:
-        texturePath = L"Resources/Textures/UI/Shop2.png";
-        CreateSlots2();
-        break;
-    case 3:
-        texturePath = L"Resources/Textures/UI/Shop3.png";
-        break;
-    default:
-        texturePath = L"Resources/Textures/UI/DefaultShop.png";
-        CreateSlots();
-        break;
-    }
+    //wstring texturePath;
+    //
+    //switch (hermitID) {
+    //case 1:
+    //    texturePath = L"Resources/Textures/UI/Shop1.png";
+    //    CreateSlots();
+    //    break;
+    //case 2:
+    //    texturePath = L"Resources/Textures/UI/Shop2.png";
+    //    CreateSlots2();
+    //    break;
+    //case 3:
+    //    texturePath = L"Resources/Textures/UI/Shop3.png";
+    //    break;
+    //default:
+    //    texturePath = L"Resources/Textures/UI/DefaultShop.png";
+    //    CreateSlots();
+    //    break;
+    //}
 
     GetMaterial()->SetDiffuseMap(texturePath);
     localPosition = CENTER;
@@ -32,25 +32,13 @@ Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
     popup->SetParent(this);
     popup->SetLocalPosition(Vector3(200, 0, 0));
     popup->Load();
+    ChangeShop(hermitID);
 }
 
 Shop::~Shop()
 {
-    for (ShopSlot* slot : iconSlots) {
-        delete slot;
-    }
-    for (ShopSlot* slot : descSlots) {
-        delete slot;
-    }
-    for (ShopSlot* slot : buySlots) {
-        delete slot;
-    }
-    for (ShopSlot* slot : sellSlots) {
-        delete slot;
-    }
-    for (ShopSlot* slot : levelSlots) {
-        delete slot;
-    }
+    ClearSlots();
+    delete popup;
 }
 
 void Shop::Update()
@@ -79,7 +67,6 @@ void Shop::Render()
 {
     //if (!isActive) return;
     Quad::Render();
-    popup->Render();
     for (ShopSlot* slot : iconSlots) {
         slot->Render();
     }
@@ -95,11 +82,12 @@ void Shop::Render()
     for (ShopSlot* slot : levelSlots) {
         slot->Render();
     }
+    popup->Render();
 }
 
 void Shop::Edit()
 {    
-    for (ShopSlot* slot : levelSlots) {
+    for (ShopSlot* slot : buySlots) {
         slot->Edit();
     }
     //popup->Edit();
@@ -372,7 +360,7 @@ void Shop::RegisterBuyEvent(int index)
         //나중에 인벤토리가 가득차면 png파일로 알림할것.
         inventory->AddGold(-price);
         goldDisplay->SetGold(inventory->GetGold());
-
+        isSoldMap[index] = true;
         // 아이콘 및 설명 처리
         if (index < iconSlots.size())
             iconSlots[index]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
@@ -470,6 +458,50 @@ void Shop::ShowUpgradeResultImage(bool success)
         popup->Play(L"Resources/Textures/UI/ShopUI/ok.png");
     else
         popup->Play(L"Resources/Textures/UI/ShopUI/back.png");
+}
+
+void Shop::ChangeShop(int newHermitID)
+{
+    ClearSlots();
+
+    hermitID = newHermitID;
+
+    // 텍스처 변경 및 슬롯 생성
+    wstring texturePath;
+    switch (hermitID) {
+    case 1:
+        texturePath = L"Resources/Textures/UI/Shop1.png";
+        CreateSlots();
+        break;
+    case 2:
+        texturePath = L"Resources/Textures/UI/Shop2.png";
+        CreateSlots2();
+        break;
+    case 3:
+        texturePath = L"Resources/Textures/UI/Shop3.png";
+        break;
+    default:
+        texturePath = L"Resources/Textures/UI/DefaultShop.png";
+        CreateSlots();
+        break;
+    }
+
+    GetMaterial()->SetDiffuseMap(texturePath);
+}
+
+void Shop::ClearSlots()
+{
+    for (ShopSlot* slot : iconSlots) delete slot;
+    for (ShopSlot* slot : descSlots) delete slot;
+    for (ShopSlot* slot : buySlots) delete slot;
+    for (ShopSlot* slot : sellSlots) delete slot;
+    for (ShopSlot* slot : levelSlots) delete slot;
+
+    iconSlots.clear();
+    descSlots.clear();
+    buySlots.clear();
+    sellSlots.clear();
+    levelSlots.clear();
 }
 
 int Shop::GetItemLevel(int itemID) const
