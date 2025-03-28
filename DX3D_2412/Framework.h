@@ -198,6 +198,8 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Clicker/BoxInventory.h"
 #include "Objects/Clicker/BoxSlot.h"
 #include "Objects/Clicker/BoxUI.h"
+#include "Objects/Clicker/ShopPurchaseManager.h"
+#include "Objects/Clicker/RateDisplay.h"
 
 
 //Manager Head

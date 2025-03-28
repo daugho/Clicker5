@@ -37,6 +37,8 @@ Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
 
 Shop::~Shop()
 {
+    for (auto r : rateDisplays) delete r;
+    rateDisplays.clear();
     ClearSlots();
     delete popup;
 }
@@ -60,6 +62,8 @@ void Shop::Update()
     for (ShopSlot* slot : levelSlots) {
         slot->Update();
     }
+    for (auto rate : rateDisplays)
+        rate->Update();
     popup->Update();
 }
 
@@ -82,15 +86,19 @@ void Shop::Render()
     for (ShopSlot* slot : levelSlots) {
         slot->Render();
     }
+    for (auto rate : rateDisplays)
+        rate->Render();
     popup->Render();
 }
 
 void Shop::Edit()
 {    
-    for (ShopSlot* slot : buySlots) {
-        slot->Edit();
-    }
+    //for (ShopSlot* slot : buySlots) {
+    //    slot->Edit();
+    //}
     //popup->Edit();
+    for (RateDisplay* slot : rateDisplays)
+        slot->Edit();
 }
 
 void Shop::CreateSlots() {
@@ -309,7 +317,17 @@ void Shop::CreateSlots2()
         slot->UpdateWorld();
 
         levelSlots.push_back(slot);
+
+        RateDisplay* rateUI = new RateDisplay();
+        rateUI->SetSlotID(i);
+        rateUI->SetRate(levelData.rate);
+        rateUI->SetPosition(pos + Vector3(200, 0, 0)); // 원하는 위치로 조정
+        rateUI->Update();
+
+        rateDisplays.push_back(rateUI);
+        OutputDebugStringA(("rate: " + to_string(levelData.rate) + "\n").c_str());
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void Shop::UpgradePlayer(int index)
@@ -344,6 +362,25 @@ void Shop::RegisterBuyEvent(int index)
 
     ShopSlot* slot = buySlots[index];
 
+    if (hermitID == 2)
+    {
+        // shop2는 업그레이드 슬롯이므로 별도 처리
+        int itemID = index + 1;
+        slot->SetEvent([=]() {
+            TryUpgradeItem(itemID);
+            });
+        return;
+    }
+
+    if (ShopPurchaseManager::Get()->IsPurchased(hermitID, index)) {
+        slot->SetEnabled(false);
+        if (index < iconSlots.size())
+            iconSlots[index]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
+        if (index < descSlots.size())
+            descSlots[index]->GetImage()->SetActive(false);
+        return;
+    }
+
     slot->SetEvent([=]() {
         ShopData item = slot->GetItem();
         int price = item.price;
@@ -360,6 +397,7 @@ void Shop::RegisterBuyEvent(int index)
         //나중에 인벤토리가 가득차면 png파일로 알림할것.
         inventory->AddGold(-price);
         goldDisplay->SetGold(inventory->GetGold());
+        ShopPurchaseManager::Get()->SetPurchased(hermitID, index);
         isSoldMap[index] = true;
         // 아이콘 및 설명 처리
         if (index < iconSlots.size())
@@ -460,6 +498,14 @@ void Shop::ShowUpgradeResultImage(bool success)
         popup->Play(L"Resources/Textures/UI/ShopUI/back.png");
 }
 
+void Shop::InitRateTextures()
+{
+    for (int i = 0; i <= 9; ++i)
+        numberTextures.push_back(L"Resources/Textures/UI/" + to_wstring(i) + L".png");
+
+    numberTextures.push_back(L"Resources/Textures/UI/dot.png"); // '.'용
+}
+
 void Shop::ChangeShop(int newHermitID)
 {
     ClearSlots();
@@ -487,6 +533,9 @@ void Shop::ChangeShop(int newHermitID)
     }
 
     GetMaterial()->SetDiffuseMap(texturePath);
+    for (int i = 0; i < buySlots.size(); i++) {
+        RegisterBuyEvent(i);
+    }
 }
 
 void Shop::ClearSlots()

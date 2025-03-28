@@ -2,7 +2,7 @@
 
 class ShopSlot;
 class GoldDisplay;
-
+class RateDisplay;
 class Shop : public Quad
 {
 public:
@@ -20,9 +20,10 @@ public:
     void CreateSlots2();
     void TryUpgradeItem(int itemID);
     void ShowUpgradeResultImage(bool success);
-
+    void InitRateTextures();
     void ChangeShop(int newHermitID);
     void ClearSlots();
+
     bool IsActive() const { return isActive; }
     vector<ShopSlot*>& GetIconSlots() { return iconSlots; }
     vector<ShopSlot*>& GetDescSlots() { return descSlots; }
@@ -44,5 +45,9 @@ private:
     float resultDuration;
     ItemPopup* popup;
     unordered_map<int, bool> isSoldMap;
+
+    vector<Quad*> rateDigits;
+    vector<wstring> numberTextures;
+    vector<RateDisplay*> rateDisplays;
 };
 
