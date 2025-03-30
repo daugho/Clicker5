@@ -25,8 +25,8 @@ void ShopManager::Update()
 
 void ShopManager::Edit()
 {
-    //for (ShopNPC* shop : shopNPCs)
-    //    shop->Edit();
+    for (ShopNPC* shop : shopNPCs)
+        shop->Edit();
 }
 
 

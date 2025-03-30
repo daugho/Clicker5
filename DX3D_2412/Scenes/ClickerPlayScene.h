@@ -6,7 +6,7 @@ public:
 	ClickerPlayScene();
 	~ClickerPlayScene();
 
-
+	void InitTerrainFromFloorCube();
 
 	// Scene을(를) 통해 상속됨
 	void Update() override;
@@ -23,4 +23,8 @@ private:
 	Player* player;
 	OreManager* oreManager;
 	OreInventory* inventory;
+	Terrain* terrain;
+	Helper* miner;
+	AStar* aStar;
+	bool isHelperManuallyMoving = false;
 };

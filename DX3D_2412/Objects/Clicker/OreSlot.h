@@ -16,7 +16,8 @@ public:
     void SetData(DropData data,int index);
     bool IsOccupied() const { return occupied; }
     const DropData& GetItem() const { return item; }
-    int GetCount() const { return count; }
+
+    int GetCount() const { return count; }//0329
     void UpdateData();
 
 private:

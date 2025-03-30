@@ -3,12 +3,15 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	model = new ModelAnimator("Bodyfinal");	
+	model = new ModelAnimator("Miner");	
 	model->SetShader(L"Model/Model.hlsl");
-	FOR(6)
-		model->ReadClip("Ghost_animation", i);
-	//model->ReadClip("Idle");
-	//model->ReadClip("Run");
+	model->ReadClip("MinerIdle", 0);
+	//FOR(3)
+	//{
+	//	model->ReadClip("MinerIdle", i);
+	//	model->ReadClip("MinerIdle", i);
+	//	model->ReadClip("MinerIdle", i);
+	//}
 	//model->ReadClip("Attack");
 	model->CreateTexture();
 }

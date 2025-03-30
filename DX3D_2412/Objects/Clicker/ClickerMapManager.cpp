@@ -7,14 +7,6 @@ ClickerMapManager::ClickerMapManager()
 	player->SetLocalPosition(-3, 2, 1);
 	CAM->SetTarget(player);
 	CAM->TargetOptionLoad("FPSMode");
-
-	//hermit1 = new Hermit("machine", HermitType::Merchant1);
-	//hermit1->SetLocalPosition(Vector3( 2, 1, 2));
-	//hermit1->SetLocalScale(Vector3( 2, 2, 2));
-
-	//hermit2 = new Hermit("Bodyfinal", HermitType::Merchant2);
-	//hermit2->SetLocalPosition(Vector3(3, 1, 3));
-	//hermit2->SetLocalScale(Vector3(2, 2, 2));
 	room1 = new Room();
 	
 	CreateRoom1();
@@ -49,19 +41,23 @@ void ClickerMapManager::Edit()
 void ClickerMapManager::CreateRoom1()
 {
 	wstring baseTexture = L"Resources/Textures/Block/T_Ore9_Color.png";
-	room1->AddCube(Vector3(11, 1, 31), Vector3(0, -0.5, 0), baseTexture,Vector2(2,15));
-	room1->AddCube(Vector3(1, 6, 31), Vector3(5, 3, 0), baseTexture, Vector2(1,1));  // 오른쪽 벽
-	room1->AddCube(Vector3(1, 6, 31), Vector3(-5, 3, 0), baseTexture, Vector2(1, 1)); // 왼쪽 벽
-	room1->AddCube(Vector3(11, 6, 1), Vector3(0, 3, -15), baseTexture, Vector2(1, 1)); // 뒷벽
-	room1->AddCube(Vector3(11, 6, 1), Vector3(0, 3, 15), baseTexture, Vector2(1, 1));  // 앞벽
-	room1->AddCube(Vector3(11, 1, 31), Vector3(0, 6, 0), baseTexture, Vector2(1, 1));  // 천장
+	room1->AddCube(Vector3(20, 1, 30), Vector3(0, -0.5, 0), baseTexture, Vector2(2, 15));
+
+	// 벽 (모두 바닥 기준으로 맞춤)
+	room1->AddCube(Vector3(1, 6, 30), Vector3(10, 3, 0), baseTexture, Vector2(1, 1));  // 오른쪽
+	room1->AddCube(Vector3(1, 6, 30), Vector3(-10, 3, 0), baseTexture, Vector2(1, 1)); // 왼쪽
+	room1->AddCube(Vector3(20, 6, 1), Vector3(0, 3, -15), baseTexture, Vector2(1, 1));  // 뒤쪽
+	room1->AddCube(Vector3(20, 6, 1), Vector3(0, 3, 15), baseTexture, Vector2(1, 1));   // 앞쪽
+
+	// 천장 (바닥 기준 위로 6)
+	room1->AddCube(Vector3(20, 1, 30), Vector3(0, 5.5f, 0), baseTexture, Vector2(1, 1)); // 천장
 
 	// ?? Room1에 광물 추가
-	room1->AddOre(Vector3{2,0,4}, 0);
-	room1->AddOre(Vector3{ 2,0, -15 }, 1);
-	room1->AddHermit(Vector3(-2.5, 0 , 10), 1);
-	room1->AddHermit(Vector3(-2.5, 1 , -10), 2);
-	room1->AddBox(Vector3(3, 0, -7));
+	room1->AddOre(Vector3{7,0,10}, 0);
+	room1->AddOre(Vector3{ 5,0, -15 }, 1);
+	room1->AddHermit(Vector3(-7, 0 , 10), 1);
+	room1->AddHermit(Vector3(-7, 0 , -10), 2);
+	room1->AddBox(Vector3(-2, 0, 0));
 }
 
 void ClickerMapManager::CreateRoom2()
@@ -96,7 +92,7 @@ void ClickerMapManager::CheckCollision()
 			player->SetLocalPosition(player->GetGlobalPosition() + (hit.point * hit.distance));
 		}
 	}
-	for (BoxInventory* box : BoxInventoryManager::Get()->GetBoxes())
+	for (BoxInventory* box : Boxmanager::Get()->GetBoxes())
 	{
 		if (box->GetCollider()->PushSphere(player, &hit))
 		{

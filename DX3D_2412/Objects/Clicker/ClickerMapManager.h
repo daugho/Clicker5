@@ -17,6 +17,8 @@ public:
     Player* GetPlayer() { return player; }
     float GetHeight(const Vector3& pos);
 
+    Room* GetRoom1() { return room1; }
+
 private:
     Player* player;
     OreManager* oreManager;

@@ -17,10 +17,14 @@ RateDisplay::~RateDisplay()
 void RateDisplay::SetRate(float rate)
 {
     for (auto digit : digits)
+    {
+        digit->SetActive(false);
+        digit->SetParent(nullptr);
         delete digit;
+    }
     digits.clear();
 
-    string rateStr = to_string(rate).substr(0, 4);  // 소수점 아래 2자리까지만
+    string rateStr = to_string(rate).substr(0, 4);
     for (int i = 0; i < rateStr.size(); ++i)
     {
         wchar_t wc = rateStr[i];
@@ -36,6 +40,7 @@ void RateDisplay::SetRate(float rate)
         digit->SetParent(this);
         digit->SetTag("RateLevel_Slot" + to_string(slotID) + "_" + to_string(i));
         digit->Load();
+        digit->UpdateWorld();
         digits.push_back(digit);
     }
 }
@@ -55,6 +60,7 @@ void RateDisplay::Update()
 
 void RateDisplay::Render()
 {
+    if (!ClickerUIManager::Get()->IsShopOpen()) return;
     for (auto digit : digits)
         digit->Render();
 }

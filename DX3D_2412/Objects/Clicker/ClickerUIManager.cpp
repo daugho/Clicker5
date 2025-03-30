@@ -14,6 +14,9 @@ ClickerUIManager::ClickerUIManager()
     shopOpen = new Shop(1, inventory,goldDisplay);
     shopOpen->SetActive(false);
 
+    shopOpen = new Shop(2, inventory, goldDisplay);
+    shopOpen->SetActive(false);
+
     itemPopup = new ItemPopup();
 
     boxUI = new BoxUI();
@@ -25,6 +28,7 @@ ClickerUIManager::~ClickerUIManager()
     delete cursor;
     delete inventory;
     delete shopOpen;
+    delete boxUI;
 }
 
 void ClickerUIManager::Update()
@@ -49,17 +53,17 @@ void ClickerUIManager::Render()
 
 void ClickerUIManager::Edit()
 {
-    inventory->Edit();
-    shopOpen->Edit();
-    goldDisplay->Edit();
+    //inventory->Edit();
+    //shopOpen->Edit();
+    //goldDisplay->Edit();
     //itemPopup->Edit();
+    boxUI->Edit();
 }
 
 void ClickerUIManager::HandleUIInput()
 {
     if (KEY->Down('I') && currentUIState == UIState::None)
         OpenInventory();
-
     if (KEY->Down('B') && currentUIState == UIState::None)
         OpenShopUI(1); // 현재 예시로 1번 상점 고정
     if (KEY->Down('c') && currentUIState == UIState::None)
@@ -108,7 +112,6 @@ void ClickerUIManager::CloseCurrentUI()
 void ClickerUIManager::OpenBoxUI()
 {
     currentUIState = UIState::Box;
-    boxUI = new BoxUI();
     boxUI->SetActive(true);
     ShowCursor(true);
 }

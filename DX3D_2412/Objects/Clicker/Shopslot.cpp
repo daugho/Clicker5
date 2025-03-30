@@ -89,6 +89,19 @@ void ShopSlot::SetLevel(const ShopItemLevelData& level, int index)
     levelImage->Load();
 }
 
+void ShopSlot::SetSellbutton(const function<void()>& callback)
+{
+    occupied = true;
+    slotType = ShopSlotType::SellSlot;
+
+    image->SetActive(true);
+    image->SetTag("Ore_ShopSlot_SellAll");
+    image->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/sell.png");
+    image->Load();
+
+    SetEvent(callback);
+}
+
 
 void ShopSlot::OnClick()
 {
@@ -113,9 +126,9 @@ void ShopSlot::OnClick()
     }
 }
 
-//void ShopSlot::Edit()
-//{
-//    //image->Edit();
-//    levelImage->Edit();
-//}
+void ShopSlot::Edit()
+{
+    image->Edit();
+    //levelImage->Edit();
+}
 

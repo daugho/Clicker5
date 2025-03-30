@@ -27,6 +27,7 @@ public:
     void SetState(State state) { this->state = state; }
     float GetCost() { return f; }
 
+    int GetIndex() const { return index; }
 private:
     int index = 0;
     int via = -1;

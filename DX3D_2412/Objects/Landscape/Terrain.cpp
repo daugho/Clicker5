@@ -3,19 +3,20 @@
 Terrain::Terrain()
 {
 	material->SetShader(L"Landscape/Terrain.hlsl");
-	//material->SetDiffuseMap(L"Resources/Textures/Colors/White.png");
+	//material->GetData()->diffuse = Float4(0, 1, 0, 1);
+	material->SetDiffuseMap(L"Resources/Textures/Colors/White.png");
 	//material->SetDiffuseMap(L"Resources/Textures/Landscape/Dirt2.png");
-	material->SetDiffuseMap(L"Resources/Textures/Landscape/Dirt.png");
+	//material->SetDiffuseMap(L"Resources/Textures/Landscape/Dirt.png");
 	//material->SetSpecularMap(L"Resources/Textures/Landscape/Fieldstone_SM.tga");
 	//material->SetNormalMap(L"Resources/Textures/Landscape/Fieldstone_NM.tga");
 
-	heightMap = Texture::Add(L"Resources/Textures/HeightMaps/PackMan.png");
-	alphaMap = Texture::Add(L"Resources/Textures/HeightMaps/PackManAlpha.png");
-	secondMap = Texture::Add(L"Resources/Textures/Landscape/Dirt2.png");
+	//heightMap = Texture::Add(L"Resources/Textures/HeightMaps/PackMan.png");
+	//alphaMap = Texture::Add(L"Resources/Textures/HeightMaps/PackManAlpha.png");
+	//secondMap = Texture::Add(L"Resources/Textures/Landscape/Dirt2.png");
 
-	MakeMesh();
-	MakeNormal();
-	mesh->CreateMesh();	
+	//MakeMesh();
+	//MakeNormal();
+	//mesh->CreateMesh();	
 }
 
 Terrain::~Terrain()
@@ -24,9 +25,8 @@ Terrain::~Terrain()
 
 void Terrain::Render()
 {
-	alphaMap->PSSet(10);
-	secondMap->PSSet(11);
-
+	//alphaMap->PSSet(10);
+	//secondMap->PSSet(11);
 	GameObject::Render();
 }
 
@@ -84,45 +84,22 @@ Vector3 Terrain::Picking()
 {
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 
-	vector<VertexType> vertices = mesh->GetVertices();
+	float terrainY = GetGlobalPosition().y - 0.001f; // Terrain의 높이 보정 포함
 
-	for (UINT z = 0; z < height - 1; z++)
-	{
-		for (UINT x = 0; x < width - 1; x++)
-		{
-			UINT index[4];
-			index[0] = width * z + x;
-			index[1] = width * z + x + 1;
-			index[2] = width * (z + 1) + x;
-			index[3] = width * (z + 1) + x + 1;
+	float t = (terrainY - ray.origin.y) / ray.direction.y;
 
-			Vector3 p[4];
-			for (UINT i = 0; i < 4; i++)
-				p[i] = vertices[index[i]].pos;
+	if (t < 0) return Vector3(); // 뒤쪽은 무시
 
-			float distance = 0.0f;
-			if (Intersects(ray.origin, ray.direction, p[0], p[1], p[2], distance))
-			{
-				return ray.origin + ray.direction * distance;
-			}
-
-			if (Intersects(ray.origin, ray.direction, p[3], p[1], p[2], distance))
-			{
-				return ray.origin + ray.direction * distance;
-			}
-		}
-	}
-
-	return Vector3();
+	return ray.origin + ray.direction * t;
 }
 
 void Terrain::MakeMesh()
 {
-	width = (UINT)heightMap->GetSize().x;
-	height = (UINT)heightMap->GetSize().y;
+	//width = (UINT)heightMap->GetSize().x;
+	//height = (UINT)heightMap->GetSize().y;
 
-	vector<Float4> pixels;
-	heightMap->ReadPixels(pixels);
+	//vector<Float4> pixels;
+	//heightMap->ReadPixels(pixels);
 
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vertices.reserve(width * height);	
@@ -136,9 +113,9 @@ void Terrain::MakeMesh()
 			vertex.uv.x = x / (float)(width - 1);
 			vertex.uv.y = z / (float)(height - 1);
 
-			UINT index = width * z + x;
-			vertex.pos.y = pixels[index].x * MAX_HEIGHT;
-
+			//UINT index = width * z + x;
+			//vertex.pos.y = pixels[index].x * MAX_HEIGHT;
+			vertex.pos.y = -0.001f;
 			vertices.push_back(vertex);
 		}
 	}

@@ -2,7 +2,7 @@
     <Shader Vertex="Light/Light.hlsl" Pixel="Light/Light.hlsl"/>
     <Texture>
         <DiffuseMap Diffuse="Resources\Textures\Model\woodbox\WoodenCrate_Crate_BaseColor.png"/>
-        <SpecularMap Specular="Resources/Textures/Colors/White.png"/>
+        <SpecularMap Specular="Resources\Textures\Model\woodbox\WoodenCrate_Crate_Metallic.png"/>
         <NormalMap Normal="Resources\Textures\Model\woodbox\WoodenCrate_Crate_Normal.png"/>
     </Texture>
     <Property Shininess="36" HasNormalMap="1">

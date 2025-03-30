@@ -1,40 +1,51 @@
 #include "Framework.h"
 
-BoxInventoryManager::BoxInventoryManager()
+Boxmanager::Boxmanager()
 {
 }
 
-BoxInventoryManager::~BoxInventoryManager()
+Boxmanager::~Boxmanager()
 {
     for (auto box : boxes)
         delete box;
 }
 
-void BoxInventoryManager::Update()
+void Boxmanager::Update()
 {
     for (auto box : boxes)
         box->Update();
 }
 
-void BoxInventoryManager::Render()
+void Boxmanager::Render()
 {
     for (auto box : boxes)
         box->Render();
 }
 
-void BoxInventoryManager::Edit()
+void Boxmanager::Edit()
 {
     for (auto box : boxes)
         box->Edit();
 }
 
-void BoxInventoryManager::AddBox(Vector3 pos)
+void Boxmanager::AddBox(Vector3 pos)
 {
-    BoxInventory* box = new BoxInventory(pos);
-    boxes.push_back(box);
+    if (boxes.empty())
+    {
+        BoxInventory* box = new BoxInventory(pos);
+        box->SetLocalPosition(pos);
+        box->UpdateWorld();
+        boxes.push_back(box);
+    }
+    else
+    {
+        BoxInventory* box = boxes[0]; // 이미 있는 박스
+        box->SetLocalPosition(pos);   // 위치만 변경
+        box->UpdateWorld();
+    }
 }
 
-BoxInventory* BoxInventoryManager::GetClosestBox(const Ray& ray, RaycastHit* hit)
+BoxInventory* Boxmanager::GetClosestBox(const Ray& ray, RaycastHit* hit)
 {
     BoxInventory* closest = nullptr;
     float minDist = FLT_MAX;

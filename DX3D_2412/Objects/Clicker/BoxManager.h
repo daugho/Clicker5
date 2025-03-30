@@ -1,11 +1,11 @@
 #pragma once
 class BoxInventory;
 
-class BoxInventoryManager : public Singleton<BoxInventoryManager>
+class Boxmanager : public Singleton<Boxmanager>
 {
 public:
-    BoxInventoryManager();
-    ~BoxInventoryManager();
+    Boxmanager();
+    ~Boxmanager();
 
     void Update();
     void Render();
@@ -15,5 +15,6 @@ public:
 
     vector<BoxInventory*>& GetBoxes() { return boxes; }
 private:
+    BoxInventory* box;
     vector<BoxInventory*> boxes;
 };

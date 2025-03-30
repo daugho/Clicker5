@@ -9,9 +9,10 @@ public:
     void Update();
     void Render();
     void Edit();
-    bool AddItem(const DropData& item, int count);
     bool IsFull() const;
     int GetTotalItemCount() const;
+    bool AddItem(const DropData& item, int count);
+    const vector<pair<DropData, int>>& GetItems() const;
 
 private:
     void CreateSlots();
@@ -20,4 +21,5 @@ private:
     //vector<BoxSlot*> slots;
     const int MAX_CAPACITY = 20;
     int currentCapacity = 0;
+    vector<pair<DropData, int>> items; // 드랍 아이템 + 개수
 };

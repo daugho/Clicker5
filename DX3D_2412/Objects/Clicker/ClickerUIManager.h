@@ -44,6 +44,7 @@ public:
     bool IsShopOpen() const { return currentUIState == UIState::Shop; }
     bool IsBoxOPen() const{return currentUIState== UIState::Box;}
     int GetCurrentShopID() const { return currentShopID; }
+    BoxUI* GetBoxUI() { return boxUI; }
 
 private:
     void CreateUI();

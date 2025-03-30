@@ -9,6 +9,7 @@ BoxInventory::BoxInventory(Vector3 position)
     collider = new BoxCollider(Vector3(2, 1, 1));
     collider->SetLocalPosition(position.x, position.y+0.5, position.z);
     collider->SetParent(this);
+    collider->Load();
 }
 
 BoxInventory::~BoxInventory()
@@ -32,11 +33,7 @@ void BoxInventory::Render()
 void BoxInventory::Edit()
 {
     model->Edit();
-}
-
-bool BoxInventory::AddItem(const DropData& item, int count)
-{
-    return false;
+    collider->Edit();
 }
 
 bool BoxInventory::IsFull() const
@@ -47,6 +44,34 @@ bool BoxInventory::IsFull() const
 int BoxInventory::GetTotalItemCount() const
 {
     return 0;
+}
+
+bool BoxInventory::AddItem(const DropData& item, int count)
+{
+    // 용량 초과 체크
+    if (currentCapacity + count > MAX_CAPACITY)
+        return false;
+
+    // 이미 존재하는 아이템이면 count만 증가
+    for (auto& pair : items)
+    {
+        if (pair.first.id == item.id)
+        {
+            pair.second += count;
+            currentCapacity += count;
+            return true;
+        }
+    }
+
+    // 새로운 아이템 추가
+    items.emplace_back(item, count);
+    currentCapacity += count;
+    return true;
+}
+
+const vector<pair<DropData, int>>& BoxInventory::GetItems() const
+{
+    return items;
 }
 
 void BoxInventory::CreateSlots()

@@ -20,6 +20,7 @@ public:
     bool IsActive() const { return isActive; }
     int GetTotalItemCount() const;
     vector<OreSlot*>& GetSlots() { return slots; }
+
 private:
 
     int currentCapacity = 0;

@@ -26,7 +26,7 @@ public:
 	float GetX() const { return XMVectorGetX(value); }
 	float GetY() const { return XMVectorGetY(value); }
 	float GetZ() const { return XMVectorGetZ(value); }
-
+	
 	void SetX(const float& v) { value = XMVectorSetX(value, v); }
 	void SetY(const float& v) { value = XMVectorSetY(value, v); }
 	void SetZ(const float& v) { value = XMVectorSetZ(value, v); }
@@ -96,7 +96,7 @@ public:
 	static Vector3 Down() { return Vector3(0, -1, 0); }
 	static Vector3 Forward() { return Vector3(0, 0, 1); }
 	static Vector3 Back() { return Vector3(0, 0, -1); }
-
+	static float GetLength(const Vector3& v) { return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z); }
 	static Vector3 Cross(const Vector3& v1, const Vector3& v2)
 	{
 		return XMVector3Cross(v1.value, v2.value);

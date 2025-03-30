@@ -16,8 +16,13 @@ public:
 	Vector3 Picking();
 
 	Vector2 GetSize() { return Vector2(width, height); }
-private:
+
+	void SetSize(UINT width, UINT height) {
+		this->width = width;
+		this->height = height;
+	};
 	void MakeMesh();	
+
 
 private:
 	UINT width, height;

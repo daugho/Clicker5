@@ -50,6 +50,8 @@ void AStar::SetNode(Terrain* terrain)
         for (UINT x = 0; x <= width; x++)
         {
             Vector3 pos = Vector3(x * interval.x, 0, z * interval.y);
+            pos.x -= size.x * 0.5f;
+            pos.z -= size.y * 0.5f;
             pos.y = terrain->GetHeight(pos);
 
             nodes.push_back(new Node(pos, nodes.size()));            

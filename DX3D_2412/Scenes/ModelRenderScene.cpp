@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("woodbox");
+	model = new Model("Miner");
 	//model->SetShader(L"Model/Model.hlsl");
 }
 

@@ -49,5 +49,6 @@ private:
     vector<Quad*> rateDigits;
     vector<wstring> numberTextures;
     vector<RateDisplay*> rateDisplays;
+    RateDisplay* rateUI;
 };
 

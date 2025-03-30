@@ -35,7 +35,7 @@ Player::~Player()
 
 void Player::Update()
 {
-	if (ClickerUIManager::Get()->IsInventoryOpen() || ClickerUIManager::Get()->IsShopOpen())
+	if (ClickerUIManager::Get()->IsInventoryOpen() || ClickerUIManager::Get()->IsShopOpen()|| ClickerUIManager::Get()->IsBoxOPen())
 		return;
 	if (KEY->Down(VK_F2))
 	{
@@ -209,9 +209,15 @@ void Player::OpenBox()
 {
 	Ray ray = CAM->ScreenPointToRay(CENTER);
 	RaycastHit hit;
-	BoxInventory* box = BoxInventoryManager::Get()->GetClosestBox(ray, &hit);
+	BoxInventory* box = Boxmanager::Get()->GetClosestBox(ray, &hit);
+	if (box != nullptr)
+	{
+		ClickerUIManager::Get()->GetBoxUI()->SetVisible(true);
+		OutputDebugStringA("박스 UI 열림\n");
+	}
 	if (box && !ClickerUIManager::Get()->IsBoxOPen())
 	{
+		ClickerUIManager::Get()->GetBoxUI()->SetTargetBox(box);
 		ClickerUIManager::Get()->OpenBoxUI();
 	}
 }

@@ -1,8 +1,4 @@
-	
 	//SCENE->Create("Start", new CollisionScene());
-
-	//SCENE->Create("Start", new ModelAnimationScene());
-	//SCENE->Create("Start", new ModelEquipScene());
 	//SCENE->Create("Start", new AStarScene());
 	//SCENE->Create("Start", new RenderTargetScene());
 	//SCENE->Create("Start", new BillboardScene());	
@@ -28,6 +24,8 @@ GameManager::GameManager()
 	SCENE->Create("Start", new ClickerPlayScene());
 	//SCENE->Create("Start", new ModelRenderScene());
 	//SCENE->Create("Export", new ModelExportScene());
+	//SCENE->Create("Start", new ModelEquipScene());
+	//SCENE->Create("Start", new ModelAnimationScene());
 
 	//SCENE->Add("Grid");
 	SCENE->Add("Start");

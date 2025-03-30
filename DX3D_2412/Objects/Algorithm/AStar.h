@@ -14,7 +14,7 @@ public:
     int FindCloseNode(Vector3 pos);    
 
     void GetPath(IN int start, IN int end, OUT vector<Vector3>& path);    
-
+    vector<Node*>& GetNodes() { return nodes; }
 private:
     void Reset();
 

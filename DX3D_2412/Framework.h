@@ -200,6 +200,7 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Clicker/BoxUI.h"
 #include "Objects/Clicker/ShopPurchaseManager.h"
 #include "Objects/Clicker/RateDisplay.h"
+#include "Objects/Clicker/Helper.h"
 
 
 //Manager Head

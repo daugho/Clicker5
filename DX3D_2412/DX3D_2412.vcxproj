@@ -241,6 +241,7 @@
     <ClInclude Include="Scenes\ClickerPlayScene.h" />
     <ClInclude Include="Scenes\CollisionScene.h" />
     <ClInclude Include="Scenes\GridScene.h" />
+    <ClInclude Include="Objects\Clicker\Helper.h" />
     <ClInclude Include="Scenes\LightScene.h" />
     <ClInclude Include="Scenes\ModelAnimationScene.h" />
     <ClInclude Include="Scenes\ModelEquipScene.h" />
@@ -307,6 +308,7 @@
     <ClCompile Include="Objects\Basic\Sphere.cpp" />
     <ClCompile Include="Objects\Clicker\BoxInventory.cpp" />
     <ClCompile Include="Objects\Clicker\BoxManager.cpp" />
+    <ClCompile Include="Objects\Clicker\BoxSlot.cpp" />
     <ClCompile Include="Objects\Clicker\BoxUI.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerMapManager.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerUIManager.cpp" />
@@ -345,6 +347,7 @@
     <ClCompile Include="Scenes\ClickerPlayScene.cpp" />
     <ClCompile Include="Scenes\CollisionScene.cpp" />
     <ClCompile Include="Scenes\GridScene.cpp" />
+    <ClCompile Include="Objects\Clicker\Helper.cpp" />
     <ClCompile Include="Scenes\LightScene.cpp" />
     <ClCompile Include="Scenes\ModelAnimationScene.cpp" />
     <ClCompile Include="Scenes\ModelEquipScene.cpp" />

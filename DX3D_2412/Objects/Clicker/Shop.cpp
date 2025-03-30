@@ -86,19 +86,21 @@ void Shop::Render()
     for (ShopSlot* slot : levelSlots) {
         slot->Render();
     }
-    for (auto rate : rateDisplays)
-        rate->Render();
+    if (hermitID == 2) {
+        for (auto rate : rateDisplays)
+            rate->Render();
+    }
     popup->Render();
 }
 
 void Shop::Edit()
 {    
-    //for (ShopSlot* slot : buySlots) {
-    //    slot->Edit();
-    //}
-    //popup->Edit();
-    for (RateDisplay* slot : rateDisplays)
+    for (ShopSlot* slot : sellSlots) {
         slot->Edit();
+    }
+    //popup->Edit();
+    //for (RateDisplay* slot : rateDisplays)
+    //    slot->Edit();
 }
 
 void Shop::CreateSlots() {
@@ -121,7 +123,7 @@ void Shop::CreateSlots() {
     sellButton->SetParent(this);
     sellButton->Load();
     sellButton->UpdateWorld();
-    sellButton->SetEvent([=]() 
+    sellButton->SetSellbutton([=]() 
         {
         int totalGold = 0;
 
@@ -249,7 +251,7 @@ void Shop::CreateSlots2()
     sellButton->SetParent(this);
     sellButton->Load();
     sellButton->UpdateWorld();
-    sellButton->SetEvent([=]()
+    sellButton->SetSellbutton([=]()
         {
             int totalGold = 0;
 
@@ -318,12 +320,13 @@ void Shop::CreateSlots2()
 
         levelSlots.push_back(slot);
 
-        RateDisplay* rateUI = new RateDisplay();
+        rateUI = new RateDisplay();
+        rateUI->SetPosition(pos + Vector3(200, 0, 0)); // 원하는 위치로 조정
         rateUI->SetSlotID(i);
         rateUI->SetRate(levelData.rate);
-        rateUI->SetPosition(pos + Vector3(200, 0, 0)); // 원하는 위치로 조정
-        rateUI->Update();
-
+        //rateUI->Load();
+        rateUI->UpdateWorld();
+        
         rateDisplays.push_back(rateUI);
         OutputDebugStringA(("rate: " + to_string(levelData.rate) + "\n").c_str());
     }
@@ -466,6 +469,8 @@ void Shop::TryUpgradeItem(int itemID)
     {
         int levelIndex = min(currentLevel - 1, (int)levelList.size() - 1);
         levelSlots[slotIndex]->SetLevel(levelList[levelIndex], slotIndex);
+        if (slotIndex < rateDisplays.size())
+            rateDisplays[slotIndex]->SetRate(levelList[levelIndex].rate);
     }
     switch (itemID) {
     case 1:
