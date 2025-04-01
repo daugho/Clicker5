@@ -22,6 +22,9 @@ public:
     void SetTerrain(Terrain* terrain) { this->terrain = terrain; }
     void MoveAlongPath();
     void FindOre();
+    void FindBox();
+    void Mining();
+
     void SetManualPath(const vector<Vector3>& newPath);
     State GetState() {
         return currentState;
@@ -55,4 +58,10 @@ private:
     int currentIndex = 0;
 
     Vector3 targetPos;
+    bool hasMoved = false;
+    OreInventory* oreInventory;
+    float miningCooldown = 1.5f;    // Helper의 채굴 주기
+    float miningTimer = 0.0f;       // 채굴 타이머
+    int miningDamage = 5;           // 채굴 데미지
+    float miningRange = 2.0f;
 };

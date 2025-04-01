@@ -20,7 +20,7 @@ Player::Player()
 	light->color = { 1, 1, 1, 1 };
 	light->attentionIntensity = 0.4;
 	light->range = 15.0;
-	light->isActive = 0;
+	light->isActive = 1;
 
 	oreInventory = new OreInventory();
 	collider = new SphereCollider(1.0f); // 반지름 1.0 설정
@@ -113,7 +113,7 @@ void Player::Mining()
 
 		if (distance <= miningRange)
 		{
-			ClickerUIManager::Get()->SetCursorColor(Float4(0, 1, 0, 1));
+			ClickerUIManager::Get()->SetCursorColor(Float4(0, 0 , 1, 1));
 		}
 		else
 		{

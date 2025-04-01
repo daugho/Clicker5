@@ -10,7 +10,7 @@ ClickerPlayScene::ClickerPlayScene()
     InitTerrainFromFloorCube();
 
     miner = new Helper();
-    miner->SetLocalPosition(Vector3(-2, 0, -2));
+    miner->SetLocalPosition(Vector3(2, 0, 2));
     miner->SetTerrain(terrain);
     aStar = new AStar();
     miner->SetAStar(aStar);

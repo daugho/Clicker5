@@ -5,11 +5,16 @@ Helper::Helper()
 {
 	//SetTag("Helper");
 	model = new ModelAnimator("Miner");
+	model->SetShader(L"Model/Model.hlsl");
 	model->ReadClip("MinerIdle", 0);
+	model->ReadClip("MinerIdle", 1);
+	model->ReadClip("MinerIdle", 2);
 	model->CreateTexture();
-	model->PlayClip(0);
+	//model->PlayClip(2);
 	model->Load();
 	model->SetParent(this);
+	oreInventory = new OreInventory();
+	
 }
 
 Helper::~Helper()
@@ -19,7 +24,9 @@ Helper::~Helper()
 
 void Helper::Update()
 {
-
+	FindOre();
+	Mining();
+	//FindBox();
 	Control();
 	Move();
 	Rotate();
@@ -93,7 +100,12 @@ void Helper::MoveAlongPath()
 {
 	if (pathIndex >= path.size())
 	{
-		OutputDebugString(L"[Helper] 경로 종료 → Idle\n");
+		if (currentState == State::MovingToOre && targetOre)
+		{
+			OutputDebugString(L"[Helper] 광물에 도착했습니다!\n");
+			targetOre = nullptr;
+		}
+
 		currentState = State::Idle;
 		return;
 	}
@@ -101,7 +113,7 @@ void Helper::MoveAlongPath()
 	Vector3 target = path[pathIndex];
 	Vector3 dir = target - GetGlobalPosition();
 
-	if (Vector3::GetLength(dir) < 0.1f)
+	if (Vector3::GetLength(dir) < 0.f)
 	{
 		pathIndex++;
 		return;
@@ -155,6 +167,103 @@ void Helper::FindOre()
 		OutputDebugString(L"[FindOre] targetOre == nullptr → Idle\n");
 		currentState = State::Idle;
 	}
+}
+
+void Helper::FindBox()
+{
+	targetBox = nullptr;
+	float minDist = FLT_MAX;
+
+	for (BoxInventory* box : Boxmanager::Get()->GetBoxes())
+	{
+		float dist = Vector3::Distance(GetGlobalPosition(), box->GetGlobalPosition());
+		if (dist < minDist)
+		{
+			minDist = dist;
+			targetBox = box;
+		}
+	}
+
+	if (targetBox)
+	{
+		int start = aStar->FindCloseNode(GetGlobalPosition());
+		int end = aStar->FindCloseNode(targetBox->GetGlobalPosition());
+		path.clear();
+		aStar->GetPath(start, end, path);
+
+		if (path.empty())
+		{
+			OutputDebugString(L"[FindBox] Helper가 이미 박스에 도착해 있습니다 → Idle\n");
+			currentState = State::Idle;
+			return;
+		}
+
+		wchar_t buffer[100];
+		swprintf_s(buffer, 100, L"[FindBox] Path size: %d\n", (int)path.size());
+		OutputDebugString(buffer);
+
+		pathIndex = 0;
+		currentState = State::MovingToBox;
+	}
+	else
+	{
+		OutputDebugString(L"[FindBox] targetBox == nullptr → Idle\n");
+		currentState = State::Idle;
+	}
+}
+
+void Helper::Mining()
+{
+	
+
+	if (!targetOre || !targetOre->IsActive())
+		return;
+
+	// 현재 인벤토리 용량 확인
+	OreInventory* inventory = ClickerUIManager::Get()->GetInventory();
+	if (inventory && inventory->GetTotalItemCount() >= 10) // MAX_CAPACITY 확인
+	{
+		currentState = State::Idle;
+		OutputDebugString(L"[Helper] 인벤토리 가득참 → 채굴 중지\n");
+		model->PlayClip(1);
+
+		return;
+	}
+
+	miningTimer += DELTA;
+
+	float distance = Vector3::Distance(GetGlobalPosition(), targetOre->GetGlobalPosition());
+
+	if (distance > miningRange)
+		return;
+
+	if (miningTimer >= miningCooldown)
+	{
+		model->PlayClip(0);
+		targetOre->TakeDamage(miningDamage);
+		miningTimer = 0.0f;
+
+		wstring msg = L"[Helper] 광물 채굴! 현재 체력: " + to_wstring(targetOre->GetHp()) + L"\n";
+		OutputDebugString(msg.c_str());
+	}
+	//if (!targetOre || !targetOre->IsActive())
+	//	return;
+	//
+	//miningTimer += DELTA;
+	//
+	//float distance = Vector3::Distance(GetGlobalPosition(), targetOre->GetGlobalPosition());
+	//
+	//if (distance > miningRange)
+	//	return;
+	//
+	//if (miningTimer >= miningCooldown)
+	//{
+	//	targetOre->TakeDamage(miningDamage);
+	//	miningTimer = 0.0f;
+	//
+	//	wstring msg = L"[Helper] 광물 채굴! 현재 체력: " + to_wstring(targetOre->GetHp()) + L"\n";
+	//	OutputDebugString(msg.c_str());
+	//}
 }
 
 void Helper::SetManualPath(const vector<Vector3>& newPath)
