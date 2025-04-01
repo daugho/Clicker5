@@ -13,12 +13,14 @@ Helper::Helper()
 	//model->PlayClip(2);
 	model->Load();
 	model->SetParent(this);
-	oreInventory = new OreInventory();
 	
+	helperInventory = new HelperInventory();
 }
 
 Helper::~Helper()
 {
+	delete model;
+	delete helperInventory;
 	delete model;
 }
 
@@ -232,36 +234,7 @@ void Helper::FindBox()
 
 void Helper::Mining()
 {
-	
 
-	if (!targetOre || !targetOre->IsActive())
-		return;
-
-	// 현재 인벤토리 용량 확인
-	OreInventory* inventory = ClickerUIManager::Get()->GetInventory();
-	if (inventory && inventory->GetTotalItemCount() >= 10) // MAX_CAPACITY 확인
-	{
-		OutputDebugString(L"[Helper] 인벤토리 가득참 → 박스로 이동 시작\n");
-		FindBox();
-		return;
-	}
-
-	miningTimer += DELTA;
-
-	float distance = Vector3::Distance(GetGlobalPosition(), targetOre->GetGlobalPosition());
-
-	if (distance > miningRange)
-		return;
-
-	if (miningTimer >= miningCooldown)
-	{
-		model->PlayClip(0);
-		targetOre->TakeDamage(miningDamage);
-		miningTimer = 0.0f;
-
-		wstring msg = L"[Helper] 광물 채굴! 현재 체력: " + to_wstring(targetOre->GetHp()) + L"\n";
-		OutputDebugString(msg.c_str());
-	}
 	//if (!targetOre || !targetOre->IsActive())
 	//	return;
 	//
@@ -284,33 +257,33 @@ void Helper::Mining()
 
 void Helper::CheckBoxAndStoreItems()
 {
-	if (!targetBox) return;
-
-	float distance = Vector3::Distance(GetGlobalPosition(), targetBox->GetGlobalPosition());
-	if (distance > 1.5f) return;
-
-	OreInventory* inventory = oreInventory; // 내부 인벤토리
-	if (!inventory) return;
-
-	const vector<OreSlot*>& slots = inventory->GetSlots();
-	for (OreSlot* slot : slots)
-	{
-		if (!slot->IsOccupied()) continue;
-
-		DropData item = slot->GetItem();
-		int count = slot->GetCount();
-
-		targetBox->AddItem(item, count);
-		slot->Clear(); // 슬롯 초기화
-	}
-
-	OutputDebugString(L"[Helper] 박스에 아이템 저장 완료 → 다시 채굴 시작\n");
-
-	// 인벤토리 카운터 초기화
-	inventory->RemoveItemCount(inventory->GetTotalItemCount());
-
-	targetBox = nullptr;
-	currentState = State::MovingToOre;
+	//if (!targetBox) return;
+	//
+	//float distance = Vector3::Distance(GetGlobalPosition(), targetBox->GetGlobalPosition());
+	//if (distance > 1.5f) return;
+	//
+	//HelperInventory* inventory = helperInventory; // 내부 인벤토리
+	//if (!inventory) return;
+	//
+	//const vector<OreSlot*>& slots = inventory->GetSlots();
+	//for (OreSlot* slot : slots)
+	//{
+	//	if (!slot->IsOccupied()) continue;
+	//
+	//	DropData item = slot->GetItem();
+	//	int count = slot->GetCount();
+	//
+	//	targetBox->AddItem(item, count);
+	//	slot->Clear(); // 슬롯 초기화
+	//}
+	//
+	//OutputDebugString(L"[Helper] 박스에 아이템 저장 완료 → 다시 채굴 시작\n");
+	//
+	//// 인벤토리 카운터 초기화
+	//inventory->RemoveItemCount(inventory->GetTotalItemCount());
+	//
+	//targetBox = nullptr;
+	//currentState = State::MovingToOre;
 }
 
 void Helper::SetManualPath(const vector<Vector3>& newPath)

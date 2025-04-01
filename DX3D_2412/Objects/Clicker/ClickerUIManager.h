@@ -9,6 +9,7 @@ class GoldDisplay;
 class ItemPopup;
 class BoxInventory;
 class BoxUI;
+class HelperInventory;
 enum class UIState
 {
     None,
@@ -39,6 +40,7 @@ public:
     void ResetCursorColor();
 
     OreInventory* GetInventory() { return inventory; }
+    HelperInventory* GetHelperInventory() { return helperinventory; }
     ItemPopup* GetItemPopup() { return itemPopup; }
     bool IsInventoryOpen() const { return currentUIState == UIState::Inventory; }
     bool IsShopOpen() const { return currentUIState == UIState::Shop; }
@@ -62,6 +64,7 @@ private:
     Quad* resourcePanel;
 
     OreInventory* inventory;
+    HelperInventory* helperinventory;
     Shop* shopOpen;//shop UI
 
     BoxInventory* boxinventory;

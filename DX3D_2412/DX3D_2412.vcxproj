@@ -205,6 +205,7 @@
     <ClInclude Include="Objects\Clicker\ClickerMapManager.h" />
     <ClInclude Include="Objects\Clicker\ClickerUIManager.h" />
     <ClInclude Include="Objects\Clicker\GoldDisplay.h" />
+    <ClInclude Include="Objects\Clicker\HelperInventory.h" />
     <ClInclude Include="Objects\Clicker\ItemPopup.h" />
     <ClInclude Include="Objects\Clicker\RateDisplay.h" />
     <ClInclude Include="Objects\Clicker\ShopManager.h" />
@@ -313,6 +314,7 @@
     <ClCompile Include="Objects\Clicker\ClickerMapManager.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerUIManager.cpp" />
     <ClCompile Include="Objects\Clicker\GoldDisplay.cpp" />
+    <ClCompile Include="Objects\Clicker\HelperInventory.cpp" />
     <ClCompile Include="Objects\Clicker\ItemPopup.cpp" />
     <ClCompile Include="Objects\Clicker\RateDisplay.cpp" />
     <ClCompile Include="Objects\Clicker\ShopManager.cpp" />

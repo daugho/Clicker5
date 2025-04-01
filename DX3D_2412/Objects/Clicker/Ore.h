@@ -11,6 +11,7 @@ public:
     void Edit();
 
     void DropItems();
+    void DropItemsToHelper();
     void TakeDamage(int damage);
 
     oreData GetData() { return data; }

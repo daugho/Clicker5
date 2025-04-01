@@ -25,7 +25,7 @@ public:
 	void ToggleLight();
 	void OpenShop();
 	void OpenBox();
-
+	OreInventory* GetInventory() { return oreInventory; }
 	//데미지 계산 함수
 	void ApplyShopDamageBoost();
 	void Shop2buypick();
@@ -44,6 +44,7 @@ private:
 
 	void SetCursor();
 
+	void TakeDamageToOre(Ore* targetOre);
 
 private:
 	//move

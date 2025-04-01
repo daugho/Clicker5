@@ -97,6 +97,41 @@ void Ore::DropItems()
 
 }
 
+void Ore::DropItemsToHelper()
+{
+
+    HelperInventory* inventory = ClickerUIManager::Get()->GetHelperInventory();
+    if (!inventory) return;
+
+    vector<DropData>& dropList = OreManager::Get()->dropTable[oreID];
+    if (dropList.empty()) return;
+
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
+
+    float randValue = distribution(generator);
+    float cumulativeRate = 0.0f;
+    DropData* selectedItem = nullptr;
+
+
+    for (DropData& drop : dropList) {
+        cumulativeRate += drop.dropRate;
+        if (randValue <= cumulativeRate) {
+            selectedItem = &drop;
+            break;
+        }
+    }
+    uniform_int_distribution<int> countDistribution(selectedItem->minCount, selectedItem->maxCount);
+    int itemCount = countDistribution(generator);
+
+
+    if (inventory->GetTotalItemCount() >= 10)
+        return;
+
+    inventory->AddItem(*selectedItem, itemCount);
+}
+
 void Ore::TakeDamage(int damage)
 {
     health -= damage;

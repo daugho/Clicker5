@@ -310,3 +310,10 @@ void Player::SetCursor()
 	SetCursorPos(clientCenterPos.x, clientCenterPos.y);
 }
 
+void Player::TakeDamageToOre(Ore* targetOre)
+{
+	if (!targetOre) return;
+
+	targetOre->TakeDamage(playerDamage);
+}
+
