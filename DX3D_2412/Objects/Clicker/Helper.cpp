@@ -24,11 +24,29 @@ Helper::~Helper()
 
 void Helper::Update()
 {
-	FindOre();
-	Mining();
+	switch (currentState)
+	{
+	case State::Idle:
+		FindOre();
+		break;
+
+	case State::MovingToOre:
+		MoveAlongPath();
+		Mining();
+		break;
+
+	case State::MovingToBox:
+		MoveAlongPath();
+		CheckBoxAndStoreItems(); // 박스 도착 시 아이템 저장
+		break;
+
+	case State::ManualMove:
+		MoveAlongPath();
+		break;
+	}
 	//FindBox();
+	//Move();
 	Control();
-	Move();
 	Rotate();
 	UpdateWorld();
 	model->Update();
@@ -223,10 +241,8 @@ void Helper::Mining()
 	OreInventory* inventory = ClickerUIManager::Get()->GetInventory();
 	if (inventory && inventory->GetTotalItemCount() >= 10) // MAX_CAPACITY 확인
 	{
-		currentState = State::Idle;
-		OutputDebugString(L"[Helper] 인벤토리 가득참 → 채굴 중지\n");
-		model->PlayClip(1);
-
+		OutputDebugString(L"[Helper] 인벤토리 가득참 → 박스로 이동 시작\n");
+		FindBox();
 		return;
 	}
 
@@ -266,11 +282,41 @@ void Helper::Mining()
 	//}
 }
 
+void Helper::CheckBoxAndStoreItems()
+{
+	if (!targetBox) return;
+
+	float distance = Vector3::Distance(GetGlobalPosition(), targetBox->GetGlobalPosition());
+	if (distance > 1.5f) return;
+
+	OreInventory* inventory = oreInventory; // 내부 인벤토리
+	if (!inventory) return;
+
+	const vector<OreSlot*>& slots = inventory->GetSlots();
+	for (OreSlot* slot : slots)
+	{
+		if (!slot->IsOccupied()) continue;
+
+		DropData item = slot->GetItem();
+		int count = slot->GetCount();
+
+		targetBox->AddItem(item, count);
+		slot->Clear(); // 슬롯 초기화
+	}
+
+	OutputDebugString(L"[Helper] 박스에 아이템 저장 완료 → 다시 채굴 시작\n");
+
+	// 인벤토리 카운터 초기화
+	inventory->RemoveItemCount(inventory->GetTotalItemCount());
+
+	targetBox = nullptr;
+	currentState = State::MovingToOre;
+}
+
 void Helper::SetManualPath(const vector<Vector3>& newPath)
 {
 	path = newPath;
 	pathIndex = 0;
 	currentState = State::ManualMove;
-
 }
 

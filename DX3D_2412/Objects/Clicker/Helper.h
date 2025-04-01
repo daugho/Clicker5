@@ -24,6 +24,7 @@ public:
     void FindOre();
     void FindBox();
     void Mining();
+    void CheckBoxAndStoreItems();
 
     void SetManualPath(const vector<Vector3>& newPath);
     State GetState() {
