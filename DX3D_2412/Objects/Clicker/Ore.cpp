@@ -125,10 +125,6 @@ void Ore::DropItemsToHelper()
     uniform_int_distribution<int> countDistribution(selectedItem->minCount, selectedItem->maxCount);
     int itemCount = countDistribution(generator);
 
-
-    if (inventory->GetTotalItemCount() >= 10)
-        return;
-
     inventory->AddItem(*selectedItem, itemCount);
 }
 
@@ -144,6 +140,20 @@ void Ore::TakeDamage(int damage)
         DropItems();
         health = data.health;
 
+    }
+}
+
+void Ore::TakeDamageFroHelper(int damage)
+{
+    health -= damage;
+
+    if (particle && !particle->IsActive())
+        particle->Play(GetGlobalPosition());
+
+    if (health <= 0)
+    {
+        DropItemsToHelper();
+        health = data.health;
     }
 }
 

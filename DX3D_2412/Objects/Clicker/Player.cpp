@@ -22,7 +22,7 @@ Player::Player()
 	light->range = 15.0;
 	light->isActive = 1;
 
-	oreInventory = new OreInventory();
+	//oreInventory = new OreInventory();
 	collider = new SphereCollider(1.0f); // 반지름 1.0 설정
 	collider->SetParent(this);
 	RecalculateDamage();
@@ -96,6 +96,8 @@ void Player::SetVelocity(const Vector3& newVelocity)
 
 void Player::Mining()
 {
+	//wstring msg1 = L"[Player] this = " + to_wstring((UINT64)this) + L"\n";
+	//OutputDebugString(msg1.c_str());
 	miningTimer += DELTA;
 
 	if (miningTimer < miningCooldown)

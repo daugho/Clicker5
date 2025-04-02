@@ -19,7 +19,6 @@ OreInventory::~OreInventory()
 
 void OreInventory::Update()
 {
-
 	Quad::Update();
     UpdateWorld();
     for (OreSlot* slot : slots) {
@@ -86,6 +85,8 @@ void OreInventory::CreatSlot()
 
 bool OreInventory::AddItem(const DropData& item, int count)
 {
+    wstring msg1 = L"[OreInventory] this = " + to_wstring((UINT64)this) + L"\n";
+    OutputDebugString(msg1.c_str());
     int availableSpace = MAX_CAPACITY - currentCapacity;
     if (availableSpace <= 0)
         return false; // 아예 여유 없음
@@ -114,7 +115,6 @@ bool OreInventory::AddItem(const DropData& item, int count)
             return true;
         }
     }
-
     return false;
 }
 

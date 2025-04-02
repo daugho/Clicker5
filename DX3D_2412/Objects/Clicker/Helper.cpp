@@ -14,14 +14,13 @@ Helper::Helper()
 	model->Load();
 	model->SetParent(this);
 	
-	helperInventory = new HelperInventory();
+	//helperInventory = new HelperInventory();
 }
 
 Helper::~Helper()
 {
 	delete model;
 	delete helperInventory;
-	delete model;
 }
 
 void Helper::Update()
@@ -39,7 +38,6 @@ void Helper::Update()
 
 	case State::MovingToBox:
 		MoveAlongPath();
-		CheckBoxAndStoreItems(); // 박스 도착 시 아이템 저장
 		break;
 
 	case State::ManualMove:
@@ -197,44 +195,127 @@ void Helper::FindBox()
 	for (BoxInventory* box : Boxmanager::Get()->GetBoxes())
 	{
 		float dist = Vector3::Distance(GetGlobalPosition(), box->GetGlobalPosition());
+
 		if (dist < minDist)
 		{
 			minDist = dist;
 			targetBox = box;
+
 		}
 	}
 
-	if (targetBox)
+	if (!targetBox)
+		return;
+
+	// 도착한 거리이면 바로 저장 처리
+	if (minDist <= 1.0f)
 	{
-		int start = aStar->FindCloseNode(GetGlobalPosition());
-		int end = aStar->FindCloseNode(targetBox->GetGlobalPosition());
-		path.clear();
-		aStar->GetPath(start, end, path);
-
-		if (path.empty())
-		{
-			OutputDebugString(L"[FindBox] Helper가 이미 박스에 도착해 있습니다 → Idle\n");
-			currentState = State::Idle;
-			return;
-		}
-
-		wchar_t buffer[100];
-		swprintf_s(buffer, 100, L"[FindBox] Path size: %d\n", (int)path.size());
-		OutputDebugString(buffer);
-
-		pathIndex = 0;
-		currentState = State::MovingToBox;
-	}
-	else
-	{
-		OutputDebugString(L"[FindBox] targetBox == nullptr → Idle\n");
+		OutputDebugString(L"[Helper] 박스가 가까워서 바로 도착 → 저장 실행\n");
+		CheckBoxAndStoreItems();
 		currentState = State::Idle;
+		return;
 	}
+
+	//아직 멀면 경로 따라 이동
+	int start = aStar->FindCloseNode(GetGlobalPosition());
+	int end = aStar->FindCloseNode(targetBox->GetGlobalPosition());
+
+	path.clear();
+	aStar->GetPath(start, end, path);
+	pathIndex = 0;
+
+	currentState = State::MovingToBox;
+	//targetBox = nullptr;
+	//float minDist = FLT_MAX;
+	//
+	//for (BoxInventory* box : Boxmanager::Get()->GetBoxes())
+	//{
+	//	float dist = Vector3::Distance(GetGlobalPosition(), box->GetGlobalPosition());
+	//	if (dist < minDist)
+	//	{
+	//		minDist = dist;
+	//		targetBox = box;
+	//	}
+	//}
+	//
+	//if (targetBox)
+	//{
+	//	int start = aStar->FindCloseNode(GetGlobalPosition());
+	//	int end = aStar->FindCloseNode(targetBox->GetGlobalPosition());
+	//	path.clear();
+	//	aStar->GetPath(start, end, path);
+	//
+	//	if (path.empty())
+	//	{
+	//		OutputDebugString(L"[FindBox] Helper가 이미 박스에 도착해 있습니다 → Idle\n");
+	//		currentState = State::Idle;
+	//		return;
+	//	}
+	//
+	//	wchar_t buffer[100];
+	//	swprintf_s(buffer, 100, L"[FindBox] Path size: %d\n", (int)path.size());
+	//	OutputDebugString(buffer);
+	//
+	//	pathIndex = 0;
+	//	currentState = State::MovingToBox;
+	//}
+	//else
+	//{
+	//	OutputDebugString(L"[FindBox] targetBox == nullptr → Idle\n");
+	//	currentState = State::Idle;
+	//}
 }
 
 void Helper::Mining()
 {
+	if (!targetOre || !targetOre->IsActive())
+		return;
 
+	// ? 중앙 관리되는 helperInventory 접근
+	HelperInventory* inventory = ClickerUIManager::Get()->GetHelperInventory();
+	if (!inventory)
+	{
+		OutputDebugString(L"[Helper] inventory가 존재하지 않습니다.\n");
+		return;
+	}
+
+	// ? 인벤토리가 가득 찼으면 상태 변경
+	if (inventory->IsFull())
+	{
+		OutputDebugString(L"[Helper] 인벤토리 가득 참 → 상태 변경: MovingToBox\n");
+		currentState = State::MovingToBox;
+		FindBox();
+		return;
+	}
+
+	miningTimer += DELTA;
+
+	float distance = Vector3::Distance(GetGlobalPosition(), targetOre->GetGlobalPosition());
+	if (distance > miningRange)
+		return;
+
+	if (miningTimer >= miningCooldown)
+	{
+		targetOre->TakeDamageFroHelper(miningDamage);  // 오타 없도록 확인
+		miningTimer = 0.0f;
+
+		wstring msg = L"[Helper] 광물 채굴! 현재 체력: " + to_wstring(targetOre->GetHp()) + L"\n";
+		OutputDebugString(msg.c_str());
+
+		if (targetOre->GetHp() <= 0)
+		{
+			// ? 중앙 inventory 전달
+			targetOre->DropItemsToHelper();
+
+			// 드롭한 후에도 인벤토리가 찼는지 체크
+			if (inventory->IsFull())
+			{
+				OutputDebugString(L"[Helper] 드롭 후 인벤토리 가득 참 → 상태 변경: MovingToBox\n");
+				currentState = State::MovingToBox;
+				FindBox();
+			}
+		}
+	}
 	//if (!targetOre || !targetOre->IsActive())
 	//	return;
 	//
@@ -257,33 +338,25 @@ void Helper::Mining()
 
 void Helper::CheckBoxAndStoreItems()
 {
-	//if (!targetBox) return;
-	//
-	//float distance = Vector3::Distance(GetGlobalPosition(), targetBox->GetGlobalPosition());
-	//if (distance > 1.5f) return;
-	//
-	//HelperInventory* inventory = helperInventory; // 내부 인벤토리
-	//if (!inventory) return;
-	//
-	//const vector<OreSlot*>& slots = inventory->GetSlots();
-	//for (OreSlot* slot : slots)
-	//{
-	//	if (!slot->IsOccupied()) continue;
-	//
-	//	DropData item = slot->GetItem();
-	//	int count = slot->GetCount();
-	//
-	//	targetBox->AddItem(item, count);
-	//	slot->Clear(); // 슬롯 초기화
-	//}
-	//
-	//OutputDebugString(L"[Helper] 박스에 아이템 저장 완료 → 다시 채굴 시작\n");
-	//
-	//// 인벤토리 카운터 초기화
-	//inventory->RemoveItemCount(inventory->GetTotalItemCount());
-	//
-	//targetBox = nullptr;
-	//currentState = State::MovingToOre;
+	if (!targetBox || !helperInventory) return;
+
+	const auto& items = helperInventory->GetItems();
+
+	for (const auto& pair : items)
+	{
+		const DropData& item = pair.first;
+		int count = pair.second;
+
+		if (!targetBox->AddItem(item, count))
+		{
+			OutputDebugString(L"[Helper] 박스 용량 부족으로 일부 아이템 저장 실패\n");
+			// 필요시 일부만 저장하는 로직 고려 가능
+			continue;
+		}
+	}
+
+	helperInventory->Clear();
+	OutputDebugString(L"[Helper] 인벤토리 비움 완료\n");
 }
 
 void Helper::SetManualPath(const vector<Vector3>& newPath)

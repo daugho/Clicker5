@@ -7,6 +7,8 @@ ClickerUIManager::ClickerUIManager()
     inventory = new OreInventory();
     inventory->SetActive(false);
 
+    helperinventory = new HelperInventory();
+
     goldDisplay = new GoldDisplay();
     goldDisplay->SetPosition(Vector3(50, 50, 0)); // 화면 우측 상단 등 적절한 위치
     goldDisplay->SetGold(0);

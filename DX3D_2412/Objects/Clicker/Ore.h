@@ -13,7 +13,7 @@ public:
     void DropItems();
     void DropItemsToHelper();
     void TakeDamage(int damage);
-
+    void TakeDamageFroHelper(int damage);
     oreData GetData() { return data; }
     int GetHp() { return health; }
 
