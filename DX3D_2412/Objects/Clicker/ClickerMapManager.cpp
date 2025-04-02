@@ -44,13 +44,13 @@ void ClickerMapManager::CreateRoom1()
 	room1->AddCube(Vector3(20, 1, 30), Vector3(0, -0.5, 0), baseTexture, Vector2(2, 15));
 
 	// 벽 (모두 바닥 기준으로 맞춤)
-	room1->AddCube(Vector3(1, 6, 30), Vector3(10, 3, 0), baseTexture, Vector2(1, 1));  // 오른쪽
-	room1->AddCube(Vector3(1, 6, 30), Vector3(-10, 3, 0), baseTexture, Vector2(1, 1)); // 왼쪽
-	room1->AddCube(Vector3(20, 6, 1), Vector3(0, 3, -15), baseTexture, Vector2(1, 1));  // 뒤쪽
-	room1->AddCube(Vector3(20, 6, 1), Vector3(0, 3, 15), baseTexture, Vector2(1, 1));   // 앞쪽
+	room1->AddCube(Vector3(1, 6, 30), Vector3(10, 3, 0), baseTexture, Vector2(15, 1));  // 오른쪽
+	room1->AddCube(Vector3(1, 6, 30), Vector3(-10, 3, 0), baseTexture, Vector2(22, 1)); // 왼쪽
+	room1->AddCube(Vector3(20, 6, 1), Vector3(0, 3, -15), baseTexture, Vector2(5, 1));  // 뒤쪽
+	room1->AddCube(Vector3(20, 6, 1), Vector3(0, 3, 15), baseTexture, Vector2(10, 1));   // 앞쪽
 
 	// 천장 (바닥 기준 위로 6)
-	room1->AddCube(Vector3(20, 1, 30), Vector3(0, 5.5f, 0), baseTexture, Vector2(1, 1)); // 천장
+	room1->AddCube(Vector3(20, 1, 30), Vector3(0, 5.5f, 0), baseTexture, Vector2(10, 15)); // 천장
 
 	// ?? Room1에 광물 추가
 	room1->AddOre(Vector3{7,0,10}, 0);

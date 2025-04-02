@@ -25,7 +25,9 @@ public:
     void FindBox();
     void Mining();
     void CheckBoxAndStoreItems();
-    HelperInventory* GetInventory() { return helperInventory; }
+    void UpdateDistanceToBox();
+    float GetDistanceToBox() const { return distanceToBox; }
+    //HelperInventory* GetInventory() { return helperInventory; }
     void SetManualPath(const vector<Vector3>& newPath);
     State GetState() { return currentState;}
 private:
@@ -35,6 +37,8 @@ private:
 
 
 private:
+
+    float distanceToBox = FLT_MAX;
 
     State currentState = State::Idle;
     Terrain* terrain;
@@ -57,7 +61,7 @@ private:
 
     Vector3 targetPos;
     bool hasMoved = false;
-    HelperInventory* helperInventory;
+    //HelperInventory* helperInventory;
     float miningCooldown = 1.5f;    // Helper¿« √§±º ¡÷±‚
     float miningTimer = 0.0f;       // √§±º ≈∏¿Ã∏”
     int miningDamage = 5;           // √§±º µ•πÃ¡ˆ

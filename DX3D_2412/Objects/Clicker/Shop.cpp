@@ -95,7 +95,7 @@ void Shop::Render()
 
 void Shop::Edit()
 {    
-    for (ShopSlot* slot : sellSlots) {
+    for (ShopSlot* slot : iconSlots) {
         slot->Edit();
     }
     //popup->Edit();
@@ -230,7 +230,7 @@ void Shop::CreateSlots2()
         iconSlots.push_back(slot);
     }
     /////////////////////////////////////////////////////////////////////////////////////////////
-    for (int i = 0; i < numSlots + 1; i++) {
+    for (int i = 0; i < 4 + 1; i++) {
         ShopSlot* slot = new ShopSlot();
         float yOffset = (slot->Size().x + yinterval) * i;
 
@@ -284,6 +284,7 @@ void Shop::CreateSlots2()
         slot->SetLocalPosition(pos);
         slot->SetTag("Ore_Shop2Slot_Bye" + to_string(i));
         slot->SetParent(this);
+        slot->SetBuyEvent2(items[i], i);
         int itemID = itemIDs[i];
         slot->SetEvent([=]()
             {
@@ -324,7 +325,7 @@ void Shop::CreateSlots2()
         rateUI->SetPosition(pos + Vector3(200, 0, 0)); // 원하는 위치로 조정
         rateUI->SetSlotID(i);
         rateUI->SetRate(levelData.rate);
-        //rateUI->Load();
+        rateUI->Load();
         rateUI->UpdateWorld();
         
         rateDisplays.push_back(rateUI);
@@ -550,12 +551,14 @@ void Shop::ClearSlots()
     for (ShopSlot* slot : buySlots) delete slot;
     for (ShopSlot* slot : sellSlots) delete slot;
     for (ShopSlot* slot : levelSlots) delete slot;
+    for (RateDisplay* rate : rateDisplays) delete rate;
 
     iconSlots.clear();
     descSlots.clear();
     buySlots.clear();
     sellSlots.clear();
     levelSlots.clear();
+    rateDisplays.clear();
 }
 
 int Shop::GetItemLevel(int itemID) const

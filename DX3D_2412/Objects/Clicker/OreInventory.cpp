@@ -2,6 +2,7 @@
 
 OreInventory::OreInventory() : Quad(L"Resources/Textures/UI/Bag.png")
 {
+    SetTexture(L"Resources/Textures/UI/Bag.png");
     localPosition = CENTER;
     UpdateWorld();
     CreatSlot();

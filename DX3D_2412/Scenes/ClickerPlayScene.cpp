@@ -3,7 +3,7 @@
 
 ClickerPlayScene::ClickerPlayScene()
 {
-	Font::Get()->AddStyle("Icon", L"배달의민족 주아", 30);
+	Font::Get()->AddStyle("Icon", L"배달의민족 주아", 20);
 	Font::Get()->AddColor("Blue",0,0,1);
 	ClickerUIManager::Get();
 	ClickerMapManager::Get();

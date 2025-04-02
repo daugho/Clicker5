@@ -20,7 +20,7 @@ Helper::Helper()
 Helper::~Helper()
 {
 	delete model;
-	delete helperInventory;
+	//delete helperInventory;
 }
 
 void Helper::Update()
@@ -38,12 +38,19 @@ void Helper::Update()
 
 	case State::MovingToBox:
 		MoveAlongPath();
+		if (distanceToBox <= 1.0f)
+		{
+			OutputDebugString(L"[Helper] 박스 도착! 아이템 저장 실행\n");
+			CheckBoxAndStoreItems();
+			currentState = State::Idle;
+		}
 		break;
 
 	case State::ManualMove:
 		MoveAlongPath();
 		break;
 	}
+	UpdateDistanceToBox();
 	//FindBox();
 	//Move();
 	Control();
@@ -116,6 +123,7 @@ void Helper::Rotate()
 
 void Helper::MoveAlongPath()
 {
+
 	if (pathIndex >= path.size())
 	{
 		if (currentState == State::MovingToOre && targetOre)
@@ -196,27 +204,21 @@ void Helper::FindBox()
 	{
 		float dist = Vector3::Distance(GetGlobalPosition(), box->GetGlobalPosition());
 
+		// 로그 출력
+		wstring msg = L"[Helper] 박스까지 거리: " + to_wstring(dist) + L"\n";
+		OutputDebugString(msg.c_str());
+
 		if (dist < minDist)
 		{
 			minDist = dist;
 			targetBox = box;
-
 		}
 	}
 
 	if (!targetBox)
 		return;
 
-	// 도착한 거리이면 바로 저장 처리
-	if (minDist <= 1.0f)
-	{
-		OutputDebugString(L"[Helper] 박스가 가까워서 바로 도착 → 저장 실행\n");
-		CheckBoxAndStoreItems();
-		currentState = State::Idle;
-		return;
-	}
-
-	//아직 멀면 경로 따라 이동
+	// 도착 처리 생략 (이제는 거리로 자동 판단)
 	int start = aStar->FindCloseNode(GetGlobalPosition());
 	int end = aStar->FindCloseNode(targetBox->GetGlobalPosition());
 
@@ -338,9 +340,9 @@ void Helper::Mining()
 
 void Helper::CheckBoxAndStoreItems()
 {
-	if (!targetBox || !helperInventory) return;
+	HelperInventory* inventory = ClickerUIManager::Get()->GetHelperInventory();
 
-	const auto& items = helperInventory->GetItems();
+	const auto& items = inventory->GetItems();
 
 	for (const auto& pair : items)
 	{
@@ -355,8 +357,18 @@ void Helper::CheckBoxAndStoreItems()
 		}
 	}
 
-	helperInventory->Clear();
+	inventory->Clear();
 	OutputDebugString(L"[Helper] 인벤토리 비움 완료\n");
+	ClickerUIManager::Get()->GetBoxUI()->SetTargetBox(targetBox);  // 혹시 targetBox를 안 넘겼다면
+	ClickerUIManager::Get()->GetBoxUI()->UpdateSlots();
+}
+
+void Helper::UpdateDistanceToBox()
+{
+	if (targetBox)
+		distanceToBox = Vector3::Distance(GetGlobalPosition(), targetBox->GetGlobalPosition());
+	else
+		distanceToBox = FLT_MAX;
 }
 
 void Helper::SetManualPath(const vector<Vector3>& newPath)

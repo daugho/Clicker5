@@ -16,13 +16,13 @@ RateDisplay::~RateDisplay()
 
 void RateDisplay::SetRate(float rate)
 {
+    digits.clear();
     for (auto digit : digits)
     {
         digit->SetActive(false);
         digit->SetParent(nullptr);
         delete digit;
-    }
-    digits.clear();
+    }    
 
     string rateStr = to_string(rate).substr(0, 4);
     for (int i = 0; i < rateStr.size(); ++i)

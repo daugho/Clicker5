@@ -48,6 +48,11 @@ int BoxInventory::GetTotalItemCount() const
 
 bool BoxInventory::AddItem(const DropData& item, int count)
 {
+    OutputDebugString(L"[BoxInventory] AddItem 호출됨!\n");
+
+    wstring log = L"추가된 아이템 ID = " + to_wstring(item.id) +
+        L", 개수 = " + to_wstring(count) + L"\n";
+    OutputDebugString(log.c_str());
     // 용량 초과 체크
     if (currentCapacity + count > MAX_CAPACITY)
         return false;

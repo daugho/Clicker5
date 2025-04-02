@@ -45,8 +45,10 @@ void BoxSlot::SetImage(const wstring& texturePath,int index)
 {
     image->SetActive(true);
     image->SetTag("Box" + to_string(index));
-    image->GetMaterial()->SetDiffuseMap(texturePath);
+    image->SetTexture(texturePath);
+    //image->GetMaterial()->SetDiffuseMap(texturePath);
     image->Load();
+
 }
 
 void BoxSlot::SetItem(const DropData& data, int count)
@@ -58,6 +60,7 @@ void BoxSlot::SetItem(const DropData& data, int count)
     image->SetActive(true);
     image->GetMaterial()->SetDiffuseMap(data.texturePath);  // DropData가 iconPath를 가지고 있다고 가정
     image->Load();
+
 }
 
 void BoxSlot::ClearItem()

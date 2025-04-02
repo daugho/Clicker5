@@ -44,3 +44,4 @@ bool HelperInventory::IsFull() const
 {
     return currentCapacity >= MAX_CAPACITY;
 }
+

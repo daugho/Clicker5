@@ -1,5 +1,5 @@
 #pragma once
-
+class Helper;
 class HelperInventory
 {
 public:
@@ -11,7 +11,6 @@ public:
 
     bool IsFull() const;
     int GetTotalItemCount() const { return currentCapacity; }
-
     const std::vector<std::pair<DropData, int>>& GetItems() const { return items; }
 
 private:

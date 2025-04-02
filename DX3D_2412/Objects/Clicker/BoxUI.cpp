@@ -84,8 +84,8 @@ void BoxUI::Render()
 
 void BoxUI::Edit()
 {
-    //insertButton->Edit();
-    //removeButton->Edit();
+    insertButton->Edit();
+    removeButton->Edit();
     //for (BoxSlot* slot : boxslots)
     //    slot->Edit();
 }

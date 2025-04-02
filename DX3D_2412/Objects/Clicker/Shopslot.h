@@ -12,10 +12,11 @@ public:
     void SetItem(const ShopData& item, int index);
     void SetDescrip(const ShopData& item, int index);
     void SetBuyEvent(const ShopData& item, int index);
+    void SetBuyEvent2(const ShopData& item, int index);
     void SetLevel(const ShopItemLevelData& level, int index);
     void SetSellbutton(const function<void()>& callback);
     void OnClick();
-    void Edit();
+    //void Edit();
 
 
     void SetSlotIndex(int index) { slotIndex = index; }

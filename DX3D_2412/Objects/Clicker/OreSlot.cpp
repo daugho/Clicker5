@@ -37,7 +37,8 @@ void OreSlot::Render()
 		return;
 	Font::Get()->SetStyle("Icon");
 	Font::Get()->SetColor("Blue");
-	Font::Get()->RenderText(to_string(count), GetGlobalPosition());
+	Font::Get()->RenderText(to_string(count), GetGlobalPosition() + Vector3(-30, -30, 0));
+
 }
 
 void OreSlot::ShowTooltip()
@@ -58,7 +59,8 @@ void OreSlot::SetData(DropData data, int index)
 {
 	image->SetActive(true);
 	item = data;
-	image->GetMaterial()->SetDiffuseMap(item.texturePath);
+	image->SetTexture(item.texturePath);
+	//image->GetMaterial()->SetDiffuseMap(item.texturePath);
 	this->index = index;
 }
 
@@ -71,6 +73,7 @@ void OreSlot::UpdateData()
 	}
 
 	image->SetActive(true);
-	image->GetMaterial()->SetDiffuseMap(item.texturePath);
+	image->SetTexture(item.texturePath);
+	//image->GetMaterial()->SetDiffuseMap(item.texturePath);
 	image->GetMaterial()->SetShader(L"Basic/Texture.hlsl");
 }

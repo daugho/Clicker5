@@ -47,7 +47,8 @@ void ShopSlot::SetItem(const ShopData& item, int index)
     slotType = ShopSlotType::ItemSlot;//정해진 text를 출력하기위해 타입 정하기.
     image->SetActive(true);
     image->SetTag("Ore_ShopSlot_Icon_" + to_string(index));
-    image->GetMaterial()->SetDiffuseMap(item.icon);
+    image->SetTexture(item.icon);
+    //image->GetMaterial()->SetDiffuseMap(item.icon);
     image->Load();
 }
 
@@ -60,7 +61,8 @@ void ShopSlot::SetDescrip(const ShopData& item, int index)
 
     image->SetActive(true);
     image->SetTag("Ore_ShopSlot_Icon_" + to_string(index));
-    image->GetMaterial()->SetDiffuseMap(item.descrip);
+    image->SetTexture(item.descrip);
+    //image->GetMaterial()->SetDiffuseMap(item.descrip);
     image->Load();
 }
 
@@ -73,7 +75,22 @@ void ShopSlot::SetBuyEvent(const ShopData& item, int index)
 
     image->SetActive(true);
     image->SetTag("Ore_ShopSlot_Buy_" + to_string(index));
-    image->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/buybutton.png");
+    image->SetTexture(L"Resources/Textures/UI/buybutton.png");
+    //image->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/buybutton.png");
+    image->Load();
+}
+
+void ShopSlot::SetBuyEvent2(const ShopData& item, int index)
+{
+    this->item = item;
+    this->slotIndex = index;
+    occupied = true;
+    slotType = ShopSlotType::SellSlot;//정해진 text를 출력하기위해 타입 정하기.
+
+    image->SetActive(true);
+    image->SetTag("Ore_ShopSlot_Buy_" + to_string(index));
+    image->SetTexture(L"Resources/Textures/UI/buybutton2.png");
+    //image->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/buybutton.png");
     image->Load();
 }
 
@@ -85,7 +102,8 @@ void ShopSlot::SetLevel(const ShopItemLevelData& level, int index)
     slotType = ShopSlotType::ItemLevel;//정해진 text를 출력하기위해 타입 정하기.
     levelImage->SetActive(true);
     levelImage->SetTag("Level" + to_string(index));
-    levelImage->GetMaterial()->SetDiffuseMap(level.ratePath);
+    levelImage->SetTexture(level.ratePath);
+    //levelImage->GetMaterial()->SetDiffuseMap(level.ratePath);
     levelImage->Load();
 }
 
@@ -96,7 +114,8 @@ void ShopSlot::SetSellbutton(const function<void()>& callback)
 
     image->SetActive(true);
     image->SetTag("Ore_ShopSlot_SellAll");
-    image->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/sell.png");
+    image->SetTexture(L"Resources/Textures/UI/sell.png");
+    //image->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/sell.png");
     image->Load();
 
     SetEvent(callback);
@@ -126,9 +145,9 @@ void ShopSlot::OnClick()
     }
 }
 
-void ShopSlot::Edit()
-{
-    image->Edit();
-    //levelImage->Edit();
-}
+//void ShopSlot::Edit()
+//{
+//    image->Edit();
+//    //levelImage->Edit();
+//}
 

@@ -10,7 +10,8 @@ ItemPopup::~ItemPopup() {}
 
 void ItemPopup::Play(const wstring& texturePath)
 {
-    GetMaterial()->SetDiffuseMap(texturePath);
+    SetTexture(texturePath);
+   //GetMaterial()->SetDiffuseMap(texturePath);
 
     Float4 color = GetMaterial()->GetData()->diffuse;
     color.w = 1.0f;
