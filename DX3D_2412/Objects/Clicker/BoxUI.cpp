@@ -17,6 +17,7 @@ BoxUI::BoxUI() : Quad(L"Resources/Textures/UI/woodbox.png")
     insertButton->UpdateWorld();
     insertButton->SetEvent([=]()//0329
     {
+            OutputDebugStringA("넣기 버튼 클릭됨\n");
         OreInventory* inventory = ClickerUIManager::Get()->GetInventory();
         const auto& slots = inventory->GetSlots(); // OreSlot 리스트
 
@@ -43,11 +44,19 @@ BoxUI::BoxUI() : Quad(L"Resources/Textures/UI/woodbox.png")
     removeButton->Load();
     removeButton->UpdateWorld();
     removeButton->SetEvent([=]()
-    {
-        OutputDebugStringA("빼기 버튼 클릭됨\n");
-    });
-    removeButton->SetActive(false);
+        {
+            OutputDebugStringA("빼기 버튼 클릭됨\n");
 
+            if (!targetBox) return;
+
+            OreInventory* inventory = ClickerUIManager::Get()->GetInventory();
+            if (!inventory) return;
+
+            targetBox->TakeItem(inventory);  // 박스에서 꺼낸다
+            UpdateSlots();                       // 박스 UI 갱신
+            inventory->Update();                // 인벤토리 UI 갱신 (슬롯 상태 반영)
+        });
+    removeButton->SetActive(false);
 }
 
 BoxUI::~BoxUI()
@@ -86,8 +95,8 @@ void BoxUI::Edit()
 {
     insertButton->Edit();
     removeButton->Edit();
-    //for (BoxSlot* slot : boxslots)
-    //    slot->Edit();
+    for (BoxSlot* slot : boxslots)
+        slot->Edit();
 }
 
 void BoxUI::CreatSlot()
@@ -100,7 +109,7 @@ void BoxUI::CreatSlot()
     
     float interval = 7.0f;
     float  Hinterval = 12.5f;
-    for (int i = 1; i < 12; i++)
+    for (int i = 1; i < 8; i++)
     {
         BoxSlot* slot = new BoxSlot();
         float xOffset = (slot->Size().x + interval) * i;
@@ -115,7 +124,7 @@ void BoxUI::CreatSlot()
     }
     for (int j = 1; j < 2; j++)
     {
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 8; i++)
         {
             BoxSlot* slot = new BoxSlot();
             float xOffset = (slot->Size().x + interval) * i;
@@ -155,7 +164,7 @@ void BoxUI::UpdateSlots()
         const DropData& data = items[i].first;
         int count = items[i].second;
 
-        boxslots[i]->SetItem(data, count);
+        boxslots[i]->SetItem(data, count,i);
     }
     for (int i = items.size(); i < boxslots.size(); ++i)
     {

@@ -12,6 +12,7 @@ public:
     void Render();
     void ShowTooltip();
     void Clear();
+    void Edit();
 
     void SetData(DropData data,int index);
     bool IsOccupied() const { return occupied; }

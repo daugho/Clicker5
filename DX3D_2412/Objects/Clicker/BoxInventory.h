@@ -12,6 +12,7 @@ public:
     bool IsFull() const;
     int GetTotalItemCount() const;
     bool AddItem(const DropData& item, int count);
+    void TakeItem(OreInventory* inventory);
     const vector<pair<DropData, int>>& GetItems() const;
 
 private:

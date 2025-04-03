@@ -10,7 +10,7 @@ public:
     void Render();
     //void Edit();
     void SetImage(const wstring& texturePath,int index);
-    void SetItem(const DropData& data,int count);
+    void SetItem(const DropData& data,int count,int index);
     void ClearItem();
 private:
     //Quad* image = nullptr;

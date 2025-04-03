@@ -207,6 +207,7 @@
     <ClInclude Include="Objects\Clicker\GoldDisplay.h" />
     <ClInclude Include="Objects\Clicker\HelperInventory.h" />
     <ClInclude Include="Objects\Clicker\ItemPopup.h" />
+    <ClInclude Include="Objects\Clicker\Portal.h" />
     <ClInclude Include="Objects\Clicker\RateDisplay.h" />
     <ClInclude Include="Objects\Clicker\ShopManager.h" />
     <ClInclude Include="Objects\Clicker\HermitData.h" />

@@ -67,8 +67,8 @@ void Helper::Render()
 
 void Helper::Edit()
 {
-	model->Edit();
-	SphereCollider::Edit();
+	//model->Edit();
+	//SphereCollider::Edit();
 }
 
 void Helper::Control()

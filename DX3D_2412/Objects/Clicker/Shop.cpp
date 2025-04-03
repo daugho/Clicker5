@@ -3,25 +3,6 @@
 Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
     : Quad(L"Resources/Textures/UI/Shop1.png"), hermitID(hermitID) , inventory(inventory) , goldDisplay(goldDisplay)
 {
-    //wstring texturePath;
-    //
-    //switch (hermitID) {
-    //case 1:
-    //    texturePath = L"Resources/Textures/UI/Shop1.png";
-    //    CreateSlots();
-    //    break;
-    //case 2:
-    //    texturePath = L"Resources/Textures/UI/Shop2.png";
-    //    CreateSlots2();
-    //    break;
-    //case 3:
-    //    texturePath = L"Resources/Textures/UI/Shop3.png";
-    //    break;
-    //default:
-    //    texturePath = L"Resources/Textures/UI/DefaultShop.png";
-    //    CreateSlots();
-    //    break;
-    //}
 
     GetMaterial()->SetDiffuseMap(texturePath);
     localPosition = CENTER;
@@ -95,7 +76,7 @@ void Shop::Render()
 
 void Shop::Edit()
 {    
-    for (ShopSlot* slot : iconSlots) {
+    for (ShopSlot* slot : descSlots) {
         slot->Edit();
     }
     //popup->Edit();
@@ -230,7 +211,7 @@ void Shop::CreateSlots2()
         iconSlots.push_back(slot);
     }
     /////////////////////////////////////////////////////////////////////////////////////////////
-    for (int i = 0; i < 4 + 1; i++) {
+    for (int i = 0; i < 6; i++) {
         ShopSlot* slot = new ShopSlot();
         float yOffset = (slot->Size().x + yinterval) * i;
 
@@ -332,6 +313,7 @@ void Shop::CreateSlots2()
         OutputDebugStringA(("rate: " + to_string(levelData.rate) + "\n").c_str());
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 
 void Shop::UpgradePlayer(int index)

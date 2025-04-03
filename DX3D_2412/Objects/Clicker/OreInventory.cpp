@@ -39,9 +39,9 @@ void OreInventory::Render()
 
 void OreInventory::Edit()
 {
-   // for (OreSlot* slot : slots) {
-   //     slot->Edit();
-   // }
+    for (OreSlot* slot : slots) {
+        slot->Edit();
+    }
 }
 
 void OreInventory::CreatSlot()
@@ -63,6 +63,7 @@ void OreInventory::CreatSlot()
         slot->SetLocalPosition(pos);
         slot->SetParent(this);
         slot->UpdateWorld();
+        //slot->Load();
         slots.push_back(slot);
     }
 
@@ -78,6 +79,7 @@ void OreInventory::CreatSlot()
             slot->SetLocalPosition(pos);
             slot->SetParent(this);
             slot->UpdateWorld();
+            //slot->Load();
 
             slots.push_back(slot);
         }

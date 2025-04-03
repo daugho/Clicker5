@@ -23,7 +23,12 @@ void OreSlot::SetItem(const DropData& item, int count)//슬롯에 몇개가있는지 표시
     occupied = true;
     SetActive(true);
 
-	UpdateData();
+	image->SetActive(true);
+	image->SetTexture(item.texturePath);
+	image->SetTag("Inventory_Image" + to_string(item.id));
+	//image->GetMaterial()->SetDiffuseMap(item.texturePath);
+	image->GetMaterial()->SetShader(L"Basic/Texture.hlsl");
+	image->Load();
 }
 
 void OreSlot::Render()
@@ -36,8 +41,8 @@ void OreSlot::Render()
 	if (!ClickerUIManager::Get()->IsInventoryOpen())
 		return;
 	Font::Get()->SetStyle("Icon");
-	Font::Get()->SetColor("Blue");
-	Font::Get()->RenderText(to_string(count), GetGlobalPosition() + Vector3(-30, -30, 0));
+	Font::Get()->SetColor("White");
+	Font::Get()->RenderText(to_string(count), GetGlobalPosition() + Vector3(-15, -15, 0));
 
 }
 
@@ -55,11 +60,17 @@ void OreSlot::Clear()
 	image->SetActive(false);
 }
 
+void OreSlot::Edit()
+{
+	image->Edit();
+}
+
 void OreSlot::SetData(DropData data, int index)
 {
 	image->SetActive(true);
 	item = data;
-	image->SetTexture(item.texturePath);
+	image->SetTag("Inventory_Image" + to_string(index));
+	//image->SetTexture(item.texturePath);
 	//image->GetMaterial()->SetDiffuseMap(item.texturePath);
 	this->index = index;
 }
@@ -74,6 +85,7 @@ void OreSlot::UpdateData()
 
 	image->SetActive(true);
 	image->SetTexture(item.texturePath);
+	image->SetTag("Inventory_Image" + to_string(index));
 	//image->GetMaterial()->SetDiffuseMap(item.texturePath);
 	image->GetMaterial()->SetShader(L"Basic/Texture.hlsl");
 }

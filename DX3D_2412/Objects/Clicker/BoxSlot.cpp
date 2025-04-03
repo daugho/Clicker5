@@ -41,7 +41,7 @@ void BoxSlot::Render()
 //    image->Edit();
 //}
 
-void BoxSlot::SetImage(const wstring& texturePath,int index)
+void BoxSlot::SetImage(const wstring& texturePath,int index)//insert,remove button
 {
     image->SetActive(true);
     image->SetTag("Box" + to_string(index));
@@ -51,16 +51,16 @@ void BoxSlot::SetImage(const wstring& texturePath,int index)
 
 }
 
-void BoxSlot::SetItem(const DropData& data, int count)
+void BoxSlot::SetItem(const DropData& data, int count, int index)
 {
     this->data = data;
     this->hasItem = true;
     this->count = count;
-    image->SetTag("Ore");
+    image->SetTag("Ore" + to_string(data.id));
     image->SetActive(true);
-    image->GetMaterial()->SetDiffuseMap(data.texturePath);  // DropData가 iconPath를 가지고 있다고 가정
+    image->SetTexture(data.texturePath);
+    //image->GetMaterial()->SetDiffuseMap(data.texturePath);
     image->Load();
-
 }
 
 void BoxSlot::ClearItem()
