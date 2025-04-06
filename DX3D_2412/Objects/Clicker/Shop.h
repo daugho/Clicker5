@@ -3,20 +3,23 @@
 class ShopSlot;
 class GoldDisplay;
 class RateDisplay;
+class ClickerPlayScene;
 class Shop : public Quad
 {
 public:
-    Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay);
+    static int hasMiner;
+    Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay, Player* player);
     ~Shop();
 
     void Update();
     void Render();
     void Edit();
     //shop1
+    void BuyKey(int index);
     void CreateSlots();
-    void UpgradePlayer(int index);
     void RegisterBuyEvent(int index);
     //shop2
+    void UpgradePlayer(int index);
     void CreateSlots2();
     void TryUpgradeItem(int itemID);
     void ShowUpgradeResultImage(bool success);
@@ -44,11 +47,14 @@ private:
     float resultTimer;
     float resultDuration;
     ItemPopup* popup;
+    ItemPopup* notice;
     unordered_map<int, bool> isSoldMap;
 
     vector<Quad*> rateDigits;
     vector<wstring> numberTextures;
     vector<RateDisplay*> rateDisplays;
     RateDisplay* rateUI;
+	Player* player=nullptr;
+
 };
 

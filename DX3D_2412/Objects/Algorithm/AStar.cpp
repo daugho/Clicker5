@@ -24,7 +24,7 @@ void AStar::Update()
         {
             if (node->IsRayCollision(ray, nullptr))
             {
-                node->SetState(Node::OBSTACLE);
+                //node->SetState(Node::OBSTACLE);
                 break;
             }
         }

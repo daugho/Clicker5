@@ -2,7 +2,6 @@
 	//SCENE->Create("Start", new AStarScene());
 	//SCENE->Create("Start", new RenderTargetScene());
 	//SCENE->Create("Start", new BillboardScene());	
-	//SCENE->Create("Start", new WeatherScene());	
 	//SCENE->Create("Start", new ParticleEditorScene());	
 #include "Framework.h"
 
@@ -22,14 +21,15 @@ GameManager::GameManager()
 {
 	//SCENE->Create("Grid", new GridScene());
 	SCENE->Create("Start", new ClickerPlayScene());
-	//SCENE->Create("Start", new ModelRenderScene());
 	//SCENE->Create("Export", new ModelExportScene());
+	//SCENE->Create("Start", new ModelRenderScene());
 	//SCENE->Create("Start", new ModelEquipScene());
 	//SCENE->Create("Start", new ModelAnimationScene());
+	//SCENE->Create("Start", new WeatherScene());	
 
 	//SCENE->Add("Grid");
-	SCENE->Add("Start");
 	//SCENE->Add("Export");
+	SCENE->Add("Start");
 
 	Create();
 }
@@ -65,8 +65,8 @@ void GameManager::Render()
 
 	Font::Get()->GetDC()->BeginDraw();
 
-	string fps = "FPS : " + to_string(Timer::Get()->GetFPS());
-	Font::Get()->RenderText(fps, { 100, SCREEN_HEIGHT - 10 });
+	//string fps = "FPS : " + to_string(Timer::Get()->GetFPS());
+	//Font::Get()->RenderText(fps, { 100, SCREEN_HEIGHT - 10 });
 
 	Environment::Get()->SetPostRender();
 	SCENE->PostRender();

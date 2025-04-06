@@ -3,6 +3,12 @@
 class SphereCollider : public Collider
 {
 public:
+	struct ObbDesc
+	{
+		Vector3 center;
+		Vector3 axis[3];
+		Vector3 halfSize;
+	};
 	SphereCollider(float radius = 1.0f, UINT stackCount = 8, UINT sliceCount = 16);
 
 	virtual bool IsRayCollision(IN const Ray& ray, OUT RaycastHit* hit) override;
@@ -13,6 +19,8 @@ public:
 	virtual bool PushBox(BoxCollider* collider, RaycastHit* hit) override;
 	virtual bool PushSphere(SphereCollider* collider, RaycastHit* hit) override;
 	virtual bool PushCapsule(CapsuleCollider* collider, RaycastHit* hit) override;
+
+	void GetObb(ObbDesc& obbDesc);
 
 	float Radius()
 	{

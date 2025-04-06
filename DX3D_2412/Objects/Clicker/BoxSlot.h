@@ -8,7 +8,7 @@ public:
 
     void Update();
     void Render();
-    //void Edit();
+    void Edit();
     void SetImage(const wstring& texturePath,int index);
     void SetItem(const DropData& data,int count,int index);
     void ClearItem();

@@ -10,13 +10,13 @@ public:
     void Render();
     void Edit();
     void CreatSlot();
-
+    void IncreaseCapacity();
     bool AddItem(const DropData& item, int count);
     void RemoveItemCount(int count);
     
     void AddGold(int value) { gold += value; }
     int GetGold() const { return gold; }
-
+    int GetMaxCapacity() const { return MAX_CAPACITY; }
     bool IsActive() const { return isActive; }
     int GetTotalItemCount() const;
     vector<OreSlot*>& GetSlots() { return slots; }
@@ -24,7 +24,7 @@ public:
 private:
 
     int currentCapacity = 0;
-    const int MAX_CAPACITY = 10;
+    int MAX_CAPACITY = 10;
     const int START_SLOTS = 5;
 
     const int GRID_ROWS = 3;
@@ -35,7 +35,7 @@ private:
 
     bool isActive = false;
     LightBuffer::Light* light;
-    int gold =0 ;
+    int gold =100000000 ;
 private:
     struct InventorySlot 
     {

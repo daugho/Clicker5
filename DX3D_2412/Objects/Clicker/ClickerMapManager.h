@@ -1,6 +1,8 @@
 #pragma once
 class Room;
 class Player;
+class Door;
+class TeleportDoor;
 class ClickerMapManager : public Singleton<ClickerMapManager>
 {
     friend class Singleton;
@@ -10,9 +12,10 @@ public:
 
     void Update();
     void Render();
+	void PostRender();
     void Edit();
     void CreateRoom1();
-    void CreateRoom2();
+
     void CheckCollision();
     Player* GetPlayer() { return player; }
     float GetHeight(const Vector3& pos);
@@ -26,5 +29,4 @@ private:
     vector<Cube*> roomCubes;
     Cube* floor;
     Room* room1;
-
 };

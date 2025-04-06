@@ -9,7 +9,7 @@ public:
     Particle();
     ~Particle();
 
-    virtual void Update() {}
+    virtual void Update() {};
     virtual void Render();
     virtual void GUIRender() {}
 

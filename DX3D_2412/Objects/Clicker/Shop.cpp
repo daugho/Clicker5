@@ -1,7 +1,9 @@
 #include "Framework.h"
 
-Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
-    : Quad(L"Resources/Textures/UI/Shop1.png"), hermitID(hermitID) , inventory(inventory) , goldDisplay(goldDisplay)
+int Shop::hasMiner = 0;
+
+Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay, Player* player)
+    : Quad(L"Resources/Textures/UI/Shop1.png"), hermitID(hermitID) , inventory(inventory) , goldDisplay(goldDisplay), player(player)
 {
 
     GetMaterial()->SetDiffuseMap(texturePath);
@@ -14,6 +16,11 @@ Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay)
     popup->SetLocalPosition(Vector3(200, 0, 0));
     popup->Load();
     ChangeShop(hermitID);
+
+    notice = new ItemPopup();
+	notice->SetParent(this);
+	notice->SetLocalPosition(Vector3(200, 0, 0));
+	notice->Load();
 }
 
 Shop::~Shop()
@@ -22,6 +29,7 @@ Shop::~Shop()
     rateDisplays.clear();
     ClearSlots();
     delete popup;
+    delete notice;
 }
 
 void Shop::Update()
@@ -46,6 +54,7 @@ void Shop::Update()
     for (auto rate : rateDisplays)
         rate->Update();
     popup->Update();
+	notice->Update();   
 }
 
 void Shop::Render()
@@ -72,16 +81,27 @@ void Shop::Render()
             rate->Render();
     }
     popup->Render();
+	notice->Render();
 }
 
 void Shop::Edit()
 {    
+    for (ShopSlot* slot : iconSlots) {
+        slot->Edit();
+    }
     for (ShopSlot* slot : descSlots) {
+        slot->Edit();
+    }
+    for (ShopSlot* slot : buySlots) {
         slot->Edit();
     }
     //popup->Edit();
     //for (RateDisplay* slot : rateDisplays)
     //    slot->Edit();
+}
+
+void Shop::BuyKey(int index)
+{
 }
 
 void Shop::CreateSlots() {
@@ -191,7 +211,7 @@ void Shop::CreateSlots2()
     ShopSlot* slot = new ShopSlot();
     slot->SetTag("Ore_Shop2Slot");
     slot->SetParent(this);
-    slot->SetItem(items[0], 0);
+    slot->SetItem2(items[0], 0);
     slot->Load();
     iconSlots.push_back(slot);
 
@@ -203,7 +223,7 @@ void Shop::CreateSlots2()
         slot->SetLocalPosition(pos);
         slot->SetTag("Ore_Shop2Slot" + to_string(i));
         slot->SetParent(this);
-        slot->SetItem(items[i], i);
+        slot->SetItem2(items[i], i);
         slot->Load();
 
         slot->UpdateWorld();
@@ -219,7 +239,7 @@ void Shop::CreateSlots2()
         slot->SetLocalPosition(pos);
         slot->SetTag("Ore_ShopSlot2_descrip" + to_string(i));
         slot->SetParent(this);
-        slot->SetDescrip(items[i], i);
+        slot->SetDescrip2(items[i], i);
         slot->Load();
 
         slot->UpdateWorld();
@@ -256,6 +276,7 @@ void Shop::CreateSlots2()
         });
     sellSlots.push_back(sellButton);
     /////////////////////////////////////////////////////////////////////////////////////////////
+
     for (int i = 0; i < 6; i++)
     {
         ShopSlot* slot = new ShopSlot();
@@ -267,10 +288,27 @@ void Shop::CreateSlots2()
         slot->SetParent(this);
         slot->SetBuyEvent2(items[i], i);
         int itemID = itemIDs[i];
-        slot->SetEvent([=]()
-            {
-                TryUpgradeItem(itemID);
-            });
+        int price = items[i].price;
+        if (itemID == 6)
+        {
+            RegisterBuyEvent(itemID); // index 그대로 넘깁니다
+        }
+        else
+        {
+            slot->SetEvent([=]()
+                {
+                    if (inventory->GetGold() < price) {
+                        OutputDebugStringA("골드 부족!\n");
+                        return;
+                    }
+
+                    inventory->AddGold(-price);
+                    goldDisplay->SetGold(inventory->GetGold());
+
+                    TryUpgradeItem(itemID);
+                    UpgradePlayer(itemID);
+                });
+        }
         slot->SetSlotIndex(i);
         int level = GetItemLevel(itemID);
         slot->Load();
@@ -323,21 +361,30 @@ void Shop::UpgradePlayer(int index)
 
     switch (index)
     {
-    case 0:
-        player->ApplyShopDamageBoost();
-        OutputDebugStringA("스킬: 채굴 데미지 증가\n");
-        break;
     case 1:
-        player->ApplyShopSpeedBoost();
-        OutputDebugStringA("스킬: 채굴 속도 증가\n");
+		player->ApplyShopSpeedBoost();
+        OutputDebugStringA("스킬: 채굴 쿨타임 감소\n");
         break;
     case 2:
-        // 이동속도 증가 함수 필요 시 player->ApplyMoveSpeedBoost();
-        OutputDebugStringA("스킬: 이동속도 증가\n");
+        for (BoxInventory* box : Boxmanager::Get()->GetBoxes())
+        {
+            box->IncreaseCapacity();
+        }
+        OutputDebugStringA("스킬: 박스 보관량 증가\n");
         break;
-    default:
-        OutputDebugStringA("기타 스킬 구매\n");
+    case 3:
+        inventory->IncreaseCapacity();
+        OutputDebugStringA("스킬: 최대 광물 소지량\n");
         break;
+    case 4:
+        player->ApplyShopDamageBoost();
+        OutputDebugStringA("스킬: 플레이어 근력\n");
+        break;
+    case 5:
+        player->Shop2buypick();
+        OutputDebugStringA("스킬: 곡괭이 강화\n");
+        break;
+
     }
 }
 
@@ -347,55 +394,91 @@ void Shop::RegisterBuyEvent(int index)
         return;
 
     ShopSlot* slot = buySlots[index];
+    ShopData item = slot->GetItem();
+    int price = item.price;
 
-    if (hermitID == 2)
+    switch (hermitID)
     {
-        // shop2는 업그레이드 슬롯이므로 별도 처리
-        int itemID = index + 1;
-        slot->SetEvent([=]() {
-            TryUpgradeItem(itemID);
-            });
-        return;
-    }
-
-    if (ShopPurchaseManager::Get()->IsPurchased(hermitID, index)) {
-        slot->SetEnabled(false);
-        if (index < iconSlots.size())
-            iconSlots[index]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
-        if (index < descSlots.size())
-            descSlots[index]->GetImage()->SetActive(false);
-        return;
-    }
-
-    slot->SetEvent([=]() {
-        ShopData item = slot->GetItem();
-        int price = item.price;
-
-        if (inventory->GetGold() < price) {
-            OutputDebugStringA("골드 부족!\n");
+    case 1:
+    {
+        if (ShopPurchaseManager::Get()->IsPurchased(hermitID, index)) {
+            slot->SetEnabled(false);
+            if (index < iconSlots.size())
+                iconSlots[index]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
+            if (index < descSlots.size())
+                descSlots[index]->GetImage()->SetActive(false);
             return;
         }
 
-        //if (!inventory->AddItem(item, 1)) {
-        //    OutputDebugStringA("인벤토리 공간 부족!\n");
-        //    return;
-        //}
-        //나중에 인벤토리가 가득차면 png파일로 알림할것.
-        inventory->AddGold(-price);
-        goldDisplay->SetGold(inventory->GetGold());
-        ShopPurchaseManager::Get()->SetPurchased(hermitID, index);
-        isSoldMap[index] = true;
-        // 아이콘 및 설명 처리
-        if (index < iconSlots.size())
-            iconSlots[index]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
+        slot->SetEvent([=]() {
+            if (inventory->GetGold() < price) {
+                OutputDebugStringA("골드 부족!\n");
+                return;
+            }
 
-        if (index < descSlots.size())
-            descSlots[index]->GetImage()->SetActive(false);
+            inventory->AddGold(-price);
+            goldDisplay->SetGold(inventory->GetGold());
+            ShopPurchaseManager::Get()->SetPurchased(hermitID, index);
+            isSoldMap[index] = true;
 
-        slot->SetEnabled(false);
+            if (index < iconSlots.size())
+                iconSlots[index]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
+            if (index < descSlots.size())
+                descSlots[index]->GetImage()->SetActive(false);
+            switch (index)
+            {
+            case 0: player->Escapekey = 1; break;
+            case 1: player->Goldkey = 1; break;
+            case 2: player->Silverkey = 1; break;
+            case 3: player->Bronzekey = 1; break;
+            }
+            slot->SetEnabled(false);
+            });
+        break;
+    }
+    case 2:
+    {
+        int itemID = index + 1;
 
-        UpgradePlayer(index);
-    });
+        // ? 이미 구매했으면 비활성화
+        if (ShopPurchaseManager::Get()->IsPurchased(hermitID, index))
+        {
+            slot->SetEnabled(false);
+            if (index < iconSlots.size())
+                iconSlots[index]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
+            if (index < descSlots.size())
+                descSlots[index]->GetImage()->SetActive(false);
+            return;
+        }
+
+        slot->SetEvent([=]() {
+            if (inventory->GetGold() < price) {
+                OutputDebugStringA("골드 부족!\n");
+                return;
+            }
+
+            inventory->AddGold(-price);
+            goldDisplay->SetGold(inventory->GetGold());
+
+            TryUpgradeItem(itemID);
+
+            if (index == buySlots.size() - 1)
+            {
+                Shop::hasMiner = 1;
+				notice->Play(L"Resources/Textures/UI/notice.png");
+
+                ShopPurchaseManager::Get()->SetPurchased(hermitID, index);
+
+                slot->SetEnabled(false);
+                if (index < iconSlots.size())
+                    iconSlots[index]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
+                if (index < descSlots.size())
+                    descSlots[index]->GetImage()->SetActive(false);
+			}
+			});
+        break;
+    }
+    }
 }
 
 void Shop::TryUpgradeItem(int itemID)
@@ -455,23 +538,6 @@ void Shop::TryUpgradeItem(int itemID)
         if (slotIndex < rateDisplays.size())
             rateDisplays[slotIndex]->SetRate(levelList[levelIndex].rate);
     }
-    switch (itemID) {
-    case 1:
-
-        break;
-    case 2:
-
-        break;
-    case 3:
-
-        break;
-    case 4 :
-
-        break;
-    case 5:
-
-        break;
-    }
     // 실제 효과 적용은 여기서 필요에 따라 Player에게 전달
     // 예시:
     // ClickerMapManager::Get()->GetPlayer()->ApplyUpgrade(itemID, data.value);
@@ -513,6 +579,7 @@ void Shop::ChangeShop(int newHermitID)
         break;
     case 3:
         texturePath = L"Resources/Textures/UI/Shop3.png";
+        //CreateSlots3();
         break;
     default:
         texturePath = L"Resources/Textures/UI/DefaultShop.png";
@@ -521,8 +588,52 @@ void Shop::ChangeShop(int newHermitID)
     }
 
     GetMaterial()->SetDiffuseMap(texturePath);
-    for (int i = 0; i < buySlots.size(); i++) {
-        RegisterBuyEvent(i);
+
+    if (hermitID == 1)
+    {
+        for (int i = 0; i < buySlots.size(); i++) {
+            RegisterBuyEvent(i);
+        }
+    }
+
+    // --- ?? 추가된 부분: 강화 상태 UI 다시 반영 ---
+    if (hermitID == 2)
+    {
+        unordered_map<int, vector<ShopItemLevelData>>& levelDataMap = ShopManager::Get()->GetShop2ItemLevels();
+
+        for (int itemID = 1; itemID <= 5; ++itemID) // 1~5번은 강화 슬롯
+        {
+            int currentLevel = GetItemLevel(itemID);
+            if (currentLevel == 0 || levelDataMap.count(itemID) == 0)
+                continue;
+
+            auto& levelList = levelDataMap[itemID];
+            int iconLevelIndex = min(currentLevel - 1, (int)levelList.size() - 1);
+            wstring newIcon = levelList[iconLevelIndex].iconPath;
+            int slotIndex = itemID - 1;
+
+            if (slotIndex < iconSlots.size())
+                iconSlots[slotIndex]->GetImage()->GetMaterial()->SetDiffuseMap(newIcon);
+            if (slotIndex < levelSlots.size())
+                levelSlots[slotIndex]->SetLevel(levelList[iconLevelIndex], slotIndex);
+            if (slotIndex < rateDisplays.size())
+                rateDisplays[slotIndex]->SetRate(levelList[iconLevelIndex].rate);
+        }
+
+        // ?? 마지막 슬롯(index == 5, itemID == 6)는 구매 여부만 판단하여 처리
+        int lastIndex = 5;
+        if (ShopPurchaseManager::Get()->IsPurchased(hermitID, lastIndex))
+        {
+            if (lastIndex < buySlots.size())
+                buySlots[lastIndex]->SetEnabled(false);
+            if (lastIndex < iconSlots.size())
+                iconSlots[lastIndex]->GetImage()->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/ShopUI/soldout.png");
+            if (lastIndex < descSlots.size())
+                descSlots[lastIndex]->GetImage()->SetActive(false);
+        }
+
+        // RegisterBuyEvent는 index를 기준으로 동작하므로 index == 5 전달
+        RegisterBuyEvent(5);
     }
 }
 
@@ -551,7 +662,3 @@ int Shop::GetItemLevel(int itemID) const
 
     return 1; // 기본 레벨은 1
 }
-
-
-
-

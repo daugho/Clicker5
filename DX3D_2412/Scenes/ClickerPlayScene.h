@@ -27,4 +27,6 @@ private:
 	Helper* miner;
 	AStar* aStar;
 	bool isHelperManuallyMoving = false;
+	bool isHelperActive = false;
+	Particle* particle;
 };

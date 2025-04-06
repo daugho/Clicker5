@@ -55,6 +55,7 @@ BoxUI::BoxUI() : Quad(L"Resources/Textures/UI/woodbox.png")
             targetBox->TakeItem(inventory);  // 박스에서 꺼낸다
             UpdateSlots();                       // 박스 UI 갱신
             inventory->Update();                // 인벤토리 UI 갱신 (슬롯 상태 반영)
+            
         });
     removeButton->SetActive(false);
 }
@@ -95,8 +96,8 @@ void BoxUI::Edit()
 {
     insertButton->Edit();
     removeButton->Edit();
-    for (BoxSlot* slot : boxslots)
-        slot->Edit();
+    //for (BoxSlot* slot : boxslots)
+    //    slot->Edit();
 }
 
 void BoxUI::CreatSlot()

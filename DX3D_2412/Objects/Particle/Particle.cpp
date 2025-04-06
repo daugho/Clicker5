@@ -10,7 +10,6 @@ Particle::~Particle()
     delete material;
     delete vertexBuffer;
 }
-
 void Particle::Render()
 {
     if (!isActive) return;

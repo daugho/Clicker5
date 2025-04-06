@@ -67,7 +67,6 @@ private:
     HelperInventory* helperinventory;
     Shop* shopOpen;//shop UI
 
-    BoxInventory* boxinventory;
     BoxUI* boxUI;
 
     BlendState* blendState[2];

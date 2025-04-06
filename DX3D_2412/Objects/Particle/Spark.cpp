@@ -2,10 +2,10 @@
 
 Spark::Spark(wstring imageFile, bool isAdditive)
 {
-    material->SetShader(L"Geometry/Spark.hlsl");
+    material->SetShader(L"Geometry/Rain.hlsl");
     material->SetDiffuseMap(imageFile);
 
-    geometryShader = Shader::AddGS(L"Geometry/Spark.hlsl");
+    geometryShader = Shader::AddGS(L"Geometry/Rain.hlsl");
 
     buffer = new FloatValueBuffer();    
     startColorbuffer = new FloatValueBuffer();

@@ -53,6 +53,9 @@ void OreSlot::ShowTooltip()
 
 void OreSlot::Clear()
 {
+	if (inventory)
+		inventory->RemoveItemCount(count);
+
 	item = DropData();
 	count = 0;
 	occupied = false;

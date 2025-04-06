@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("Miner");
+	model = new Model("door_frame");
 	//model->SetShader(L"Model/Model.hlsl");
 }
 

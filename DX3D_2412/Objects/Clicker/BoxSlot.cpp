@@ -25,7 +25,8 @@ void BoxSlot::Render()
     Button::Render();
     if (image && hasItem)
         image->Render();
-
+    if (!hasItem || count == 0)
+        return;
     if (count == 0)
         return;
     if (!ClickerUIManager::Get()->IsBoxOPen())
@@ -36,10 +37,10 @@ void BoxSlot::Render()
 
 }
 
-//void BoxSlot::Edit()
-//{
-//    image->Edit();
-//}
+void BoxSlot::Edit()
+{
+    image->Edit();
+}
 
 void BoxSlot::SetImage(const wstring& texturePath,int index)//insert,remove button
 {

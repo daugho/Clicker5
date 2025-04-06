@@ -1,5 +1,5 @@
 id,name,discrip,price,icon
-1,aa,Resources/Textures/UI/ShopUI/shop0.png,10,Resources/Textures/UI/ShopUI/potion0.png
-2,bb,Resources/Textures/UI/ShopUI/shop1.png,20,Resources/Textures/UI/ShopUI/potion1.png
-3,cc,Resources/Textures/UI/ShopUI/shop2.png,30,Resources/Textures/UI/ShopUI/fire.png
-4,dd,Resources/Textures/UI/ShopUI/shop3.png,40,Resources/Textures/UI/ShopUI/potion2.png
+1,dd,Resources/Textures/UI/ShopUI/shop3.png,1000000,Resources/Textures/UI/ShopUI/escapekey.png
+2,cc,Resources/Textures/UI/ShopUI/shop2.png,540000,Resources/Textures/UI/ShopUI/goldkey.png
+3,bb,Resources/Textures/UI/ShopUI/shop1.png,150000,Resources/Textures/UI/ShopUI/silverkey.png
+4,aa,Resources/Textures/UI/ShopUI/shop0.png,25000,Resources/Textures/UI/ShopUI/bronzekey.png

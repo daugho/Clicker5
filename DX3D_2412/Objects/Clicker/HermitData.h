@@ -19,7 +19,8 @@ enum class ShopSlotType {
 	DescriptionSlot, // 설명 슬롯
 	BuySlot,         // 구매 버튼
 	SellSlot,		//판매 버튼
-	ItemLevel
+	ItemLevel,
+	ItemSlot2
 };
 struct ShopItemData {
 	int id;

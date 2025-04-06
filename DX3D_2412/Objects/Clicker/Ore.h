@@ -7,6 +7,7 @@ public:
     ~Ore();
 
     void Render();
+    void PostRender();
     void Update();
     void Edit();
 
@@ -32,4 +33,6 @@ private:
     ParticleSystem* particle; 
     float duration = 1.0f;
     float lifeTime = 0.0f;
+    Vector3 hpBarOffset = { 0, 0.6f, 0.0f };
+    ProgressBar* hpBar;
 };

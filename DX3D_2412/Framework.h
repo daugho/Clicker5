@@ -202,6 +202,8 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Clicker/RateDisplay.h"
 #include "Objects/Clicker/HelperInventory.h"
 #include "Objects/Clicker/Helper.h"
+#include "Objects/Clicker/Door.h"
+#include "Objects/Clicker/TeleportDoor.h"
 
 
 //Manager Head

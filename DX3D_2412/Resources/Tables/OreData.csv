@@ -1,7 +1,7 @@
 ID,Name,TexturePath,ShaderPath,NormalPath,SizeX,SizeY,SizeZ,Health
-0,Bronze,Resources/Textures/Model/MinerOre/Wood/Gold/Gold.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,2,2,2,10
+0,Bronze,Resources/Textures/Model/MinerOre/Marble/Amber/CuboidMineral_Marble_Amber_AlbedoTransparency.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,2,2,2,10
 1,Amber,Resources/Textures/Model/MinerOre/Wood/Amber/Wood_Amber.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,5,5,5,100
 2,Silver,Resources/Textures/Model/MinerOre/Wood/Bronze/Wood_Bronze.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,5,5,5,1700
-3,Gold,Resources/Textures/Model/MinerOre/Wood/Bronze/Wood_Bronze.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,5,5,5,21000
-4,Titium,Resources/Textures/Model/MinerOre/Wood/Bronze/Wood_Bronze.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,5,5,5,350000
+3,Gold,Resources/Textures/Model/MinerOre/Wood/Gold/Gold.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,5,5,5,21000
+4,Titium,Resources/Textures/Model/MinerOre/Volcanic/Titanium/Volcanic_Titanium.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,8,8,8,350000
 5,Platinum,Resources/Textures/Model/MinerOre/Wood/Bronze/Wood_Bronze.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Shader.png,Resources/Textures/Model/MinerOre/Wood/Gold/Gold_Normal.png,5,5,5,3800000

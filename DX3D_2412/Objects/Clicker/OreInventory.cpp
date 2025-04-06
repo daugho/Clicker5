@@ -49,6 +49,7 @@ void OreInventory::CreatSlot()
     OreSlot* slot = new OreSlot();
     slot->SetTag("Ore_InventorySlot");
     slot->SetParent(this);
+    slot->SetInventory(this);
     slot->Load();
     slots.push_back(slot);
     
@@ -62,6 +63,7 @@ void OreInventory::CreatSlot()
         Vector3 pos = slots[0]->GetLocalPosition() + Vector3(xOffset, 0, 0);
         slot->SetLocalPosition(pos);
         slot->SetParent(this);
+        slot->SetInventory(this);
         slot->UpdateWorld();
         //slot->Load();
         slots.push_back(slot);
@@ -78,6 +80,7 @@ void OreInventory::CreatSlot()
             Vector3 pos = slots[0]->GetLocalPosition() + Vector3(xOffset, yOffset, 0);
             slot->SetLocalPosition(pos);
             slot->SetParent(this);
+            slot->SetInventory(this);
             slot->UpdateWorld();
             //slot->Load();
 
@@ -86,9 +89,17 @@ void OreInventory::CreatSlot()
     }
 }
 
+void OreInventory::IncreaseCapacity()
+{
+	MAX_CAPACITY += 10;
+    OutputDebugStringA(("IncreaseCapacity »£√‚µ  °Ê MAX_CAPACITY = " + to_string(MAX_CAPACITY) + "\n").c_str());
+}
+
 bool OreInventory::AddItem(const DropData& item, int count)
 {
     wstring msg1 = L"[OreInventory] this = " + to_wstring((UINT64)this) + L"\n";
+    OutputDebugStringA(("MAX_CAPACITY = " + to_string(MAX_CAPACITY) + ", currentCapacity = " + to_string(currentCapacity) + "\n").c_str());
+
     OutputDebugString(msg1.c_str());
     int availableSpace = MAX_CAPACITY - currentCapacity;
     if (availableSpace <= 0)

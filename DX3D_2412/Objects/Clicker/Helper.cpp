@@ -10,10 +10,9 @@ Helper::Helper()
 	model->ReadClip("MinerIdle", 1);
 	model->ReadClip("MinerIdle", 2);
 	model->CreateTexture();
-	//model->PlayClip(2);
 	model->Load();
 	model->SetParent(this);
-	
+	//FindOre();
 	//helperInventory = new HelperInventory();
 }
 
@@ -25,38 +24,51 @@ Helper::~Helper()
 
 void Helper::Update()
 {
+	Rotate();
+	UpdateWorld();
+	model->Update();
+
 	switch (currentState)
 	{
 	case State::Idle:
-		FindOre();
+		PlayAnimation(1);
+		if (!targetOre || !targetOre->IsActive() || path.empty())
+			FindOre();
 		break;
-
+	
 	case State::MovingToOre:
+		if (!isMining)
+			PlayAnimation(0);
 		MoveAlongPath();
+		Rotate();
 		Mining();
 		break;
-
+	
 	case State::MovingToBox:
+		PlayAnimation(2);
 		MoveAlongPath();
+		Rotate();
 		if (distanceToBox <= 1.0f)
 		{
 			OutputDebugString(L"[Helper] 박스 도착! 아이템 저장 실행\n");
 			CheckBoxAndStoreItems();
 			currentState = State::Idle;
+			FindOre();
 		}
 		break;
-
+	
 	case State::ManualMove:
+		PlayAnimation(1); // 수동 이동도 걷는 모션
 		MoveAlongPath();
+		Rotate();
 		break;
 	}
 	UpdateDistanceToBox();
 	//FindBox();
 	//Move();
 	Control();
-	Rotate();
-	UpdateWorld();
-	model->Update();
+
+
 }
 
 void Helper::Render()
@@ -73,9 +85,23 @@ void Helper::Edit()
 
 void Helper::Control()
 {
+	//if (KEY->Down(VK_RBUTTON))
+	//{
+	//	Vector3 destPos = terrain->Picking(); // 클릭 위치 얻기
+	//
+	//	int start = aStar->FindCloseNode(GetGlobalPosition());
+	//	int end = aStar->FindCloseNode(destPos);
+	//
+	//	vector<Vector3> path;
+	//	aStar->GetPath(start, end, path);
+	//
+	//	if (!path.empty())
+	//		SetManualPath(path);
+	//}
+
 	if (KEY->Down(VK_RBUTTON))
 	{
-		Vector3 destPos = terrain->Picking(); // 클릭 위치 얻기
+		Vector3 destPos = terrain->Picking();
 
 		int start = aStar->FindCloseNode(GetGlobalPosition());
 		int end = aStar->FindCloseNode(destPos);
@@ -84,7 +110,7 @@ void Helper::Control()
 		aStar->GetPath(start, end, path);
 
 		if (!path.empty())
-			SetManualPath(path);
+			SetManualPath(path); // ManualMove 상태로 전환
 	}
 }
 void Helper::Move()
@@ -114,7 +140,7 @@ void Helper::Rotate()
 {
 	Vector3 forward = GetForward();
 	Vector3 cross = Vector3::Cross(forward, velocity);
-
+	
 	if (cross.y > 0)
 		Transform::Rotate(Vector3::Up(), rotSpeed * DELTA);
 	else if (cross.y < 0)
@@ -123,7 +149,6 @@ void Helper::Rotate()
 
 void Helper::MoveAlongPath()
 {
-
 	if (pathIndex >= path.size())
 	{
 		if (currentState == State::MovingToOre && targetOre)
@@ -131,26 +156,67 @@ void Helper::MoveAlongPath()
 			OutputDebugString(L"[Helper] 광물에 도착했습니다!\n");
 			targetOre = nullptr;
 		}
-
+	
 		currentState = State::Idle;
 		return;
 	}
-
+	
 	Vector3 target = path[pathIndex];
 	Vector3 dir = target - GetGlobalPosition();
-
+	
 	if (Vector3::GetLength(dir) < 0.f)
 	{
 		pathIndex++;
 		return;
 	}
-
+	
 	dir.Normalize();
+	velocity = dir;
 	Translate(dir * moveSpeed * DELTA);
+	//if (pathIndex >= path.size())
+	//	return;
+	//
+	//Vector3 target = path[pathIndex];
+	//Vector3 dir = target - GetGlobalPosition();
+	//
+	//if (Vector3::GetLength(dir) < 0.1f)
+	//{
+	//	pathIndex++;
+	//
+	//	// ? 경로 끝에 도달했는지 즉시 확인
+	//	if (pathIndex >= path.size())
+	//	{
+	//		if (currentState == State::ManualMove)
+	//		{
+	//			OutputDebugString(L"[Helper] 수동 이동 완료 → 가장 가까운 광물 탐색 시작\n");
+	//			currentState = State::Idle;
+	//			FindOre();
+	//		}
+	//		else if (currentState == State::MovingToOre && targetOre)
+	//		{
+	//			OutputDebugString(L"[Helper] 광물에 도착했습니다!\n");
+	//			targetOre = nullptr;
+	//			// NOTE: 여기선 상태 전환 X → Mining()이 상태 유지
+	//		}
+	//		else if (currentState == State::MovingToBox)
+	//		{
+	//			// 도착은 거리로 판단하므로 여기선 유지 가능
+	//			FindBox();
+	//		}
+	//
+	//		return;
+	//	}
+	//
+	//	return;
+	//}
+	//
+	//dir.Normalize();
+	//Translate(dir * moveSpeed * DELTA);
 }
 
 void Helper::FindOre()
 {
+	Rotate();
 	targetOre = nullptr;
 	float minDist = FLT_MAX;
 
@@ -197,6 +263,7 @@ void Helper::FindOre()
 
 void Helper::FindBox()
 {
+	Rotate();
 	targetBox = nullptr;
 	float minDist = FLT_MAX;
 
@@ -227,45 +294,6 @@ void Helper::FindBox()
 	pathIndex = 0;
 
 	currentState = State::MovingToBox;
-	//targetBox = nullptr;
-	//float minDist = FLT_MAX;
-	//
-	//for (BoxInventory* box : Boxmanager::Get()->GetBoxes())
-	//{
-	//	float dist = Vector3::Distance(GetGlobalPosition(), box->GetGlobalPosition());
-	//	if (dist < minDist)
-	//	{
-	//		minDist = dist;
-	//		targetBox = box;
-	//	}
-	//}
-	//
-	//if (targetBox)
-	//{
-	//	int start = aStar->FindCloseNode(GetGlobalPosition());
-	//	int end = aStar->FindCloseNode(targetBox->GetGlobalPosition());
-	//	path.clear();
-	//	aStar->GetPath(start, end, path);
-	//
-	//	if (path.empty())
-	//	{
-	//		OutputDebugString(L"[FindBox] Helper가 이미 박스에 도착해 있습니다 → Idle\n");
-	//		currentState = State::Idle;
-	//		return;
-	//	}
-	//
-	//	wchar_t buffer[100];
-	//	swprintf_s(buffer, 100, L"[FindBox] Path size: %d\n", (int)path.size());
-	//	OutputDebugString(buffer);
-	//
-	//	pathIndex = 0;
-	//	currentState = State::MovingToBox;
-	//}
-	//else
-	//{
-	//	OutputDebugString(L"[FindBox] targetBox == nullptr → Idle\n");
-	//	currentState = State::Idle;
-	//}
 }
 
 void Helper::Mining()
@@ -295,10 +323,12 @@ void Helper::Mining()
 	float distance = Vector3::Distance(GetGlobalPosition(), targetOre->GetGlobalPosition());
 	if (distance > miningRange)
 		return;
+	//PlayAnimation(2);
 
 	if (miningTimer >= miningCooldown)
 	{
-		targetOre->TakeDamageFroHelper(miningDamage);  // 오타 없도록 확인
+		PlayAnimation(1);
+		targetOre->TakeDamageFroHelper(miningDamage); 
 		miningTimer = 0.0f;
 
 		wstring msg = L"[Helper] 광물 채굴! 현재 체력: " + to_wstring(targetOre->GetHp()) + L"\n";
@@ -318,24 +348,6 @@ void Helper::Mining()
 			}
 		}
 	}
-	//if (!targetOre || !targetOre->IsActive())
-	//	return;
-	//
-	//miningTimer += DELTA;
-	//
-	//float distance = Vector3::Distance(GetGlobalPosition(), targetOre->GetGlobalPosition());
-	//
-	//if (distance > miningRange)
-	//	return;
-	//
-	//if (miningTimer >= miningCooldown)
-	//{
-	//	targetOre->TakeDamage(miningDamage);
-	//	miningTimer = 0.0f;
-	//
-	//	wstring msg = L"[Helper] 광물 채굴! 현재 체력: " + to_wstring(targetOre->GetHp()) + L"\n";
-	//	OutputDebugString(msg.c_str());
-	//}
 }
 
 void Helper::CheckBoxAndStoreItems()
@@ -369,6 +381,15 @@ void Helper::UpdateDistanceToBox()
 		distanceToBox = Vector3::Distance(GetGlobalPosition(), targetBox->GetGlobalPosition());
 	else
 		distanceToBox = FLT_MAX;
+}
+
+void Helper::PlayAnimation(int clipIndex)
+{
+	if (clipIndex != currentClipIndex)
+	{
+		model->PlayClip(clipIndex);
+		currentClipIndex = clipIndex;
+	}
 }
 
 void Helper::SetManualPath(const vector<Vector3>& newPath)

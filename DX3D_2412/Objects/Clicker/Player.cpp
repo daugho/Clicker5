@@ -20,7 +20,7 @@ Player::Player()
 	light->color = { 1, 1, 1, 1 };
 	light->attentionIntensity = 0.4;
 	light->range = 15.0;
-	light->isActive = 1;
+	light->isActive = 0;
 
 	//oreInventory = new OreInventory();
 	collider = new SphereCollider(1.0f); // 반지름 1.0 설정
@@ -72,6 +72,7 @@ void Player::Update()
 	{
 		OpenShop();
 		OpenBox();
+		OpenDoor();
 	}
 }
 
@@ -96,8 +97,6 @@ void Player::SetVelocity(const Vector3& newVelocity)
 
 void Player::Mining()
 {
-	//wstring msg1 = L"[Player] this = " + to_wstring((UINT64)this) + L"\n";
-	//OutputDebugString(msg1.c_str());
 	miningTimer += DELTA;
 
 	if (miningTimer < miningCooldown)
@@ -224,9 +223,69 @@ void Player::OpenBox()
 	}
 }
 
+void Player::OpenDoor()
+{
+	Ray ray = CAM->ScreenPointToRay(CENTER);
+	RaycastHit hit;
+
+	// 1. 일반 문 먼저 검사
+	for (Door* door : ClickerMapManager::Get()->GetRoom1()->GetDoors())
+	{
+		if (door->IsRayCollision(ray, &hit))
+		{
+			float distance = Vector3::Distance(GetGlobalPosition(), hit.point);
+			if (distance <= 5.0f)
+			{
+				KeyType requiredKey = door->GetRequiredKey();
+				bool hasKey = false;
+
+				switch (requiredKey)
+				{
+				case KeyType::None:
+					hasKey = true;
+					break;
+				case KeyType::Bronze:
+					hasKey = (Bronzekey > 0);
+					break;
+				case KeyType::Silver:
+					hasKey = (Silverkey > 0);
+					break;
+				case KeyType::Gold:
+					hasKey = (Goldkey > 0);
+					break;
+				case KeyType::Escape:
+					hasKey = (Escapekey > 0);
+					break;
+				}
+
+				if (hasKey)
+				{
+					door->Activate();
+				}
+				else
+				{
+					// 필요한 열쇠가 없을 때 알림 표시
+					ClickerUIManager::Get()->GetItemPopup()->Play(L"Resources/Textures/UI/notice_need_key.png");
+				}
+			}
+		}
+	}
+
+	// 2. 텔레포트 문도 별도로 검사
+	for (TeleportDoor* teleportDoor : ClickerMapManager::Get()->GetRoom1()->GetTDoors())
+	{
+		if (teleportDoor->IsRayCollision(ray, &hit))
+		{
+			float distance = Vector3::Distance(GetGlobalPosition(), hit.point);
+			if (distance <= 5.0f)
+				teleportDoor->Activate(this);
+		}
+	}
+}
+
 void Player::RecalculateDamage()
 {
-	playerDamage = baseDamage + upgradeBonus + shopBonus + equipmentBonus;
+	playerDamage = (baseDamage + shopBonus) * equipmentBonus;
 
 	string msg = "현재 채굴 데미지: " + to_string(playerDamage) + "\n";
 	OutputDebugStringA(msg.c_str());
@@ -234,7 +293,7 @@ void Player::RecalculateDamage()
 
 void Player::RecalculateMiningCooldown()
 {
-	miningCooldown = baseCooldown - upgradeCooldownBonus - shopCooldownBonus;
+	miningCooldown = baseCooldown - upgradeCooldownBonus;
 	miningCooldown = max(miningCooldown, 0.1f);
 	string msg = "현재 채굴 쿨다운: " + to_string(miningCooldown) + "\n";
 	OutputDebugStringA(msg.c_str());
@@ -248,11 +307,14 @@ void Player::ApplyShopDamageBoost()
 
 void Player::Shop2buypick()
 {
+	equipmentBonus *= 1.5f;
+	RecalculateDamage();
 }
 
 void Player::ApplyShopSpeedBoost()
 {
-	shopCooldownBonus = 0.3f;
+	miningUpgradeLevel++;
+	upgradeCooldownBonus = baseCooldown * (1.0f - pow(0.8f, miningUpgradeLevel));
 	RecalculateMiningCooldown();
 }
 

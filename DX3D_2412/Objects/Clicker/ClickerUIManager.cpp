@@ -13,16 +13,18 @@ ClickerUIManager::ClickerUIManager()
     goldDisplay->SetPosition(Vector3(50, 50, 0)); // 화면 우측 상단 등 적절한 위치
     goldDisplay->SetGold(0);
 
-    shopOpen = new Shop(1, inventory,goldDisplay);
-    shopOpen->SetActive(false);
-
-    shopOpen = new Shop(2, inventory, goldDisplay);
-    shopOpen->SetActive(false);
-
     itemPopup = new ItemPopup();
 
     boxUI = new BoxUI();
     boxUI->SetActive(false);
+
+    Player* player = ClickerMapManager::Get()->GetPlayer();
+	ShowCursor(true);
+    shopOpen = new Shop(1, inventory, goldDisplay, player);
+    shopOpen->SetActive(false);
+
+    shopOpen = new Shop(2, inventory, goldDisplay, player);
+    shopOpen->SetActive(false);
 }
 
 ClickerUIManager::~ClickerUIManager()
@@ -35,12 +37,13 @@ ClickerUIManager::~ClickerUIManager()
 
 void ClickerUIManager::Update()
 {
+
     goldDisplay->Update();
     itemPopup->Update();
     boxUI->Update();
     HandleUIInput();
-    ToogleFreeView();
     UpdateCurrentUI();
+    ToogleFreeView();
 }
 
 void ClickerUIManager::Render()
@@ -57,9 +60,9 @@ void ClickerUIManager::Edit()
 {
     //inventory->Edit();
     //shopOpen->Edit();
-    //goldDisplay->Edit();
+    goldDisplay->Edit();
     //itemPopup->Edit();
-    boxUI->Edit();
+    //boxUI->Edit();
 }
 
 void ClickerUIManager::HandleUIInput()

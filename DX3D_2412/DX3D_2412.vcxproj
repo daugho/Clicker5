@@ -204,6 +204,8 @@
     <ClInclude Include="Objects\Clicker\BoxUI.h" />
     <ClInclude Include="Objects\Clicker\ClickerMapManager.h" />
     <ClInclude Include="Objects\Clicker\ClickerUIManager.h" />
+    <ClInclude Include="Objects\Clicker\Door.h" />
+    <ClInclude Include="Objects\Clicker\DoorFrame.h" />
     <ClInclude Include="Objects\Clicker\GoldDisplay.h" />
     <ClInclude Include="Objects\Clicker\HelperInventory.h" />
     <ClInclude Include="Objects\Clicker\ItemPopup.h" />
@@ -220,6 +222,7 @@
     <ClInclude Include="Objects\Clicker\ShopNpc.h" />
     <ClInclude Include="Objects\Clicker\ShopPurchaseManager.h" />
     <ClInclude Include="Objects\Clicker\Shopslot.h" />
+    <ClInclude Include="Objects\Clicker\TeleportDoor.h" />
     <ClInclude Include="Objects\Collider\BoxCollider.h" />
     <ClInclude Include="Objects\Collider\CapsuleCollider.h" />
     <ClInclude Include="Objects\Collider\Collider.h" />
@@ -314,6 +317,7 @@
     <ClCompile Include="Objects\Clicker\BoxUI.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerMapManager.cpp" />
     <ClCompile Include="Objects\Clicker\ClickerUIManager.cpp" />
+    <ClCompile Include="Objects\Clicker\Door.cpp" />
     <ClCompile Include="Objects\Clicker\GoldDisplay.cpp" />
     <ClCompile Include="Objects\Clicker\HelperInventory.cpp" />
     <ClCompile Include="Objects\Clicker\ItemPopup.cpp" />
@@ -328,6 +332,7 @@
     <ClCompile Include="Objects\Clicker\ShopNpc.cpp" />
     <ClCompile Include="Objects\Clicker\ShopPurchaseManager.cpp" />
     <ClCompile Include="Objects\Clicker\Shopslot.cpp" />
+    <ClCompile Include="Objects\Clicker\TeleportDoor.cpp" />
     <ClCompile Include="Objects\Collider\BoxCollider.cpp" />
     <ClCompile Include="Objects\Collider\CapsuleCollider.cpp" />
     <ClCompile Include="Objects\Collider\Collider.cpp" />

@@ -3,19 +3,24 @@
 
 ClickerPlayScene::ClickerPlayScene()
 {
+    player = new Player();
 	Font::Get()->AddStyle("Icon", L"배달의민족 주아", 20);
+	Font::Get()->AddStyle("Shop2", L"배달의민족 주아", 20);
 	Font::Get()->AddColor("Blue",0,0,1);
 	Font::Get()->AddColor("White",1,1,1);
+	Font::Get()->AddColor("Black",0,0,0);
 	ClickerUIManager::Get();
 	ClickerMapManager::Get();
     InitTerrainFromFloorCube();
 
-    miner = new Helper();
-    miner->SetLocalPosition(Vector3(2, 0, 2));
-    miner->SetTerrain(terrain);
+    miner = nullptr;
+    //miner->SetLocalPosition(Vector3(2, 0, 2));
+    //miner->SetTerrain(terrain);
     aStar = new AStar();
-    miner->SetAStar(aStar);
+    //miner->SetAStar(aStar);
     aStar->SetNode(terrain);
+    particle = new Rain();
+    particle->Play(Vector3(70, 70, 5));
 }
 
 ClickerPlayScene::~ClickerPlayScene()
@@ -25,11 +30,12 @@ ClickerPlayScene::~ClickerPlayScene()
     delete miner;
     delete aStar;
     delete terrain;
+    delete player;
+    delete particle;
 }
 
 void ClickerPlayScene::InitTerrainFromFloorCube()
 {
-    ClickerMapManager::Get()->CreateRoom1();
     Room* room = ClickerMapManager::Get()->GetRoom1();
 
     if (!room || room->GetCubes().empty())
@@ -61,9 +67,21 @@ void ClickerPlayScene::InitTerrainFromFloorCube()
 }
 
 void ClickerPlayScene::Update()
-{
- 
-    miner->Update();
+{ 
+    particle->Update();
+    if (KEY->Down('H') && Shop::hasMiner == 1)
+    {
+        if (!miner) // 중복 생성 방지
+        {
+            miner = new Helper();
+            miner->SetTerrain(terrain);
+            miner->SetAStar(aStar);
+            miner->SetLocalPosition(Vector3(2, 0, 2));
+            isHelperActive = true;
+        }
+    }
+    if (isHelperActive)
+        miner->Update();
 
     aStar->Update();
     ClickerUIManager::Get()->Update();
@@ -77,19 +95,23 @@ void ClickerPlayScene::PreRender()
 void ClickerPlayScene::Render()
 {
 	ClickerMapManager::Get()->Render();
-    miner->Render();
+    if (isHelperActive)
+        miner->Render();
     aStar->Render();
     terrain->Render();
+	particle->Render();
 }
 
 void ClickerPlayScene::PostRender()
 {
 	ClickerUIManager::Get()->Render();
+	ClickerMapManager::Get()->PostRender();
 }
 
 void ClickerPlayScene::GUIRender()
 {
 	ClickerUIManager::Get()->Edit();
 	ClickerMapManager::Get()->Edit();
-    miner->Edit();
+    //miner->Edit();
+    particle->GUIRender();
 }

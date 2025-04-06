@@ -25,6 +25,7 @@ public:
 	void ToggleLight();
 	void OpenShop();
 	void OpenBox();
+	void OpenDoor();
 	OreInventory* GetInventory() { return oreInventory; }
 	//데미지 계산 함수
 	void ApplyShopDamageBoost();
@@ -36,6 +37,9 @@ public:
 	//최종 계산함수
 	void RecalculateMiningCooldown();
 	void RecalculateDamage();
+
+	void SetKey(int value) { Bronzekey = value; }
+	bool HasKey() const { return Bronzekey > 0; }
 private:
 	void Control();
 
@@ -48,21 +52,20 @@ private:
 
 private:
 	//move
-	float moveSpeed = 5.0f;
+	float moveSpeed = 15.0f;
 	float rotSpeed = 1.0f;
 
 	//damage
 	int baseDamage = 5;          // 기본 채굴 데미지
-	int upgradeBonus = 0;        // 업그레이드로 인한 추가 데미지
 	int shopBonus = 0;           // 상점 아이템 효과
-	int equipmentBonus = 0;
-	int playerDamage = 1;
+	int equipmentBonus = 1;
+	int playerDamage = 0;
 
 	//mining speed
-	float baseCooldown = 1.0f;
-	float upgradeCooldownBonus = 0.0f;
-	float shopCooldownBonus = 0.0f;
-	float miningCooldown = 2.0f;  //채굴 쿨다운 (1.5초당 1회)
+	float baseCooldown = .0f;
+	float upgradeCooldownBonus = 0.3f;
+	float miningCooldown = 2.5f;  //채굴 쿨다운 (1.5초당 1회)
+	int miningUpgradeLevel = 0;
 
 	//etc
 	Vector3 velocity;
@@ -78,8 +81,14 @@ private:
 
 	SphereCollider* collider;
 	float miningRange = 3.0f;
-	bool isLightOn = true;
+	bool isLightOn = false;
 	bool isInventoryOpen = false;
 	bool isShopOpen = false;
 	bool isFreeView = false;
+
+	public:
+	int Bronzekey = 0;
+	int Silverkey = 0;
+	int Goldkey = 0;
+	int Escapekey = 0;
 };

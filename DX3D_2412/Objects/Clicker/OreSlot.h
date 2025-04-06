@@ -17,7 +17,7 @@ public:
     void SetData(DropData data,int index);
     bool IsOccupied() const { return occupied; }
     const DropData& GetItem() const { return item; }
-
+    void SetInventory(OreInventory* inventory) { this->inventory = inventory; }
     int GetCount() const { return count; }//0329
     void UpdateData();
 
@@ -26,4 +26,5 @@ private:
     int count = 0;
     bool occupied = false;
     int index = 0;
+    OreInventory* inventory = nullptr;
 };

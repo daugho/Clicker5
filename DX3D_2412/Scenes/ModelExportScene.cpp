@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-    string name = "Miner";
+    string name = "door_frame";
     string extension = "fbx";
     string file = "Resources/Models/FBX/" + name + "." + extension;
 
@@ -11,20 +11,20 @@ ModelExportScene::ModelExportScene()
     exporter->ExportMaterial();
     exporter->ExportMesh();
     delete exporter;
-
-    string clipName = "Walk";
-    file = "Resources/Models/Animations/Miner/Walking.fbx";    
-    
-    exporter = new ModelExporter(name, file);
-    exporter->ExportClip(clipName);
-    delete exporter;
-    
-    clipName = "Stand";
-    file = "Resources/Models/Animations/Miner/stand.fbx";
-    
-    exporter = new ModelExporter(name, file);
-    exporter->ExportClip(clipName);
-    delete exporter;
+    //
+    //string clipName = "Walk";
+    //file = "Resources/Models/Animations/Miner/Walking.fbx";    
+    //
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
+    //
+    //clipName = "Stand";
+    //file = "Resources/Models/Animations/Miner/stand.fbx";
+    //
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
     //
     //clipName = "Attack";
     //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";

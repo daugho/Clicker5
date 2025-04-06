@@ -34,8 +34,15 @@ void ShopSlot::Render()
     {
         string text = to_string(item.price) + "G";
         Font::Get()->SetStyle("Icon");
-        Font::Get()->SetColor("Black");
-        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(-30, -30, 0));
+        Font::Get()->SetColor("White");
+        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(670, 0, 0));
+    }
+    if (slotType == ShopSlotType::ItemSlot2)
+    {
+        string text = to_string(item.price) + "G";
+        Font::Get()->SetStyle("Shop2");
+        Font::Get()->SetColor("White");
+        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(560, 0, 0));
     }
 }
 
@@ -52,6 +59,19 @@ void ShopSlot::SetItem(const ShopData& item, int index)
     image->Load();
 }
 
+void ShopSlot::SetItem2(const ShopData& item, int index)
+{
+	this->item = item;
+	this->slotIndex = index;
+	occupied = true;
+	slotType = ShopSlotType::ItemSlot2;//정해진 text를 출력하기위해 타입 정하기.
+	image->SetActive(true);
+	image->SetTag("Ore_ShopSlot2_Icon_" + to_string(index));
+	image->SetTexture(item.icon);
+	//image->GetMaterial()->SetDiffuseMap(item.icon);
+	image->Load();
+}
+
 void ShopSlot::SetDescrip(const ShopData& item, int index)
 {
     this->item = item;
@@ -60,10 +80,23 @@ void ShopSlot::SetDescrip(const ShopData& item, int index)
     slotType = ShopSlotType::DescriptionSlot;//정해진 text를 출력하기위해 타입 정하기.
 
     image->SetActive(true);
-    image->SetTag("Ore_ShopSlot_Icon_" + to_string(index));
+    image->SetTag("Ore_ShopSlot_Descrip_" + to_string(index));
     image->SetTexture(item.descrip);
     //image->GetMaterial()->SetDiffuseMap(item.descrip);
     image->Load();
+}
+
+void ShopSlot::SetDescrip2(const ShopData& item, int index)
+{
+	this->item = item;
+	this->slotIndex = index;
+	occupied = true;
+	slotType = ShopSlotType::DescriptionSlot;//정해진 text를 출력하기위해 타입 정하기.
+	image->SetActive(true);
+	image->SetTag("Ore_ShopSlot2_Descrip__" + to_string(index));
+	image->SetTexture(item.descrip);
+	//image->GetMaterial()->SetDiffuseMap(item.descrip);
+	image->Load();
 }
 
 void ShopSlot::SetBuyEvent(const ShopData& item, int index)
@@ -88,7 +121,7 @@ void ShopSlot::SetBuyEvent2(const ShopData& item, int index)
     slotType = ShopSlotType::SellSlot;//정해진 text를 출력하기위해 타입 정하기.
 
     image->SetActive(true);
-    image->SetTag("Ore_ShopSlot_Buy_" + to_string(index));
+    image->SetTag("Ore_ShopSlot2_Buy_" + to_string(index));
     image->SetTexture(L"Resources/Textures/UI/buybutton2.png");
     //image->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/buybutton.png");
     image->Load();
@@ -145,9 +178,9 @@ void ShopSlot::OnClick()
     }
 }
 
-//void ShopSlot::Edit()
-//{
-//    image->Edit();
-//    //levelImage->Edit();
-//}
+void ShopSlot::Edit()
+{
+    image->Edit();
+    //levelImage->Edit();
+}
 

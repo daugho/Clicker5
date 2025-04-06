@@ -33,6 +33,7 @@ public:
 public:
     void Update();
     void Render();
+    void PostRender();
     void CreatOre(Vector3 pos, int oreID);
     void LoadOreTable(string path);
     void LoadDropTable(int oreID);

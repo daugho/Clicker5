@@ -27,6 +27,8 @@ Ore::Ore(int oreID ,const string& modelPath) : oreID(oreID)
     particle = new ParticleSystem("Resources/FX/Explosion.fx");
     particle->SetLoop(false);
     particle->Stop();
+
+	hpBar = new ProgressBar(L"Resources/Textures/UI/enemy_hp_bar.png", L"Resources/Textures/UI/enemy_hp_bar_BG.png");
 }
 
 Ore::~Ore()
@@ -42,6 +44,16 @@ void Ore::Render()
     if (particle)
         particle->Render();
     collider->Render();
+}
+
+void Ore::PostRender()
+{
+    Vector3 pos = CAM->WorldToScreenPoint(localPosition + hpBarOffset);
+    Font::Get()->RenderText(data.name, pos);
+
+    hpBar->SetLocalPosition(pos);
+    hpBar->UpdateWorld();
+    hpBar->Render();
 }
 
 void Ore::Update()
@@ -90,7 +102,7 @@ void Ore::DropItems()
     int itemCount = countDistribution(generator);
 
 
-    if (inventory->GetTotalItemCount() >= 10)
+    if (inventory->GetTotalItemCount() >= inventory->GetMaxCapacity())
         return;
 
     inventory->AddItem(*selectedItem, itemCount);
@@ -131,7 +143,7 @@ void Ore::DropItemsToHelper()
 void Ore::TakeDamage(int damage)
 {
     health -= damage;
-
+    hpBar->SetAmount((float)health / data.health);
     if (particle && !particle->IsActive())
         particle->Play(GetGlobalPosition());
 
@@ -139,7 +151,6 @@ void Ore::TakeDamage(int damage)
     {
         DropItems();
         health = data.health;
-
     }
 }
 

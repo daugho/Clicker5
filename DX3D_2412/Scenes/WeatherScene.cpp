@@ -8,7 +8,7 @@ WeatherScene::WeatherScene()
     //particle = new Spark(L"Resources/Textures/FX/star.png", true);
     //particle = new Rain();
     //particle = new Snow();
-    particle = new ParticleSystem("Resources/FX/Explosion.fx");
+    particle = new Rain();
 }
 
 WeatherScene::~WeatherScene()
@@ -49,5 +49,5 @@ void WeatherScene::PostRender()
 
 void WeatherScene::GUIRender()
 {
-    //particle->GUIRender();
+    particle->GUIRender();
 }

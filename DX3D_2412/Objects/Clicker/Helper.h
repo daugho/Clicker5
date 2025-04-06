@@ -26,6 +26,7 @@ public:
     void Mining();
     void CheckBoxAndStoreItems();
     void UpdateDistanceToBox();
+    void PlayAnimation(int clipIndex);
     float GetDistanceToBox() const { return distanceToBox; }
     //HelperInventory* GetInventory() { return helperInventory; }
     void SetManualPath(const vector<Vector3>& newPath);
@@ -66,4 +67,6 @@ private:
     float miningTimer = 0.0f;       // 채굴 타이머
     int miningDamage = 5;           // 채굴 데미지
     float miningRange = 2.0f;
+    int currentClipIndex = -1;
+	bool isMining = false;
 };

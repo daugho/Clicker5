@@ -23,7 +23,29 @@ void OreManager::Update()
 void OreManager::Render()
 {
     for (Ore* ore : ores)
-        ore->Render();
+    {
+        float distance = Vector3::Distance(CAM->GetGlobalPosition(), ore->GetGlobalPosition());
+        if (distance < 11.0f) // 시야 거리 안
+        {
+            ore->Render();
+        }
+        //if (CAM->ContainSphere(ore->GetLocalPosition(), 0.2f))
+        //{
+        //    ore->Render();
+        //}
+    }
+}
+
+void OreManager::PostRender()
+{
+    for (Ore* ore : ores)
+    {
+        float distance = Vector3::Distance(CAM->GetGlobalPosition(), ore->GetGlobalPosition());
+        if (distance < 7.0f)
+		{
+			ore->PostRender();
+		}
+    }
 }
 
 void OreManager::CreatOre(Vector3 pos, int oreID)
