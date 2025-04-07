@@ -69,4 +69,6 @@ private:
     float miningRange = 2.0f;
     int currentClipIndex = -1;
 	bool isMining = false;
+    float soundTimer = 0.0f;
+    float soundInterval = 1.0f;
 };

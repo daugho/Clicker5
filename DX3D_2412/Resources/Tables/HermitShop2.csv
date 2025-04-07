@@ -1,7 +1,7 @@
 id,name,discrip,price,icon
 1,speed,Resources/Textures/UI/ShopUI/speeddiscrip.png,500,Resources/Textures/UI/ShopUI/speed1.png
-2,box,Resources/Textures/UI/ShopUI/boxdiscrip.png,600,Resources/Textures/UI/ShopUI/box1.png
-3,bag,Resources/Textures/UI/ShopUI/bagdiscrip.png,900,Resources/Textures/UI/ShopUI/bag1.png
+2,box,Resources/Textures/UI/ShopUI/bagdiscrip.png,600,Resources/Textures/UI/ShopUI/box1.png
+3,bag,Resources/Textures/UI/ShopUI/boxdiscrip.png,900,Resources/Textures/UI/ShopUI/bag1.png
 4,power,Resources/Textures/UI/ShopUI/powerdiscrip.png,1500,Resources/Textures/UI/ShopUI/power1.png
 5,pick,Resources/Textures/UI/ShopUI/pickdiscrip.png,2000,Resources/Textures/UI/ShopUI/pick1.png
-6,key,Resources/Textures/UI/hire.png,10000,Resources/Textures/UI/ShopUI/key.png
+6,key,Resources/Textures/UI/ShopUI/hire.png,10000,Resources/Textures/UI/ShopUI/key.png

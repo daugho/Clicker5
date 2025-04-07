@@ -26,6 +26,9 @@ Player::Player()
 	collider = new SphereCollider(1.0f); // 반지름 1.0 설정
 	collider->SetParent(this);
 	RecalculateDamage();
+	Audio::Get()->Add("Pick","Resources/Sounds/Pick.wav");
+	Audio::Get()->Add("walk","Resources/Sounds/walk.mp3");
+	Audio::Get()->Add("open","Resources/Sounds/dooropen.mp3");
 }
 
 Player::~Player()
@@ -125,6 +128,7 @@ void Player::Mining()
 		{
 			closestOre->TakeDamage(playerDamage);
 			miningTimer = 0.0f;
+			Audio::Get()->Play("Pick");
 		}
 	}
 	else
@@ -261,6 +265,8 @@ void Player::OpenDoor()
 				if (hasKey)
 				{
 					door->Activate();
+					Audio::Get()->Play("open");
+
 				}
 				else
 				{
@@ -323,9 +329,13 @@ void Player::Control()
 	Vector3 dir;
 
 	if (KEY->Press('W'))
+	{
 		dir += GetForward();
+	}
 	if (KEY->Press('S'))
+	{
 		dir += GetBack();
+	}
 	if (KEY->Press('A'))
 		dir += GetLeft();
 	if (KEY->Press('D'))

@@ -29,4 +29,6 @@ private:
     vector<Cube*> roomCubes;
     Cube* floor;
     Room* room1;
+    float soundTimer = 0.0f;
+    float soundInterval = 5.0f;
 };

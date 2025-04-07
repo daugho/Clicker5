@@ -43,6 +43,14 @@ void RateDisplay::SetRate(float rate)
         digit->UpdateWorld();
         digits.push_back(digit);
     }
+    wstring percentPath = L"Resources/Textures/UI/ShopUI/ratenum/percent.png";
+    Quad* percentDigit = new Quad(percentPath);
+    percentDigit->SetLocalPosition(position + Vector3(rateStr.size() * spacing, 0, 0));
+    percentDigit->SetParent(this);
+    percentDigit->SetTag("RateLevel_Slot" + to_string(slotID) + "_percent");
+    percentDigit->Load();
+    percentDigit->UpdateWorld();
+    digits.push_back(percentDigit);
 }
 
 void RateDisplay::SetPosition(const Vector3& pos)

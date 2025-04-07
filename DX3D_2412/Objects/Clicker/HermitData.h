@@ -20,7 +20,8 @@ enum class ShopSlotType {
 	BuySlot,         // 구매 버튼
 	SellSlot,		//판매 버튼
 	ItemLevel,
-	ItemSlot2
+	ItemSlot2,
+	DescriptionSlot2,
 };
 struct ShopItemData {
 	int id;

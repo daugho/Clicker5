@@ -14,6 +14,7 @@ Helper::Helper()
 	model->SetParent(this);
 	//FindOre();
 	//helperInventory = new HelperInventory();
+	Audio::Get()->Add("hPick", "Resources/Sounds/Pick.wav");
 }
 
 Helper::~Helper()
@@ -327,6 +328,7 @@ void Helper::Mining()
 
 	if (miningTimer >= miningCooldown)
 	{
+		Audio::Get()->Play("hPick");
 		PlayAnimation(1);
 		targetOre->TakeDamageFroHelper(miningDamage); 
 		miningTimer = 0.0f;

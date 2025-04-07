@@ -13,6 +13,7 @@ ShopSlot::ShopSlot() : Button(Vector2(110, 60))
     levelImage->SetParent(this);
     levelImage->SetLocalPosition(Vector3(0, 0, 0.01f));  // 위치 조절
     levelImage->SetActive(false);
+
 }
 
 ShopSlot::~ShopSlot() {}
@@ -35,14 +36,14 @@ void ShopSlot::Render()
         string text = to_string(item.price) + "G";
         Font::Get()->SetStyle("Icon");
         Font::Get()->SetColor("White");
-        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(670, 0, 0));
+        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(0, 0, 0));
     }
     if (slotType == ShopSlotType::ItemSlot2)
     {
         string text = to_string(item.price) + "G";
         Font::Get()->SetStyle("Shop2");
         Font::Get()->SetColor("White");
-        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(560, 0, 0));
+        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(30, -35, 0));
     }
 }
 
@@ -91,11 +92,11 @@ void ShopSlot::SetDescrip2(const ShopData& item, int index)
 	this->item = item;
 	this->slotIndex = index;
 	occupied = true;
-	slotType = ShopSlotType::DescriptionSlot;//정해진 text를 출력하기위해 타입 정하기.
+	slotType = ShopSlotType::DescriptionSlot2;//정해진 text를 출력하기위해 타입 정하기.
 	image->SetActive(true);
 	image->SetTag("Ore_ShopSlot2_Descrip__" + to_string(index));
 	image->SetTexture(item.descrip);
-	//image->GetMaterial()->SetDiffuseMap(item.descrip);
+	//image->GetMaterial()->GetData()->diffuse = Float4(0,0,0,0);
 	image->Load();
 }
 
@@ -181,6 +182,6 @@ void ShopSlot::OnClick()
 void ShopSlot::Edit()
 {
     image->Edit();
-    //levelImage->Edit();
+    levelImage->Edit();
 }
 

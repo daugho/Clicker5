@@ -65,7 +65,7 @@ void Room::AddTeleportDoor(Vector3 pos, Vector3 target)
 
 void Room::Edit()
 {
-	ShopManager::Get()->Edit();
+	//ShopManager::Get()->Edit();
     //ShopManager::Get()->Edit();
     //Boxmanager::Get()->Edit();
     //for (Door* door : doors)
@@ -74,8 +74,8 @@ void Room::Edit()
 	//	tdoor->Edit();
 	//for (Cube* cube : roomCubes)
 	//	cube->Edit();
-	//for (Shop* shop : shops)
-	//	shop->Edit();
+	for (Shop* shop : shops)
+		shop->Edit();
 	//for (BoxInventory* box : Boxmanager::Get()->GetBoxes())
 	//    box->Edit();
 }

@@ -9,6 +9,8 @@ ClickerMapManager::ClickerMapManager()
 	CAM->TargetOptionLoad("FPSMode");
 	room1 = new Room();
 	CreateRoom1();
+	Audio::Get()->Add("waterfall1", "Resources/Sounds/waterfall1.mp3");
+	Audio::Get()->Add("waterfall2", "Resources/Sounds/waterfall2.mp3");
 }
 
 ClickerMapManager::~ClickerMapManager()
@@ -16,11 +18,22 @@ ClickerMapManager::~ClickerMapManager()
 	delete player;
 	delete room1;
 	//delete room2;
-
 }
 
 void ClickerMapManager::Update()
 {
+	soundTimer += DELTA;
+
+	if (soundTimer >= soundInterval)
+	{
+		int randomIndex = rand() % 2;
+		if (randomIndex == 0)
+			Audio::Get()->Play("waterfall1");
+		else
+			Audio::Get()->Play("waterfall2");
+
+		soundTimer = 0.0f;
+	}
 	player->Update();
 	room1->Update();
 	ShopManager::Get()->Update();

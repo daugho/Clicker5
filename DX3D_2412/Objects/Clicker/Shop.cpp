@@ -21,6 +21,9 @@ Shop::Shop(int hermitID, OreInventory* inventory, GoldDisplay* goldDisplay, Play
 	notice->SetParent(this);
 	notice->SetLocalPosition(Vector3(200, 0, 0));
 	notice->Load();
+    Audio::Get()->Add("rein", "Resources/Sounds/rein.mp3");
+    Audio::Get()->Add("fail", "Resources/Sounds/fail.mp3");
+    Audio::Get()->Add("sell", "Resources/Sounds/sell.mp3");
 }
 
 Shop::~Shop()
@@ -86,18 +89,18 @@ void Shop::Render()
 
 void Shop::Edit()
 {    
-    for (ShopSlot* slot : iconSlots) {
-        slot->Edit();
-    }
-    for (ShopSlot* slot : descSlots) {
-        slot->Edit();
-    }
-    for (ShopSlot* slot : buySlots) {
-        slot->Edit();
-    }
-    //popup->Edit();
-    //for (RateDisplay* slot : rateDisplays)
+    //for (ShopSlot* slot : sellSlots) {
     //    slot->Edit();
+    //}
+    //for (ShopSlot* slot : descSlots) {
+    //    slot->Edit();
+    //}
+    //for (ShopSlot* slot : buySlots) {
+    //    slot->Edit();
+    //}
+    //popup->Edit();
+    for (RateDisplay* slot : rateDisplays)
+        slot->Edit();
 }
 
 void Shop::BuyKey(int index)
@@ -241,7 +244,6 @@ void Shop::CreateSlots2()
         slot->SetParent(this);
         slot->SetDescrip2(items[i], i);
         slot->Load();
-
         slot->UpdateWorld();
 
         descSlots.push_back(slot);
@@ -254,6 +256,8 @@ void Shop::CreateSlots2()
     sellButton->UpdateWorld();
     sellButton->SetSellbutton([=]()
         {
+            Audio::Get()->Play("sell");
+
             int totalGold = 0;
 
             auto& slots = inventory->GetSlots(); // inventory는 Shop에 전달된 OreInventory*
@@ -547,9 +551,16 @@ void Shop::ShowUpgradeResultImage(bool success)
 {
     if (!popup) return;
     if (success)
+    {
         popup->Play(L"Resources/Textures/UI/ShopUI/ok.png");
+        Audio::Get()->Play("rein");
+    }
     else
+    {
         popup->Play(L"Resources/Textures/UI/ShopUI/back.png");
+        Audio::Get()->Play("fail");
+
+    }
 }
 
 void Shop::InitRateTextures()

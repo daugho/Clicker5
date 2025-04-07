@@ -59,7 +59,7 @@ void ClickerUIManager::Render()
 void ClickerUIManager::Edit()
 {
     //inventory->Edit();
-    //shopOpen->Edit();
+    shopOpen->Edit();
     goldDisplay->Edit();
     //itemPopup->Edit();
     //boxUI->Edit();

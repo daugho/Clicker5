@@ -11,7 +11,7 @@ void Collider::Render()
 {
 	if (!isDraw) return;
 
-	//GameObject::Render(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	GameObject::Render(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 }
 
 bool Collider::IsCollision(Collider* collider)
