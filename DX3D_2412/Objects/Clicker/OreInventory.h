@@ -35,7 +35,7 @@ private:
 
     bool isActive = false;
     LightBuffer::Light* light;
-    int gold =100000000 ;
+    int gold =000000000 ;
 private:
     struct InventorySlot 
     {

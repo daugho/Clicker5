@@ -89,18 +89,18 @@ void Shop::Render()
 
 void Shop::Edit()
 {    
-    //for (ShopSlot* slot : sellSlots) {
-    //    slot->Edit();
-    //}
+    for (ShopSlot* slot : descSlots) {
+        slot->Edit();
+    }
     //for (ShopSlot* slot : descSlots) {
     //    slot->Edit();
     //}
-    //for (ShopSlot* slot : buySlots) {
-    //    slot->Edit();
-    //}
-    //popup->Edit();
-    for (RateDisplay* slot : rateDisplays)
+    for (ShopSlot* slot : buySlots) {
         slot->Edit();
+    }
+    //popup->Edit();
+    //for (RateDisplay* slot : rateDisplays)
+    //    slot->Edit();
 }
 
 void Shop::BuyKey(int index)

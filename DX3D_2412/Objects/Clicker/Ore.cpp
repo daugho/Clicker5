@@ -91,9 +91,11 @@ void Ore::DropItems()
     DropData* selectedItem = nullptr;
 
 
-    for (DropData& drop : dropList) {
+    for (DropData& drop : dropList)
+    {
         cumulativeRate += drop.dropRate;
-        if (randValue <= cumulativeRate) {
+        if (randValue <= cumulativeRate)
+        {
             selectedItem = &drop;
             break;
         }

@@ -32,7 +32,7 @@ void BoxSlot::Render()
     if (!ClickerUIManager::Get()->IsBoxOPen())
         return;
     Font::Get()->SetStyle("Icon");
-    Font::Get()->SetColor("Black");
+    Font::Get()->SetColor("White");
     Font::Get()->RenderText(to_string(count), GetGlobalPosition());
 
 }

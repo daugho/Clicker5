@@ -36,7 +36,7 @@ void ShopSlot::Render()
         string text = to_string(item.price) + "G";
         Font::Get()->SetStyle("Icon");
         Font::Get()->SetColor("White");
-        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(0, 0, 0));
+        Font::Get()->RenderText(text, GetGlobalPosition() + Vector3(160, 0, 0));
     }
     if (slotType == ShopSlotType::ItemSlot2)
     {
@@ -182,6 +182,6 @@ void ShopSlot::OnClick()
 void ShopSlot::Edit()
 {
     image->Edit();
-    levelImage->Edit();
+    //levelImage->Edit();
 }
 

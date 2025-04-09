@@ -4,7 +4,7 @@ ClickerMapManager::ClickerMapManager()
 {
 
 	player = new Player();
-	player->SetLocalPosition(-3, 2, 1);
+	player->SetLocalPosition(-3, 2.5, 1);
 	CAM->SetTarget(player);
 	CAM->TargetOptionLoad("FPSMode");
 	room1 = new Room();
